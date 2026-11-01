@@ -48,10 +48,15 @@ if (!isNull findDisplay 92000) exitWith {};
     private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "RAPOR", "LOJİSTİK", "UAV"];
     missionNamespace setVariable ["TC2_ui_tabs", _tabs];
 
+    private _fieldMode = _terminal isKindOf "CAManBase";
+
+    // Ekran alanı; çerçeve (uiBuildFrame) bunun dışına çizilir. Saha cihazı kılıflı olduğu için biraz alçak, masa başında klavye gövdesi için altta pay var.
     private _w = 0.7 * safeZoneW;
-    private _h = 0.7 * safeZoneH;
+    private _h = ([0.68, 0.66] select _fieldMode) * safeZoneH;
     private _left = safeZoneX + (safeZoneW - _w) / 2;
-    private _top = safeZoneY + (safeZoneH - _h) / 2;
+    private _top = safeZoneY + (safeZoneH - _h) / 2 - 0.02;
+
+    [_display, ["DESK", "FIELD"] select _fieldMode, _left, _top, _w, _h] call TC2_fnc_uiBuildFrame;
 
     private _headerH = 0.05;
     private _tabH = 0.05;
@@ -72,13 +77,26 @@ if (!isNull findDisplay 92000) exitWith {};
     _header ctrlSetPosition [_left, _top, _w - _closeW, _headerH];
     _header ctrlSetBackgroundColor [0, 0.2, 0.05, 1];
     _header ctrlSetTextColor _green;
-    _header ctrlSetText format [
-        "  %1   |   %2   |   %3",
-        ["TC2 KOMUTA TERMİNALİ", "TC2 SAHA CİHAZI"] select (_terminal isKindOf "CAManBase"),
-        [_terminal] call TC2_fnc_terminalGetId,
-        name _player
-    ];
+    _header ctrlSetText (if (_fieldMode) then {
+        format ["  TC2 SAHA   |   %1   |   %2", groupId (group _player), name _player]
+    } else {
+        format ["  TC2 TERMİNAL   |   %1   |   %2", [_terminal] call TC2_fnc_terminalGetId, name _player]
+    });
     _header ctrlCommit 0;
+
+    // Canlı durum satırı (bakış yönü, saat, grid, yükseklik): başlığın sağ yarısı. uiWatch saniyede bir günceller.
+    private _statusBar = _display ctrlCreate ["RscText", 92004];
+    _statusBar ctrlSetPosition [_left + (_w - _closeW) * 0.5, _top, (_w - _closeW) * 0.5, _headerH];
+    _statusBar ctrlSetTextColor [0.7, 1, 0.75, 1];
+    _statusBar ctrlSetFontHeight 0.032;
+    _statusBar ctrlCommit 0;
+
+    // Görünmez odak çukuru: yazı kutusundan odağı almak için (uiReleaseFocus). Ekran dışında 1 piksellik düğme.
+    private _sink = _display ctrlCreate ["RscButtonMenu", 92005];
+    _sink ctrlSetPosition [_left, _top + _h - 0.002, 0.002, 0.002];
+    _sink ctrlSetBackgroundColor [0, 0, 0, 0];
+    _sink ctrlSetText "";
+    _sink ctrlCommit 0;
 
     // Kapat düğmesi
     private _closeButton = _display ctrlCreate ["RscButtonMenu", 92003];
@@ -218,7 +236,7 @@ if (!isNull findDisplay 92000) exitWith {};
         [
             _display, _mx, _my,
             [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457, 92604, 92720, 92721, 92722, 92723, 92724, 92725],
-            92010 + (missionNamespace getVariable ["TC2_ui_tab", 0])
+            92005
         ] call TC2_fnc_uiReleaseFocus;
     }];
 
@@ -231,6 +249,7 @@ if (!isNull findDisplay 92000) exitWith {};
     missionNamespace setVariable ["TC2_ui_watchHandle", _handle];
 
     [0] call TC2_fnc_uiSelectTab;
+    call TC2_fnc_uiStatusText;
 
     [_terminal, call TC2_fnc_netGetRadioState] call TC2_fnc_netReportState;
     call TC2_fnc_netUiUpdate;

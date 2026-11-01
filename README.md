@@ -161,6 +161,12 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 Test: [`docs/TEST_ASAMA6_RAPORLAR.md`](docs/TEST_ASAMA6_RAPORLAR.md). Test yardımcısı: `["BLUE"] call TC2_fnc_debugGive;` (RED / BLUE / GOLD / TABLET / NONE).
 
+### Arayüz: çerçeve ve harita araçları (ATAK'tan esinlenen)
+
+Masa başı terminal dizüstü çerçevesi, saha cihazı kılıflı tablet çerçevesi içinde açılır; başlıkta canlı yön / saat / grid / yükseklik satırı vardır.
+HARİTA sekmesi: imleç altı canlı **grid + yükseklik + mesafe + yön (derece/mil)**, **ÖLÇ** (iki nokta arası mesafe / yön / yükseklik farkı), **MERKEZ**,
+**KATMAN** (oyun harita işaretleri oyunun kendi sembolleriyle). Hepsi istemcide yerel hesap; ağ yükü yok, kare başına döngü yok (çizim olayı + 10 Hz kısıtlı imleç olayı).
+
 ## Aşama 6a – OPORD (yetki seviyeli operasyon emri)
 
 **OPORD** sekmesi: beş paragraf düzeninde operasyon emri (Situation, Mission, Execution, Sustainment, Command and Signal + görev organizasyonu + ateş eki).

@@ -80,8 +80,20 @@ OPORD sekmesi ⇒ belge türü listesinden **WARNO (Uyarı Emri)** ⇒ Level 3 i
 
 Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` ve `DOGRULANDI SALUTE` satırları sunucuda görünür. İstemci RPT'sinde `Error` olmamalı.
 
+## I. Arayüz: çerçeve, odak, harita araçları
+
+1. **Çerçeve:** masa başı terminal = siyah çerçeveli dizüstü ekranı (alt çenede LED ve "TC2", altta klavye gövdesi); saha cihazı (ACE self menüsü) = kum rengi kılıflı tablet (üst/alt tutucu, kamera, yan tuşlar). Başlıkta canlı satır: `NW 300°  05:05  024 057  YÜK 12 m`.
+2. **Yazı boyutu:** RAPOR ayrıntı kutusu normal boyutta olmalı (eskiden dev harf). Başka sekmede çok büyük/küçük metin görürseniz hangi sekme olduğunu yazın.
+3. **Odak:** bir yazı kutusuna tıklayıp başka yere (siyah boş alana da) tıklayın; sekme düğmesi **beyaz kalmamalı**, açılır listeler ve düğmeler ilk tıkta çalışmalı. Boşa tıklamak artık hiçbir şey kapatmaz.
+4. **Harita araçları** (HARİTA sekmesi, üst satır: DÜŞMAN PİYADE | İŞARET SİL | BİRİM / LACE | ÖLÇ | MERKEZ | KATMAN):
+   * İmleci haritada gezdirin: sağdaki çubukta **grid, yükseklik (m), bana mesafe, yön (derece / mil)** canlı değişir.
+   * **ÖLÇ** ⇒ iki noktaya tıklayın: sarı çizgi, `ÖLÇÜM 842 m  047° / 0835 mil  Δyük +12 m`. Üçüncü tık yeniden başlatır; ÖLÇ'e tekrar basınca kapanır.
+   * **MERKEZ** ⇒ harita sizin konumunuza gider.
+   * **KATMAN** ⇒ oyundaki harita işaretleri (Eden / Zeus / oyuncu işaretleri, alanlar, çizgiler) oyunun kendi sembolleriyle görünür; KAPALI ⇒ gizlenir. Denemek için normal Arma haritasına bir işaret koyun (çift tık) ya da Zeus ile işaret yerleştirin; 5 sn içinde terminal haritasında görünmeli.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).
 * WARNORD biçim örneği (ATP 3-21.8 şekil 2-3) metinde görsel olduğu için okunamadı; bölüm başlıkları listeden türetildi.
-* Yalnızca sqflint ile denendi; oyun içi doğrulama kullanıcı testine bağlı.
+* Çerçeve ve harita araçları yalnızca sqflint ile denendi; çerçeve oranları ve harita işaret çizimi oyunda ince ayar isteyebilir.
+* Oyun harita işaretleri yalnızca **oyuncunun kendi haritasında gördükleri**dir; TC2 düşman işaretleri oyun işareti değildir ve normal haritada görünmez.

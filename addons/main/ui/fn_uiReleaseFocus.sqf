@@ -3,32 +3,26 @@
     Çalışma yeri: İstemci (terminal ve pilot pencerelerinin "MouseButtonDown" olayı)
 
     Sorun: yazı kutusuna (RscEdit) tıklanınca klavye odağı kutuda kalıyor ve başka yere tıklamak zorlaşıyordu.
-    Çözüm: sol tık, herhangi bir GÖRÜNÜR yazı kutusunun DIŞINDAYSA odağı zararsız bir düğmeye ver
-    (terminalde o anki sekmenin düğmesi: Enter/Boşluk yalnızca aynı sekmeyi tekrar seçer; pilot penceresinde GERİ OKU).
-    Tıklama yazı kutusunun içindeyse hiçbir şey yapılmaz (kutu odağı normal alır).
+    Çözüm: YALNIZCA o an odakta bir yazı kutusu varsa ve sol tık o kutunun DIŞINDAYSA, odağı görünmez bir "odak çukuru" düğmesine ver.
+    Odakta yazı kutusu yoksa hiçbir şey yapılmaz (önceki sürüm her tıklamada odağı çalıyor, açılır listeleri ve düğmeleri bozuyordu;
+    odak sekme düğmesine verilince beyaz da boyanıyordu).
 
     Parametreler:
         0: pencere <DISPLAY>
         1: fare x <NUMBER>
         2: fare y <NUMBER>
         3: yazı kutusu IDC listesi <ARRAY>
-        4: odak verilecek düğme IDC <NUMBER>
+        4: odak verilecek düğme IDC <NUMBER>  (terminalde 92005 görünmez çukur; pilot penceresinde GERİ OKU)
 
     Dönüş: yok
 */
 
 params ["_display", "_mx", "_my", "_editIdcs", "_focusIdc"];
 
-private _inside = false;
+private _focused = focusedCtrl _display;
+if (isNull _focused || {!((ctrlIDC _focused) in _editIdcs)}) exitWith {};
 
-{
-    private _control = _display displayCtrl _x;
-    if (!isNull _control && {ctrlShown _control}) then {
-        (ctrlPosition _control) params ["_cx", "_cy", "_cw", "_ch"];
-        if (_mx >= _cx && {_mx <= _cx + _cw} && {_my >= _cy} && {_my <= _cy + _ch}) then {_inside = true};
-    };
-} forEach _editIdcs;
+(ctrlPosition _focused) params ["_cx", "_cy", "_cw", "_ch"];
+if (_mx >= _cx && {_mx <= _cx + _cw} && {_my >= _cy} && {_my <= _cy + _ch}) exitWith {};
 
-if (!_inside) then {
-    ctrlSetFocus (_display displayCtrl _focusIdc);
-};
+ctrlSetFocus (_display displayCtrl _focusIdc);

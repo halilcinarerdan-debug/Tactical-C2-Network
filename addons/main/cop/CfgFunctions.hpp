@@ -25,6 +25,9 @@ class cop
     class copFieldReport {};
     class copMarkersFor {};
     class copFriendsOf {};
+    class copUiCursor {};
+    class copMeasureText {};
+    class copGameMarkers {};
     class copSyncUnit {};
     class copPush {};
     class copRequest {};

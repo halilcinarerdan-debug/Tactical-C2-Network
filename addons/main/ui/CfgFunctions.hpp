@@ -7,6 +7,8 @@ class ui
     class uiTabText {};
     class uiWatch {};
     class uiOnUnload {};
+    class uiBuildFrame {};
+    class uiStatusText {};
     class uiReleaseFocus {};
     class uiMakeControl {};
     class uiBuildRows {};

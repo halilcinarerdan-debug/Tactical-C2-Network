@@ -5,6 +5,7 @@
     Haritaya tıklama. Mod (TC2_cop_mode):
       "PLACE"  -> tıklanan yere DÜŞMAN PİYADE işareti koy,
       "DELETE" -> tıklamaya en yakın işareti sil (tolerans: ekranın ~%2'si kadar mesafe),
+      "MEASURE"-> iki noktaya sırayla tıkla: mesafe, yön (derece / mil), yükseklik farkı (A ve B çizilir; üçüncü tık yeniden başlatır),
       "INFO"   -> tıklamaya en yakın dost birimin LACE bilgisini panelde göster (salt okuma, sunucuya istek yok),
       ""       -> bir şey yapma (harita yalnızca kaydırılır/yakınlaştırılır).
     Karar sunucudadır; burada yalnızca istek gönderilir.
@@ -23,6 +24,20 @@ if (isNull _terminal) exitWith {};
 
 private _world = _map ctrlMapScreenToWorld [_x, _y];
 private _state = call TC2_fnc_netGetRadioState;
+
+if (_mode isEqualTo "MEASURE") exitWith {
+    private _points = missionNamespace getVariable ["TC2_cop_measure", []];
+    if (count _points >= 2) then {_points = []};
+    _world set [2, 0];
+    _points pushBack _world;
+    missionNamespace setVariable ["TC2_cop_measure", _points];
+
+    if (count _points == 2) then {
+        [_points call TC2_fnc_copMeasureText, [1, 0.9, 0.3, 1]] call TC2_fnc_copUiStatus;
+    } else {
+        ["  ÖLÇ: A işaretlendi, B noktasına tıklayın.", [0.25, 1, 0.35, 1]] call TC2_fnc_copUiStatus;
+    };
+};
 
 if (_mode isEqualTo "INFO") exitWith {
     private _tolerance = ((_world distance2D (_map ctrlMapScreenToWorld [_x + 0.02, _y])) max 20);

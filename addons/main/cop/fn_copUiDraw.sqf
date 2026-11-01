@@ -12,6 +12,25 @@
 
 params ["_map"];
 
+// Oyun harita işaretleri (KATMAN): 5 sn'de bir hazırlanan önbellek; burada yalnızca çizim.
+{
+    _x params ["_shape", "_pos", "_texture", "_color", "_size", "_angle", "_text", "_extra"];
+    switch (_shape) do {
+        case "ICON": {
+            _map drawIcon [_texture, _color, _pos, _size, _size, _angle, _text, 1, 0.04, "PuristaMedium", "right"];
+        };
+        case "ELLIPSE": {
+            _map drawEllipse [_pos, _size select 0, _size select 1, _angle, _color, _extra select 0];
+        };
+        case "RECTANGLE": {
+            _map drawRectangle [_pos, _size select 0, _size select 1, _angle, _color, _extra select 0];
+        };
+        case "POLYLINE": {
+            {_map drawLine [_x select 0, _x select 1, _color]} forEach _extra;
+        };
+    };
+} forEach (missionNamespace getVariable ["TC2_cop_gameMarkers", []]);
+
 (missionNamespace getVariable ["TC2_cop_data", [[], [], []]]) params ["_friends", "_markers", ["_unverified", []]];
 
 {
@@ -52,3 +71,18 @@ _map drawIcon [
     "\A3\ui_f\data\map\markers\nato\b_inf.paa", [0.25, 1, 0.35, 1], getPosASL ACE_player,
     28, 28, getDir ACE_player, "SEN", 1, 0.045, "PuristaMedium", "right"
 ];
+
+// ÖLÇ: A noktası seçiliyse çizgi B'ye (ya da B yoksa imlece) uzanır.
+private _measure = missionNamespace getVariable ["TC2_cop_measure", []];
+if !(_measure isEqualTo []) then {
+    private _from = _measure select 0;
+    private _to = if (count _measure > 1) then {_measure select 1} else {missionNamespace getVariable ["TC2_cop_cursor", []]};
+
+    _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _from, 14, 14, 0, "A", 1, 0.045, "PuristaMedium", "right"];
+    if !(_to isEqualTo []) then {
+        _map drawLine [_from, _to, [1, 0.9, 0.3, 1]];
+        if (count _measure > 1) then {
+            _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _to, 14, 14, 0, format ["B  %1 m", round (_from distance2D _to)], 1, 0.045, "PuristaMedium", "right"];
+        };
+    };
+};

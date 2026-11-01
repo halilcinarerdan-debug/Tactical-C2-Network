@@ -25,6 +25,8 @@ _friends = _friends apply {
 
 missionNamespace setVariable ["TC2_cop_data", [_friends, _markers, _unverified]];
 
+call TC2_fnc_copGameMarkers;
+
 if ((missionNamespace getVariable ["TC2_cop_mode", ""]) isEqualTo "") then {
     if (_code isEqualTo "OK") then {
         [format ["  %1 dost   |   %2 düşman işareti", count _friends, count _markers], [0.25, 1, 0.35, 1]] call TC2_fnc_copUiStatus;
