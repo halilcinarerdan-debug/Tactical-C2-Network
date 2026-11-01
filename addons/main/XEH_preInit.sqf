@@ -11,3 +11,6 @@ call TC2_fnc_terminalInitSettings;
 
 // 3. ACRE2 veri agi
 call TC2_fnc_netInitSettings;
+
+// 4. Ortak harekat resmi
+call TC2_fnc_copInitSettings;

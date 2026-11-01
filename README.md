@@ -13,7 +13,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 1 | Fiziksel terminal + OPSEC (kimlik kartıyla erişim) | ✅ hazır (test bekliyor) |
 | 2 | Terminal arayüzü (yeşil/siyah, sekmeli; UAV sekmesi yer tutucu) | ✅ hazır (test bekliyor) |
 | 3 | ACRE2 veri ağı + basit mesajlaşma (telsiz/kanal/menzil kontrolü, PING/PONG) | ✅ hazır (test bekliyor) |
-| 4 | Ortak harekat resmi (COP) + harita işaretleme | ⏳ |
+| 4 | Ortak harekat resmi (COP): terminal haritası, düşman işareti, ACE MicroDAGR | ✅ hazır (test bekliyor) |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC) | ⏳ |
 | 6 | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
 
@@ -63,11 +63,20 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_netServerReport / ServerSend  [SUNUCU] rapor ve gönderim işleyicileri
         fn_netRangeOf / netSanitize ...  menzil tablosu, metin temizleme, yardımcılar
         fn_debugNetPeer.sqf              TEST: AI'ı simüle ağ eşi yap
+    cop/                                 4. aşama (ortak harekat resmi)
+        fn_copHeartbeat.sqf              [İSTEMCİ] telsizi olan herkes 10 sn'de bir durumunu bildirir
+        fn_copFieldReport.sqf            [SUNUCU] saha varlığı kaydı + doğrulama
+        fn_copFriendsOf / copMarkersFor  [SUNUCU] ağdaki dostlar / görülebilen işaretler (TTL, menzil)
+        fn_copRequest / Place / Remove   [SUNUCU] harita verisi, işaret koy, işaret sil
+        fn_copSyncUnit / copPush         [SUNUCU] liderlerin MicroDAGR özetini eşzamanla
+        fn_copDagrSync.sqf               [İSTEMCİ] işaretleri DAGR waypoint'i olarak yaz
+        fn_copUi*.sqf                    [İSTEMCİ] HARİTA sekmesi: kurulum, çizim, tıklama, durum
 docs/
     DOKTRIN_NOTLARI.md                   doktrinden çıkan kurallar (9-Line, Type 1/2/3, BOT/BOC, roller)
     TEST_ASAMA1.md                       tek başına test: editör, hosted MP, yerel dedicated
     TEST_ASAMA2.md                       arayüz testi
     TEST_ASAMA3.md                       ağ/mesajlaşma testi (tek kişilik, simüle eş)
+    TEST_ASAMA4.md                       COP / işaret / MicroDAGR testi
     UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
 
@@ -99,6 +108,28 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
+
+## Aşama 4 – Ortak harekat resmi (COP), düşman işareti, MicroDAGR
+
+**HARİTA** sekmesi terminalin kendi haritasıdır: sen (yeşil), ağındaki dostlar (mavi; grup liderleri büyük ve etiketli),
+düşman işaretleri (kırmızı). **Normal Arma haritasına (M) hiçbir şey eklenmez.** `DÜŞMAN PİYADE` düğmesi + haritaya tıklama ile işaret konur,
+`İŞARET SİL` + tıklama ile silinir.
+
+| Konu | Kural |
+|------|-------|
+| Dostlar | telsizi olan HERKES (terminali açık olmasa da), aynı telsiz tipi + kanal + senin menzilin içinde. Konumlar sunucuda okunur (istemciye güvenilmez). Telsizi olan her istemci durumunu 10 sn'de bir bildirir (tek hafif CBA PFH). |
+| İşaretler | AĞA aittir (tip + kanal); görmek için aynı ağda ve işareti koyanın menzilinde olmalısın. Ömür 30 dk (CBA), ağ başına en çok 30. Sunucuda saklanır ⇒ terminali sonradan açan/JIP olan görür. |
+| MicroDAGR | yalnızca **grup lideri** + envanterinde **ACE MicroDAGR** olan birim, görebildiği işaretleri `TC2 INF <grid>` **waypoint**'i olarak alır. Liderlik/DAGR/kanal/respawn değişimi 10 sn içinde, işaret koyma/silme anında eşzamanlanır. Kendi waypoint'lerine dokunulmaz. |
+| Güvenlik | tüm işlemler sunucuda: gönderen (`remoteExecutedOwner`), oturum (kart, 5 m, telsiz envanterde), 1.5 sn aralık, konum biçimi doğrulaması; `[TC2][COP]` RPT kaydı. |
+| Performans | HARİTA sekmesi dışında ek maliyet yok; harita verisi sekme açıkken 5 sn'de bir; çizim yalnızca `drawIcon` (önbellekten). |
+
+**Bilinen sınırlar:**
+- MicroDAGR'ın "işaret çizme" API'si yok; kullanılabilir olan **waypoint** listesidir. Waypoint'ler `ace_microdagr_waypoints` oyuncu değişkenine yazılır (ACE'in genel API'si değil, yalnızca `deviceAddWaypoint` genel); ACE sürümü değişirse bu biçim kontrol edilmeli.
+- Dostlar DAGR'a yazılmaz (hareketli, waypoint değil). DAGR'da simge görünmesi için ACE ayarı *Haritada tüm waypoint'leri göster* açık olmalı.
+- Yalnızca `DÜŞMAN PİYADE` türü var; yeni tür eklemek `copTypeName` + `copPlace` türler listesi + düğme.
+- Telsiz tipi/kanal bilgisi istemciden gelir (Aşama 3 ile aynı sınır).
+
+Test: [`docs/TEST_ASAMA4.md`](docs/TEST_ASAMA4.md).
 
 ## Aşama 3 – ACRE2 veri ağı ve basit mesajlaşma
 

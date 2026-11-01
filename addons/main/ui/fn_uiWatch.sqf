@@ -40,3 +40,10 @@ if (!(_state isEqualTo _lastState) || {(diag_tickTime - _lastReport) > 5}) then 
 };
 
 call TC2_fnc_netUiUpdate;
+
+// HARİTA sekmesi açıksa veriyi 5 sn'de bir yenile (Aşama 4).
+private _tick = (missionNamespace getVariable ["TC2_ui_tick", 0]) + 1;
+missionNamespace setVariable ["TC2_ui_tick", _tick];
+if ((missionNamespace getVariable ["TC2_ui_tab", 0]) == 1 && {_tick % 5 == 0}) then {
+    call TC2_fnc_copUiRequest;
+};

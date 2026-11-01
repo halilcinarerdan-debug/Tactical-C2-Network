@@ -22,5 +22,6 @@ if (!isNull _terminal) then {
     [_terminal, [], true] call TC2_fnc_netReportState;
 };
 missionNamespace setVariable ["TC2_net_status", []];
+missionNamespace setVariable ["TC2_cop_mode", ""];
 
 ["TC2_terminalClosed", [_terminal]] call CBA_fnc_localEvent;

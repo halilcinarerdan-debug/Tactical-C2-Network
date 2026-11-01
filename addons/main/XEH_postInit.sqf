@@ -13,3 +13,6 @@ if (!hasInterface) exitWith {};
 
 // 1. Fiziksel terminal + erişim kontrolü
 call TC2_fnc_terminalPostInit;
+
+// 4. Ortak harekat resmi: saha varlığı bildirimi (10 sn)
+call TC2_fnc_copPostInit;

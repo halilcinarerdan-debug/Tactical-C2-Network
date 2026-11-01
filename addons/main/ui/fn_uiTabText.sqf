@@ -31,7 +31,7 @@ private _body = switch (_index) do {
             [_terminal] call TC2_fnc_terminalGetId
         ]
     };
-    case 1: {"Ortak harekat resmi ve haritaya işaretleme.<br/><br/>Aşama 4'te eklenecek."};
+    case 1: {""};  // HARİTA sekmesi: içerik harita kontrolüdür (copUiBuild)
     case 2: {"9-Line CAS talebi (Type 1/2/3, BOT/BOC).<br/><br/>Aşama 5'te eklenecek."};
     case 3: {"OPORD ve INTSUM belgeleri (yetki seviyesine göre).<br/><br/>Aşama 6'da eklenecek."};
     case 4: {"Lojistik talepleri.<br/><br/>Aşama 6'da eklenecek."};

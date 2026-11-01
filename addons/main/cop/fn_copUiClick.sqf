@@ -1,0 +1,50 @@
+/*
+    Fonksiyon: TC2_fnc_copUiClick
+    Çalışma yeri: İSTEMCİ (terminal haritasının "MouseButtonClick" olayı)
+
+    Haritaya tıklama. Mod (TC2_cop_mode):
+      "PLACE"  -> tıklanan yere DÜŞMAN PİYADE işareti koy,
+      "DELETE" -> tıklamaya en yakın işareti sil (tolerans: ekranın ~%2'si kadar mesafe),
+      ""       -> bir şey yapma (harita yalnızca kaydırılır/yakınlaştırılır).
+    Karar sunucudadır; burada yalnızca istek gönderilir.
+
+    Parametreler: olay [harita, düğme, x, y, shift, ctrl, alt]
+    Dönüş: yok
+*/
+
+params ["_map", "_button", "_x", "_y"];
+
+private _mode = missionNamespace getVariable ["TC2_cop_mode", ""];
+if (_button != 0 || {_mode isEqualTo ""}) exitWith {};
+
+private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];
+if (isNull _terminal) exitWith {};
+
+private _world = _map ctrlMapScreenToWorld [_x, _y];
+private _state = call TC2_fnc_netGetRadioState;
+
+if (_mode isEqualTo "PLACE") exitWith {
+    private _args = [ACE_player, _terminal, _state, "INF", ATLToASL [_world select 0, _world select 1, 0]];
+    if (isServer) then {_args call TC2_fnc_copPlace} else {_args remoteExecCall ["TC2_fnc_copPlace", 2]};
+};
+
+if (_mode isEqualTo "DELETE") exitWith {
+    private _tolerance = ((_world distance2D (_map ctrlMapScreenToWorld [_x + 0.02, _y])) max 20);
+    private _best = -1;
+    private _bestDistance = _tolerance;
+
+    {
+        private _distance = (_x select 2) distance2D _world;
+        if (_distance <= _bestDistance) then {
+            _bestDistance = _distance;
+            _best = _x select 0;
+        };
+    } forEach ((missionNamespace getVariable ["TC2_cop_data", [[], []]]) select 1);
+
+    if (_best < 0) exitWith {
+        ["  Yakında silinecek işaret yok.", [1, 0.8, 0.2, 1]] call TC2_fnc_copUiStatus;
+    };
+
+    private _args = [ACE_player, _terminal, _state, _best];
+    if (isServer) then {_args call TC2_fnc_copRemove} else {_args remoteExecCall ["TC2_fnc_copRemove", 2]};
+};

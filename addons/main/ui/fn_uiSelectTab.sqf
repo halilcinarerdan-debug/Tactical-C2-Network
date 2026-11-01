@@ -25,6 +25,17 @@ if (isNull _display) exitWith {};
     (_display displayCtrl _x) ctrlShow (_index == 0);
 } forEach [92030, 92031, 92032, 92033, 92034];
 
+// HARİTA sekmesi (92040-92043) yalnızca HARİTA'da. Seçilince veriyi hemen iste.
+{
+    (_display displayCtrl _x) ctrlShow (_index == 1);
+} forEach [92040, 92041, 92042, 92043];
+
+if (_index == 1) then {
+    missionNamespace setVariable ["TC2_cop_mode", ""];
+    call TC2_fnc_copUiMode;
+    call TC2_fnc_copUiRequest;
+};
+
 private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];
 
 (_display displayCtrl 92020) ctrlSetStructuredText ([_index, _terminal, ACE_player] call TC2_fnc_uiTabText);

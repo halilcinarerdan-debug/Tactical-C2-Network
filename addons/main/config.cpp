@@ -130,6 +130,9 @@ class CfgFunctions
 
         // 3. Asama: ACRE2 veri agi + basit mesajlasma
         #include "net\CfgFunctions.hpp"
+
+        // 4. Asama: ortak harekat resmi (harita, dusman isaretleri, MicroDAGR)
+        #include "cop\CfgFunctions.hpp"
     };
 };
 
@@ -178,6 +181,43 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_netReceive
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 4. Asama (COP). Sunucuya giden: copFieldReport, copRequest, copPlace, copRemove. Istemciye giden: copOnData, copOnAck, copDagrSync.
+        class TC2_fnc_copFieldReport
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_copRequest
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_copPlace
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_copRemove
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_copOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_copOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_copDagrSync
         {
             allowedTargets = 0;
             jip = 0;

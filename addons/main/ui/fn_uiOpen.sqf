@@ -155,6 +155,9 @@ if (!isNull findDisplay 92000) exitWith {};
     _netLog ctrlSetBackgroundColor [0, 0, 0, 0];
     _netLog ctrlCommit 0;
 
+    // HARİTA sekmesi (Aşama 4): harita + işaret düğmeleri; varsayılan gizli.
+    [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_copUiBuild;
+
     // Ağ durumunu sıfırla (yeni oturum) ve sunucuya ilk raporu gönder.
     missionNamespace setVariable ["TC2_net_status", []];
     missionNamespace setVariable ["TC2_net_statusTime", diag_tickTime];
