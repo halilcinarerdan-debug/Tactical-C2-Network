@@ -8,9 +8,9 @@
 [
     "TC2_cas_jtacClasses",
     "EDITBOX",
-    ["JTAC sınıfları (classname)", "Bu sınıftaki askerler JTAC sayılır. ; veya , ile ayrılır. Bir askere Zeus modülüyle JTAC verilmesi/alınması bu listeyi geçersiz kılar. Ayrıca Eden'de rol açıklamasında JTAC veya FAC yazanlar da JTAC sayılır."],
+    ["JTAC sınıfları (classname)", "Bu sınıftaki askerler JTAC sayılır. Virgülle ayırın (';' cba_settings.sqf dosyasını bozar). Bir askere Zeus modülüyle JTAC verilmesi/alınması bu listeyi geçersiz kılar. Ayrıca Eden'de rol açıklamasında JTAC veya FAC yazanlar da JTAC sayılır."],
     ["Tactical C2 Network", "Joint Fires (9-Line CAS)"],
-    "B_recon_JTAC_F;O_recon_JTAC_F",
+    "B_recon_JTAC_F,O_recon_JTAC_F",
     true
 ] call CBA_settings_fnc_init;
 
