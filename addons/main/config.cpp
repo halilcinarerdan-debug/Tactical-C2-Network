@@ -113,6 +113,18 @@ class TC2_TerminalDialog
     class controls {};
 };
 
+// ----------------------------------------------------------------------------
+//  5. Asama: Pilot 9-Line penceresi (ACE self menusunden acilir). Bos diyalog; kontroller scriptte kurulur.
+// ----------------------------------------------------------------------------
+class TC2_CasDialog
+{
+    idd = 92100;
+    movingEnable = 0;
+    enableSimulation = 1;
+    class controlsBackground {};
+    class controls {};
+};
+
 class CfgFunctions
 {
     class TC2
@@ -133,6 +145,9 @@ class CfgFunctions
 
         // 4. Asama: ortak harekat resmi (harita, dusman isaretleri, MicroDAGR)
         #include "cop\CfgFunctions.hpp"
+
+        // 5. Asama: dijital 9-Line CAS
+        #include "cas\CfgFunctions.hpp"
     };
 };
 
@@ -218,6 +233,48 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_copDagrSync
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 5. Asama (CAS). Sunucuya giden: casPoll, casSend, casReadback, casAbort. Istemciye giden: casOnData, casOnAck, casOnIncoming, casOnResult.
+        class TC2_fnc_casPoll
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_casSend
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_casReadback
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_casAbort
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_casOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_casOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_casOnIncoming
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_casOnResult
         {
             allowedTargets = 0;
             jip = 0;

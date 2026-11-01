@@ -14,7 +14,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 2 | Terminal arayüzü (yeşil/siyah, sekmeli; UAV sekmesi yer tutucu) | ✅ hazır (test bekliyor) |
 | 3 | ACRE2 veri ağı + basit mesajlaşma (telsiz/kanal/menzil kontrolü, PING/PONG) | ✅ hazır (test bekliyor) |
 | 4 | Ortak harekat resmi (COP): terminal haritası, düşman işareti, ACE MicroDAGR | ✅ hazır (test bekliyor) |
-| 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC) | ⏳ |
+| 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC, zorunlu geri okuma, abort) | ✅ hazır (test bekliyor) |
 | 6 | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
 
 ## Depo yapısı
@@ -71,12 +71,23 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_copSyncUnit / copPush         [SUNUCU] liderlerin MicroDAGR özetini eşzamanla
         fn_copDagrSync.sqf               [İSTEMCİ] işaretleri DAGR waypoint'i olarak yaz
         fn_copUi*.sqf                    [İSTEMCİ] HARİTA sekmesi: kurulum, çizim, tıklama, durum
+    cas/                                 5. aşama (dijital 9-Line CAS)
+        fn_casValidate.sqf               doktrin doğrulaması (19 alanlı form; sunucu karar verir, istemci ön kontrol)
+        fn_casLines / casGrid            9 satırı okunur biçimde yaz; 10 haneli grid (ACE)
+        fn_casCompare.sqf                zorunlu geri okuma karşılaştırması (satır 4, 6, kısıtlar)
+        fn_casSend / Poll / Abort        [SUNUCU] gönder, CAS sekmesi verisi, iptal
+        fn_casReadback / ApplyReadback   [SUNUCU] pilot geri okuması, sonuç dağıtımı
+        fn_casTargets.sqf                [SUNUCU] alıcılar: aynı ağ + menzil + hava aracı
+        fn_casUi*.sqf                    [İSTEMCİ] JTAC formu (CAS sekmesi)
+        fn_casPilot*.sqf                 [İSTEMCİ] pilot penceresi (ACE self menü)
+        fn_debugCasPilot.sqf             TEST: AI'ı simüle CAS pilotu yap
 docs/
     DOKTRIN_NOTLARI.md                   doktrinden çıkan kurallar (9-Line, Type 1/2/3, BOT/BOC, roller)
     TEST_ASAMA1.md                       tek başına test: editör, hosted MP, yerel dedicated
     TEST_ASAMA2.md                       arayüz testi
     TEST_ASAMA3.md                       ağ/mesajlaşma testi (tek kişilik, simüle eş)
     TEST_ASAMA4.md                       COP / işaret / MicroDAGR testi
+    TEST_ASAMA5.md                       9-Line CAS testi (tek kişilik)
     UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
 
@@ -108,6 +119,33 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
+
+## Aşama 5 – Dijital 9-Line CAS
+
+**CAS** sekmesi tek ekranlı 9-Line formudur (JP 3-09.3, Figure V-14 sırası). JTAC doldurur, ağdaki pilota gönderir; pilot ACE self menüsünden
+(**uçak içinde de**) açıp **zorunlu geri okumayı** yapar; sonuç JTAC'a renkli satırlarla döner.
+
+| Konu | Kural |
+|------|-------|
+| Yetki | yalnızca JTAC: objede `TC2_jtac = true` (Eden init: `this setVariable ["TC2_jtac", true, true];`). Sunucu kontrol eder. |
+| Alıcı | JTAC ile aynı telsiz tipi + kanal + menzilde ve hava aracında (Plane = sabit kanat, diğerleri = döner kanat). Gönderim, Aşama 3 ağ kontrolünden geçer ("BAĞLANTI YOK"). |
+| Doktrin doğrulaması | **sunucuda**: Type 1 ⇒ yalnız BOT; heading 0-359; mesafe sabit kanatta nm (0.1), döner kanatta m (100 m katı); lazerde 4 haneli kod; dostlar m + kardinal yön; danger close komutan baş harfleriyle; serbest metin temizlenir. |
+| Hedef konumu | HARİTA sekmesindeki düşman işaretlerinden seçilir; yükseklik (ft MSL) otomatik; konum 10 haneli grid, datum "ARMA grid". |
+| Geri okuma | satır 4, satır 6 ve verilmiş tüm kısıtlar (doktrin). Sunucu karşılaştırır; TAMAM/HATA + doğru değer JTAC ve pilota. Yanlışsa tekrar. |
+| İptal | JTAC her zaman iptal edebilir (doktrin); pilot bilgilendirilir. |
+| Pilot bildirimi | bildirim + kısa bip; pencere **kendiliğinden açılmaz** (uçuşu bölmez). |
+| Güvenlik/performans | tüm kararlar sunucuda, `remoteExecutedOwner` gönderen doğrulaması, 3 sn aralık, `[TC2][CAS]` RPT kaydı. Sekme dışında ek maliyet yok. |
+
+**Kapsam dışı (sonraki küçük aşama):** "cleared to engage" / "cleared hot" izinleri, "IN" çağrısı sonrası kontrol türü değiştirme kilidi (doktrin: Type değişimi
+Type 1/2'de "IN", Type 3'te "commencing" çağrısından önce yapılmalı). Şu an: form, gönderim, geri okuma, iptal.
+
+**Bilinen sınırlar:**
+- Konum 10 haneli oyun grid'idir (doktrinin istediği 100.000 m grid kimliği + MGRS yok; Arma'da yoktur). Datum satırında belirtilir.
+- Geri okuma, pilotun değerleri yazması şeklindedir (ses yerine); amaç doktrindeki doğrulama adımını işletmektir.
+- Pilot penceresi modal diyalogdur: açıkken uçuş tuşları pencereye gider. Sakin uçuşta veya ikinci pilotla kullanılmalı.
+- Pilotun hava aracında olup olmadığı sunucuda `vehicle _unit isKindOf "Air"` ile bakılır; farklı mod araçlarında sınıf kalıtımı değişebilir.
+
+Test: [`docs/TEST_ASAMA5.md`](docs/TEST_ASAMA5.md).
 
 ## Aşama 4 – Ortak harekat resmi (COP), düşman işareti, MicroDAGR
 

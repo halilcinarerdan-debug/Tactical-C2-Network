@@ -14,3 +14,6 @@ call TC2_fnc_netInitSettings;
 
 // 4. Ortak harekat resmi
 call TC2_fnc_copInitSettings;
+
+// 5. Dijital 9-Line CAS
+call TC2_fnc_casInitSettings;

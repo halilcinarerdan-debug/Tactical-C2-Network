@@ -16,3 +16,6 @@ call TC2_fnc_terminalPostInit;
 
 // 4. Ortak harekat resmi: saha varlığı bildirimi (10 sn)
 call TC2_fnc_copPostInit;
+
+// 5. Dijital 9-Line CAS: pilot tarafı (ACE self menü eylemi)
+call TC2_fnc_casPostInit;

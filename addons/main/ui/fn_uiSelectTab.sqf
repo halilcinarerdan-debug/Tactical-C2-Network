@@ -36,6 +36,17 @@ if (_index == 1) then {
     call TC2_fnc_copUiRequest;
 };
 
+// CAS sekmesi (9-Line formu) yalnızca CAS'ta. Seçilince veriyi hemen iste.
+{
+    (_display displayCtrl _x) ctrlShow (_index == 2);
+} forEach (missionNamespace getVariable ["TC2_cas_ctrlIds", []]);
+
+if (_index == 2) then {
+    missionNamespace setVariable ["TC2_cas_statusText", ""];
+    call TC2_fnc_casUiRequest;
+    call TC2_fnc_casUiUpdate;
+};
+
 private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];
 
 (_display displayCtrl 92020) ctrlSetStructuredText ([_index, _terminal, ACE_player] call TC2_fnc_uiTabText);
