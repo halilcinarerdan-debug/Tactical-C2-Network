@@ -102,14 +102,14 @@ Bu yüzden ayarda `Item_CAC_Card` yazılı olsa bile **hem `Item_CAC_Card` hem `
 ```
 
 İkisi de `CfgWeapons=false` ise kartı sağlayan mod yüklü değildir ya da sınıf adı farklıdır. Geçici olarak ayarı `ItemGPS` gibi mevcut bir eşyaya çevirip test edebilirsin.
-Ayar boş bırakılırsa **kimse giremez** (güvenli varsayılan).
+Projenin kendi kartı **`TC2_CAC_Card`** her zaman kabul edilir; ayar yalnızca **ek** (harici mod) kart sınıfları içindir.
 
 ### CBA ayarları (`Options > Addon Options > Tactical C2 Network > Terminal ve Erişim (OPSEC)`)
 
 | Ayar | Varsayılan | Kapsam | Açıklama |
 |------|-----------|--------|----------|
 | `TC2_terminal_enabled` | açık | global | Kapalıysa eylem görünmez, sunucu her talebi reddeder |
-| `TC2_access_cardClasses` | `Item_CAC_Card;TC2_CAC_Card` | global | Gerekli kart sınıf(lar)ı; `;` veya `,` ile ayır |
+| `TC2_access_cardClasses` | `Item_CAC_Card` | global | **Ek** kart sınıf(lar)ı (`TC2_CAC_Card` her zaman geçerli); `;` veya `,` ile ayır |
 | `TC2_access_authTime` | 2 sn | global | Kart okutma çubuğu süresi; 0 = anında |
 | `TC2_debug` | kapalı | istemci | Bildirimleri sohbet satırına da yazar |
 

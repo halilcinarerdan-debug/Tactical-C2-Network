@@ -30,9 +30,9 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
 [
     "TC2_access_cardClasses",
     "EDITBOX",
-    ["Gerekli kimlik kartı (classname)", "Terminale girmek için envanterde/atanmış eşyalarda bulunması gereken eşya. Birden fazla sınıf ; veya , ile ayrılır. 'Item_' ön ekli yazılırsa ön eksiz hali de kabul edilir. BOŞ bırakılırsa kimse giremez."],
+    ["Ek kimlik kartı sınıfları (classname)", "TC2_CAC_Card her zaman kabul edilir. Buraya harici moddan ek kart sınıfları yazılabilir; birden fazla sınıf ; veya , ile ayrılır. 'Item_' ön ekli yazılırsa ön eksiz hali de kabul edilir."],
     _category,
-    "Item_CAC_Card;TC2_CAC_Card",
+    "Item_CAC_Card",
     true
 ] call CBA_settings_fnc_init;
 

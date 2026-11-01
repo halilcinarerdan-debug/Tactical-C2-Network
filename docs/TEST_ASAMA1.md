@@ -42,9 +42,8 @@ Beklenen: `[true,true,true]`.
 [] call TC2_fnc_debugInfo;
 ```
 Çıktı sohbet satırına yazılır ve **panoya kopyalanır** (bana yapıştırabilirsin). `aday` satırlarına bak:
-`item_cac_card` ve/veya `cac_card` için `CfgWeapons=true` olan bir sınıf olmalı. İkisi de `false` ise kartı sağlayan mod yüklü değil
-ya da sınıf adı farklı; geçici çözüm: `Options → Addon Options → Tactical C2 Network` içinde **Gerekli kimlik kartı** ayarını `ItemGPS` yap
-(aşağıdaki testlerin hepsi aynen geçerli).
+`tc2_cac_card` için `CfgWeapons=true` olmalı (projenin kendi kartı, her zaman kabul edilir). `item_cac_card` / `cac_card`
+yalnızca harici bir mod o kartı sağlıyorsa `true` olur; `false` olmaları normaldir.
 
 **1.3 Senaryo A — kart yok ⇒ RED.** Kartın olmadığından emin ol: `[player, false] call TC2_fnc_debugCard;`.
 Terminale bak, **Sol Windows**'u basılı tut (ACE etkileşim), **Terminale Giriş (Kimlik Kartı)**'nı seç
@@ -91,7 +90,7 @@ systemChat str ([TC2_t, TC2_ai] call TC2_fnc_accessCheck);      // beklenen: [fa
 (İsteğe bağlı: canlı bir AI'a `setUnconscious true` verince `UNCONSCIOUS` dönmesi beklenir; dönmezse bana bildir.)
 
 **1.7 Ayarlar.** `TC2_terminal_enabled`'ı kapat ⇒ eylem menüden kaybolur ve `accessCheck` `DISABLED` döner. `TC2_access_authTime`'ı 0 yap ⇒ çubuk çıkmadan anında sonuç.
-`TC2_access_cardClasses` boşalt ⇒ kartı olan bile giremez (güvenli varsayılan).
+`TC2_access_cardClasses` ayarı yalnızca **ek** harici kart sınıfları içindir; boş olsa bile `TC2_CAC_Card` her zaman geçerlidir.
 
 ## 2. Hosted MP
 

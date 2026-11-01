@@ -8,7 +8,7 @@
     MP notu: envanter tüm makinelere senkronlanır, bu yüzden SUNUCU da başka oyuncunun kartını
     doğru görür. Sunucu bu fonksiyonla kendi kararını verir (istemciye güvenilmez).
 
-    Güvenli varsayılan (fail-closed): kart sınıfı ayarı boşsa kimse giremez.
+    Kabul edilen sınıf listesi hiçbir zaman boş değildir (TC2_CAC_Card her zaman vardır).
 
     Parametreler:
         0: birim <OBJECT>
