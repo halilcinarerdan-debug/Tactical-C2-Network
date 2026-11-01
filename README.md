@@ -172,6 +172,8 @@ Test: [`docs/TEST_ASAMA6_MEDEVAC.md`](docs/TEST_ASAMA6_MEDEVAC.md).
 
 ### Arayüz: çerçeve ve harita araçları (ATAK'tan esinlenen)
 
+Yazı tipi: oyunun eşit genişlikli **EtelkaMonospacePro** yazı tipi (CBA `TC2_ui_mono`, varsayılan açık).
+
 Masa başı terminal **masaüstü monitör** (kalın çerçeve, yuvarlak köşe, ayak), saha cihazı **kalın kılıflı tablet** çerçevesi içinde açılır; başlıkta canlı yön / saat / grid / yükseklik satırı vardır.
 HARİTA sekmesi: imleç altı canlı **grid + yükseklik + mesafe + yön (derece/mil)**, **ÖLÇ** (iki nokta arası mesafe / yön / yükseklik farkı), **MERKEZ**,
 **KATMAN** (oyun harita işaretleri oyunun kendi sembolleriyle). Düşman işaretleri **kategori + tür** listesiyle konur (piyade, keşif, motorize/mekanize, zırh, topçu, havan, hava savunma, helikopter, uçak, İHA, komuta, ikmal, bakım, servis, sağlık, deniz, tesis, mayın/IED, pusu, bilinmeyen); semboller oyunun NATO simgeleridir (`TC2_fnc_copTypeCatalog`). Tabletli **AI grup liderleri** de (CBA `TC2_cop_showAi`, varsayılan açık; aynı taraf, telsiz menzili içinde) dost simgesi olarak çıkar. Hepsi istemcide yerel hesap; ağ yükü yok, kare başına döngü yok (çizim olayı + 10 Hz kısıtlı imleç olayı).

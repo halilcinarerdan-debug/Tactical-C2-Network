@@ -80,3 +80,12 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
     false,
     false
 ] call CBA_settings_fnc_init;
+
+[
+    "TC2_ui_mono",
+    "CHECKBOX",
+    ["Arayüz yazı tipi: EtelkaMonospacePro", "Açıksa terminal ve pilot penceresi oyunun eşit genişlikli EtelkaMonospacePro yazı tipini kullanır (okunabilirlik). Kapalıysa oyunun varsayılan yazı tipi kalır. Değişiklik pencere bir sonraki açılışında etkili olur. Türkçe karakterlerde (İ, ı, ş, ğ) kare görürseniz kapatın."],
+    ["Tactical C2 Network", "Arayüz"],
+    true,
+    false
+] call CBA_settings_fnc_init;

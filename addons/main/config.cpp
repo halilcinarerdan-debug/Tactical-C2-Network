@@ -26,6 +26,7 @@ class CfgPatches
             "ace_main",
             "ace_common",
             "ace_interact_menu",
+            "A3_Ui_F",
             "A3_Structures_F_Items_Electronics",
             "A3_Modules_F"
         };
@@ -224,6 +225,39 @@ class TC2_CasDialog
 //  OPORD sekmesi: kaydirilabilir cok satirli metin alanlari. Kendi basina duran, vanilla sinifa bagimli olmayan siniflar
 //  (style 16 = ST_MULTI). View: salt okunur (canModify = 0); Edit: duzenlenebilir (yalniz Level 3).
 // ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+//  Yazi tipi: EtelkaMonospacePro (oyunun kendi esit genislikli yazi tipi). Yapili metin ve menu dugmesi yazi tipini sinif duzeyinde
+//  (Attributes) alir; diger kontroller scriptten ctrlSetFont ile (uiFontApply). Secim CBA "TC2_ui_mono" ile (uiClass).
+// ----------------------------------------------------------------------------
+class RscStructuredText;
+class RscButtonMenu;
+
+class TC2_RscStructuredTextMono: RscStructuredText
+{
+    class Attributes
+    {
+        font = "EtelkaMonospacePro";
+        color = "#ffffff";
+        align = "left";
+        valign = "top";
+        shadow = 0;
+        shadowColor = "#000000";
+        size = "1";
+    };
+};
+
+class TC2_RscButtonMenuMono: RscButtonMenu
+{
+    font = "EtelkaMonospacePro";
+    class Attributes
+    {
+        font = "EtelkaMonospacePro";
+        color = "#E5E5E5";
+        align = "center";
+        shadow = "false";
+    };
+};
+
 class TC2_RscMultiView
 {
     idc = -1;

@@ -29,7 +29,7 @@ private _bw = (_width - 5 * _gap) / 6;
 
 private _tool = {
     params ["_idc", "_index", "_text", "_color", "_code"];
-    private _button = _display ctrlCreate ["RscButtonMenu", _idc];
+    private _button = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, _idc];
     _button ctrlSetPosition [_left + _index * (_bw + _gap), _top, _bw, _rowH];
     _button ctrlSetText _text;
     _button ctrlSetFontHeight 0.028;
@@ -113,7 +113,7 @@ _readout ctrlShow false;
 _readout ctrlCommit 0;
 
 // LACE paneli: haritanın üst kenarında, yalnızca INFO modunda ve bir birim seçiliyken görünür (copUiMode yönetir).
-private _panel = _display ctrlCreate ["RscStructuredText", 92046];
+private _panel = _display ctrlCreate [["RscStructuredText"] call TC2_fnc_uiClass, 92046];
 _panel ctrlSetPosition [_left + 0.005, _mapTop + 0.005, _width * 0.6, 0.16];
 _panel ctrlSetBackgroundColor [0, 0.05, 0.01, 0.92];
 _panel ctrlSetFontHeight 0.028;

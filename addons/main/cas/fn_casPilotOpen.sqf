@@ -43,7 +43,7 @@ _header ctrlSetText "  CAS 9-LINE";
 _header ctrlSetFontHeight 0.032;
 _header ctrlCommit 0;
 
-private _close = _display ctrlCreate ["RscButtonMenu", 92103];
+private _close = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92103];
 _close ctrlSetPosition [_left + _w - _closeW, _top, _closeW, _headerH];
 _close ctrlSetText "KAPAT";
 _close ctrlSetBackgroundColor [0.45, 0.05, 0.05, 1];
@@ -53,7 +53,7 @@ _close ctrlCommit 0;
 
 // Sol: 9-Line
 private _linesWidth = _w * 0.55;
-private _lines = _display ctrlCreate ["RscStructuredText", 92104];
+private _lines = _display ctrlCreate [["RscStructuredText"] call TC2_fnc_uiClass, 92104];
 _lines ctrlSetPosition [_left + _pad, _top + _headerH + _pad, _linesWidth, _h - _headerH - 2 * _pad];
 _lines ctrlSetBackgroundColor [0, 0, 0, 0];
 _lines ctrlCommit 0;
@@ -91,7 +91,7 @@ private _fields = [
 
 private _buttonY = _top + _headerH + _pad + 6 * (_rowH + 0.006) + 0.01;
 
-private _readback = _display ctrlCreate ["RscButtonMenu", 92116];
+private _readback = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92116];
 _readback ctrlSetPosition [_rightLeft, _buttonY, _rightWidth, _rowH + 0.005];
 _readback ctrlSetText "GERİ OKU";
 _readback ctrlSetTextColor _green;
@@ -100,7 +100,7 @@ _readback ctrlAddEventHandler ["ButtonClick", {call TC2_fnc_casPilotReadback}];
 _readback ctrlCommit 0;
 
 private _resultY = _buttonY + _rowH + 0.02;
-private _results = _display ctrlCreate ["RscStructuredText", 92117];
+private _results = _display ctrlCreate [["RscStructuredText"] call TC2_fnc_uiClass, 92117];
 _results ctrlSetPosition [_rightLeft, _resultY, _rightWidth, (_top + _h - _pad) - _resultY];
 _results ctrlSetBackgroundColor [0, 0.05, 0.01, 1];
 _results ctrlCommit 0;
@@ -132,3 +132,6 @@ _display displayAddEventHandler ["Unload", {
 }];
 
 call TC2_fnc_casPilotUpdate;
+
+// Yazı tipi: EtelkaMonospacePro (CBA TC2_ui_mono açıksa).
+[_display] call TC2_fnc_uiFontApply;

@@ -13,6 +13,8 @@ class ui
     class uiReleaseFocus {};
     class uiTrackFocus {};
     class uiMakeControl {};
+    class uiClass {};
+    class uiFontApply {};
     class uiBuildRows {};
     class uiFillCombo {};
 };

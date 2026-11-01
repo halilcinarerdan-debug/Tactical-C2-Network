@@ -13,7 +13,7 @@
 
 params ["_display", "_idc", "_class", "_px", "_py", "_pw", "_ph"];
 
-private _control = _display ctrlCreate [_class, _idc];
+private _control = _display ctrlCreate [[_class] call TC2_fnc_uiClass, _idc];
 _control ctrlSetPosition [_px, _py, _pw, _ph];
 // Yazı boyutu yüksekliğe göre; YAPILI METİN (RscStructuredText) yüksekliğe BAĞLANMAZ: uzun kutuda dev harf çıkıyordu. Taban 0.028, içerik <t size> ile ayarlanır.
 _control ctrlSetFontHeight ([_ph * 0.72, 0.028] select (_class isEqualTo "RscStructuredText"));

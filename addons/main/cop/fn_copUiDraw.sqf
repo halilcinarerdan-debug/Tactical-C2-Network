@@ -12,12 +12,14 @@
 
 params ["_map"];
 
+private _font = ["PuristaMedium", "EtelkaMonospacePro"] select (missionNamespace getVariable ["TC2_ui_mono", true]);
+
 // Oyun harita işaretleri (KATMAN): 5 sn'de bir hazırlanan önbellek; burada yalnızca çizim.
 {
     _x params ["_shape", "_pos", "_texture", "_color", "_size", "_angle", "_text", "_extra"];
     switch (_shape) do {
         case "ICON": {
-            _map drawIcon [_texture, _color, _pos, _size, _size, _angle, _text, 1, 0.04, "PuristaMedium", "right"];
+            _map drawIcon [_texture, _color, _pos, _size, _size, _angle, _text, 1, 0.04, _font, "right"];
         };
         case "ELLIPSE": {
             _map drawEllipse [_pos, _size select 0, _size select 1, _angle, _color, _extra select 0];
@@ -48,7 +50,7 @@ private _arrowReach = (_map ctrlMapScreenToWorld [0.5, 0.5]) distance2D (_map ct
     _map drawIcon [
         "\A3\ui_f\data\map\markers\nato\b_inf.paa", _color, _pos,
         [20, 28] select _leader, [20, 28] select _leader, 0,
-        ["", [_label, format ["%1  [%2]", _label, _status]] select !(_status isEqualTo "")] select _leader, 1, 0.045, "PuristaMedium", "right"
+        ["", [_label, format ["%1  [%2]", _label, _status]] select !(_status isEqualTo "")] select _leader, 1, 0.045, _font, "right"
     ];
 
     // Lider bakış oku: simgenin önünde, bakılan yönde (ok ile simge arası ekranda sabit uzaklık: haritayı yakınlaştırınca da aynı kalır).
@@ -63,7 +65,7 @@ private _arrowReach = (_map ctrlMapScreenToWorld [0.5, 0.5]) distance2D (_map ct
     _map drawIcon [
         "\A3\ui_f\data\map\markers\nato\o_unknown.paa", [1, 0.65, 0.2, 1], _pos,
         26, 26, 0,
-        format ["SALUTE #%1 ? %2 dk", _id, floor (_age / 60)], 1, 0.045, "PuristaMedium", "right"
+        format ["SALUTE #%1 ? %2 dk", _id, floor (_age / 60)], 1, 0.045, _font, "right"
     ];
 } forEach _unverified;
 
@@ -73,13 +75,13 @@ private _arrowReach = (_map ctrlMapScreenToWorld [0.5, 0.5]) distance2D (_map ct
     _map drawIcon [
         _icon, _iconColor, _pos,
         _iconSize, _iconSize, 0,
-        format ["%1  %2 dk", [_type] call TC2_fnc_copTypeName, floor (_age / 60)], 1, 0.045, "PuristaMedium", "right"
+        format ["%1  %2 dk", [_type] call TC2_fnc_copTypeName, floor (_age / 60)], 1, 0.045, _font, "right"
     ];
 } forEach _markers;
 
 _map drawIcon [
     "\A3\ui_f\data\map\markers\nato\b_inf.paa", [0.25, 1, 0.35, 1], getPosASL ACE_player,
-    28, 28, getDir ACE_player, "SEN", 1, 0.045, "PuristaMedium", "right"
+    28, 28, getDir ACE_player, "SEN", 1, 0.045, _font, "right"
 ];
 
 // ÖLÇ: A noktası seçiliyse çizgi B'ye (ya da B yoksa imlece) uzanır.
@@ -88,11 +90,11 @@ if !(_measure isEqualTo []) then {
     private _from = _measure select 0;
     private _to = if (count _measure > 1) then {_measure select 1} else {missionNamespace getVariable ["TC2_cop_cursor", []]};
 
-    _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _from, 14, 14, 0, "A", 1, 0.045, "PuristaMedium", "right"];
+    _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _from, 14, 14, 0, "A", 1, 0.045, _font, "right"];
     if !(_to isEqualTo []) then {
         _map drawLine [_from, _to, [1, 0.9, 0.3, 1]];
         if (count _measure > 1) then {
-            _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _to, 14, 14, 0, format ["B  %1 m", round (_from distance2D _to)], 1, 0.045, "PuristaMedium", "right"];
+            _map drawIcon ["\A3\ui_f\data\map\markers\military\dot_CA.paa", [1, 0.9, 0.3, 1], _to, 14, 14, 0, format ["B  %1 m", round (_from distance2D _to)], 1, 0.045, _font, "right"];
         };
     };
 };

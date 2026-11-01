@@ -96,14 +96,14 @@ if (!isNull findDisplay 92000) exitWith {};
     _statusBar ctrlCommit 0;
 
     // Görünmez odak çukuru: yazı kutusundan odağı almak için (uiReleaseFocus). Ekran dışında 1 piksellik düğme.
-    private _sink = _display ctrlCreate ["RscButtonMenu", 92005];
+    private _sink = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92005];
     _sink ctrlSetPosition [_left, _top + _h - 0.002, 0.002, 0.002];
     _sink ctrlSetBackgroundColor [0, 0, 0, 0];
     _sink ctrlSetText "";
     _sink ctrlCommit 0;
 
     // Kapat düğmesi
-    private _closeButton = _display ctrlCreate ["RscButtonMenu", 92003];
+    private _closeButton = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92003];
     _closeButton ctrlSetPosition [_left + _w - _closeW, _top, _closeW, _headerH];
     _closeButton ctrlSetText "KAPAT";
     _closeButton ctrlSetBackgroundColor [0.45, 0.05, 0.05, 1];
@@ -116,7 +116,7 @@ if (!isNull findDisplay 92000) exitWith {};
     // Sekme düğmeleri (IDC 92010 + sıra)
     private _tabW = _w / count _tabs;
     {
-        private _tabButton = _display ctrlCreate ["RscButtonMenu", 92010 + _forEachIndex];
+        private _tabButton = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92010 + _forEachIndex];
         _tabButton ctrlSetPosition [_left + _forEachIndex * _tabW, _top + _headerH, _tabW, _tabH];
         _tabButton ctrlSetText _x;
         _tabButton ctrlSetFontHeight 0.03;
@@ -129,7 +129,7 @@ if (!isNull findDisplay 92000) exitWith {};
 
     // İçerik alanı
     private _contentY = _top + _headerH + _tabH + _pad;
-    private _content = _display ctrlCreate ["RscStructuredText", 92020];
+    private _content = _display ctrlCreate [["RscStructuredText"] call TC2_fnc_uiClass, 92020];
     _content ctrlSetPosition [_left + _pad, _contentY, _w - 2 * _pad, _h - (_headerH + _tabH + _footerH + 3 * _pad)];
     _content ctrlSetBackgroundColor [0, 0, 0, 0];
     _content ctrlCommit 0;
@@ -164,7 +164,7 @@ if (!isNull findDisplay 92000) exitWith {};
     }];
     _edit ctrlCommit 0;
 
-    private _sendButton = _display ctrlCreate ["RscButtonMenu", 92032];
+    private _sendButton = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92032];
     _sendButton ctrlSetPosition [_left + _w - _pad - 2 * _buttonW - _gap, _inputTop, _buttonW, _inputH];
     _sendButton ctrlSetText "GÖNDER";
     _sendButton ctrlSetTextColor _green;
@@ -172,7 +172,7 @@ if (!isNull findDisplay 92000) exitWith {};
     _sendButton ctrlAddEventHandler ["ButtonClick", {call TC2_fnc_netUiSend}];
     _sendButton ctrlCommit 0;
 
-    private _pingButton = _display ctrlCreate ["RscButtonMenu", 92033];
+    private _pingButton = _display ctrlCreate [["RscButtonMenu"] call TC2_fnc_uiClass, 92033];
     _pingButton ctrlSetPosition [_left + _w - _pad - _buttonW, _inputTop, _buttonW, _inputH];
     _pingButton ctrlSetText "PING";
     _pingButton ctrlSetTextColor _green;
@@ -180,7 +180,7 @@ if (!isNull findDisplay 92000) exitWith {};
     _pingButton ctrlAddEventHandler ["ButtonClick", {["PING"] call TC2_fnc_netSend}];
     _pingButton ctrlCommit 0;
 
-    private _netLog = _display ctrlCreate ["RscStructuredText", 92034];
+    private _netLog = _display ctrlCreate [["RscStructuredText"] call TC2_fnc_uiClass, 92034];
     _netLog ctrlSetPosition [_left + _pad, _logTop, _w - 2 * _pad, (_contentY + _contentH) - _logTop];
     _netLog ctrlSetBackgroundColor [0, 0, 0, 0];
     _netLog ctrlCommit 0;
@@ -263,6 +263,9 @@ if (!isNull findDisplay 92000) exitWith {};
 
     // Ekran köşelerini çerçeve renginde kapla (en son: üst üste çizim sırası).
     call TC2_fnc_uiBuildFrameCorners;
+
+    // Yazı tipi: EtelkaMonospacePro (CBA TC2_ui_mono açıksa).
+    [_display] call TC2_fnc_uiFontApply;
 
     [_terminal, call TC2_fnc_netGetRadioState] call TC2_fnc_netReportState;
     call TC2_fnc_netUiUpdate;

@@ -108,6 +108,12 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
 4. **Bakış oku:** HARİTA'da grup/takım liderlerinin (oyuncu ve tabletli AI) simgesinin önünde, baktıkları yönü gösteren bir **ok** olur (yayada gözün baktığı yön, araçta aracın yönü; 5 dereceye yuvarlanır, 5 sn'de bir yenilenir). Lideri döndürün: ok dönmeli; haritayı yakınlaştırınca ok simgeden aynı ekran uzaklığında kalmalı. Lider olmayan dostta ok yoktur.
 5. Doğrulanmamış SALUTE noktaları DAGR'a **gitmez**; yalnızca işaret olanlar (S2/CO doğrulayınca) gider.
 
+## L. Yazı tipi (EtelkaMonospacePro)
+
+Terminal ve pilot penceresi oyunun eşit genişlikli **EtelkaMonospacePro** yazı tipiyle açılır (CBA `Arayüz ▸ Arayüz yazı tipi`, kişisel ayar, varsayılan açık; değişiklik pencere bir sonraki açılışında etkili olur). Harita etiketleri de aynı yazı tipini kullanır.
+Kontrol edin: (1) tüm sekmelerde yazılar okunaklı mı, (2) **Türkçe karakterler** (İ ı ş ğ ç ö ü) kare/boşluk çıkmadan görünüyor mu, (3) düğme/etiketler taşıyor mu (eşit genişlikli yazı daha geniştir; taşan yeri bildirin, boyut küçültülür).
+Karakterlerde sorun olursa ayarı kapatın; eski yazı tipine döner.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).
