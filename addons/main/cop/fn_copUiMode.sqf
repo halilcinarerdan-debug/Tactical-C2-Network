@@ -5,7 +5,7 @@
     Harita tıklama modunu ayarlar ve düğmeleri vurgular. Aynı moda tekrar basmak modu kapatır.
 
     Parametreler:
-        0: mod <STRING>  "PLACE" | "DELETE" | boş = mevcut modu yalnızca yeniden boya (varsayılan)
+        0: mod <STRING>  "PLACE" | "DELETE" | "INFO" | boş = mevcut modu yalnızca yeniden boya (varsayılan)
 
     Dönüş: yok
 */
@@ -21,6 +21,7 @@ if !(_request isEqualTo "") then {
     switch (_mode) do {
         case "PLACE":  {["  Haritaya tıklayın: DÜŞMAN PİYADE konacak.", [1, 0.5, 0.5, 1]] call TC2_fnc_copUiStatus};
         case "DELETE": {["  Silmek istediğiniz işarete tıklayın.", [1, 0.8, 0.2, 1]] call TC2_fnc_copUiStatus};
+        case "INFO":   {["  Bir dost birime tıklayın: LACE bilgisi.", [0.25, 1, 0.35, 1]] call TC2_fnc_copUiStatus};
         default        {call TC2_fnc_copUiRequest};
     };
 };
@@ -30,3 +31,9 @@ if (isNull _display) exitWith {};
 
 (_display displayCtrl 92041) ctrlSetBackgroundColor ([[0.02, 0.1, 0.03, 1], [0.5, 0.1, 0.1, 1]] select (_mode isEqualTo "PLACE"));
 (_display displayCtrl 92042) ctrlSetBackgroundColor ([[0.02, 0.1, 0.03, 1], [0.45, 0.35, 0.05, 1]] select (_mode isEqualTo "DELETE"));
+(_display displayCtrl 92044) ctrlSetBackgroundColor ([[0.02, 0.1, 0.03, 1], [0.1, 0.45, 0.15, 1]] select (_mode isEqualTo "INFO"));
+
+// LACE paneli yalnızca INFO modunda görünür.
+if !(_mode isEqualTo "INFO") then {
+    (_display displayCtrl 92046) ctrlShow false;
+};

@@ -50,4 +50,5 @@ if (_tick % 5 == 0) then {
     if (_tab == 2) then {call TC2_fnc_casUiRequest};
     if (_tab in [3, 4]) then {call TC2_fnc_artyUiRequest};
     if (_tab == 5) then {call TC2_fnc_opordUiRequest};
+    if (_tab == 6) then {call TC2_fnc_rptUiRequest};
 };

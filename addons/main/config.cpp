@@ -15,8 +15,8 @@ class CfgPatches
         author = "TC2";
         url = "";
         // units[]: Zeus (curator) bu listeden addon'u aktive eder.
-        units[] = {"TC2_Terminal_F", "TC2_Module_Jtac", "TC2_Module_Observer", "TC2_Module_Fdc"};
-        weapons[] = {"TC2_CAC_Card"};
+        units[] = {"TC2_Terminal_F", "TC2_Module_Jtac", "TC2_Module_Observer", "TC2_Module_Fdc", "TC2_Module_Co", "TC2_Module_S2", "TC2_Module_S4"};
+        weapons[] = {"TC2_CAC_Card", "TC2_Card_Red", "TC2_Card_Blue", "TC2_Card_Gold", "TC2_Tablet"};
         requiredVersion = 0.1;
         // A3_Structures_F_Items_Electronics: Land_Laptop_unfolded_F bu yamada tanimli;
         // taban sinifin bizden ONCE yuklenmesi icin gerekli.
@@ -106,6 +106,24 @@ class CfgVehicles
         tc2_role = "FDC";
     };
 
+    class TC2_Module_Co: TC2_Module_Jtac
+    {
+        displayName = "Boluk Komutani (CO) Ata / Kaldir";
+        tc2_role = "CO";
+    };
+
+    class TC2_Module_S2: TC2_Module_Jtac
+    {
+        displayName = "Istihbarat Subayi (S2) Ata / Kaldir";
+        tc2_role = "S2";
+    };
+
+    class TC2_Module_S4: TC2_Module_Jtac
+    {
+        displayName = "Lojistik Subayi (S4) Ata / Kaldir";
+        tc2_role = "S4";
+    };
+
     class TC2_Terminal_F: Land_Laptop_unfolded_F
     {
         scope = 2;
@@ -126,6 +144,40 @@ class CfgWeapons
 {
     class CBA_MiscItem;
     class CBA_MiscItem_ItemInfo;
+
+    // Seviye kartlari (masa basi terminal): Kirmizi = Level 1, Mavi = Level 2, Siyah/Altin = Level 3.
+    class TC2_Card_Red: CBA_MiscItem
+    {
+        author = "TC2";
+        scope = 2;
+        displayName = "Kirmizi Kart (Level 1)";
+        descriptionShort = "Level 1 kimlik karti: terminalde yalnizca kendi gorevini okur.";
+        picture = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\itemacc_ca.paa";
+
+        class ItemInfo: CBA_MiscItem_ItemInfo
+        {
+            mass = 1;
+        };
+    };
+
+    class TC2_Card_Blue: TC2_Card_Red
+    {
+        displayName = "Mavi Kart (Level 2)";
+        descriptionShort = "Level 2 kimlik karti: gizli (Level 3) belgeleri goremez; 9-Line / CFF yazabilir, raporlari okur.";
+    };
+
+    class TC2_Card_Gold: TC2_Card_Red
+    {
+        displayName = "Siyah-Altin Kart (Level 3)";
+        descriptionShort = "Level 3 kimlik karti: komuta / kurmay; her seyi gorur, OPORD'u duzenler.";
+    };
+
+    // Saha tableti: laptop olmadan ACE self menusunden terminal penceresini acar.
+    class TC2_Tablet: TC2_Card_Red
+    {
+        displayName = "TC2 Saha Tableti";
+        descriptionShort = "Sahadan terminal verilerine baglanir. Liderler ve JTAC tam kullanir; digerleri yalnizca harita ve isaretleri izler.";
+    };
 
     class TC2_CAC_Card: CBA_MiscItem
     {
@@ -229,6 +281,9 @@ class CfgFunctions
 
         // 6. Asama: OPORD (yetki seviyeli belgeler)
         #include "opord\CfgFunctions.hpp"
+
+        // 6. Asama: saha raporlari (SALUTE / SITREP / LACE)
+        #include "rpt\CfgFunctions.hpp"
     };
 };
 
@@ -421,6 +476,33 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_opordOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 6. Asama (RAPORLAR). Sunucuya giden: rptSend, rptPoll, rptVerify. Istemciye giden: rptOnData, rptOnAck.
+        class TC2_fnc_rptSend
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_rptPoll
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_rptVerify
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_rptOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_rptOnAck
         {
             allowedTargets = 0;
             jip = 0;

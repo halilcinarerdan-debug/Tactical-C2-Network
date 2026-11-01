@@ -14,12 +14,12 @@ if (!hasInterface) exitWith {};
 params [["_code", "", [""]], ["_extra", [], [[]]]];
 
 private _text = switch (_code) do {
-    case "ACKED":       {format ["OPORD onayınız kaydedildi (sürüm %1).", _extra param [0, "?"]]};
+    case "ACKED":       {format ["Belge onayınız kaydedildi (sürüm %1).", _extra param [0, "?"]]};
     case "SAVED":       {format ["Bölüm kaydedildi (sürüm %1).", _extra param [0, "?"]]};
-    case "TEMPLATE_OK": {"Boş OPORD şablonu oluşturuldu."};
-    case "NOT_EDITOR":  {"OPORD'u yalnızca Level 3 düzenleyebilir."};
-    case "EMPTY":       {"Henüz yayımlanmış OPORD yok."};
-    case "EXISTS":      {"Zaten bir OPORD var; şablon yalnızca belge yokken oluşturulur."};
+    case "TEMPLATE_OK": {"Boş şablon oluşturuldu."};
+    case "NOT_EDITOR":  {"Belgeyi yalnızca MASA BAŞINDA Level 3 düzenleyebilir."};
+    case "EMPTY":       {"Henüz yayımlanmış belge yok."};
+    case "EXISTS":      {"Zaten bir belge var; şablon yalnızca belge yokken oluşturulur."};
     case "NO_SECTION":  {"Bölüm bulunamadı."};
     default {[_code] call TC2_fnc_accessReasonText};
 };

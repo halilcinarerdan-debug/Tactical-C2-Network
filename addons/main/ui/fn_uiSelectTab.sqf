@@ -5,7 +5,7 @@
     Seçili sekmeyi vurgular ve içerik alanını o sekmenin metniyle doldurur. Döngü yok, tek seferlik iş.
 
     Parametreler:
-        0: sekme sırası <NUMBER>  (0 = ANA ... 5 = UAV)
+        0: sekme sırası <NUMBER>  (0 = ANA, 1 = HARİTA, 2 = CAS, 3 = TOPÇU, 4 = FDC, 5 = OPORD, 6 = RAPOR, 7 = LOJİSTİK, 8 = UAV)
 
     Dönüş: yok
 */
@@ -23,6 +23,14 @@ missionNamespace setVariable ["TC2_ui_tab", _index];
     _button ctrlSetBackgroundColor (if (_forEachIndex == _index) then {[0.1, 0.45, 0.15, 1]} else {[0.02, 0.1, 0.03, 1]});
 } forEach (missionNamespace getVariable ["TC2_ui_tabs", []]);
 
+// İZLEME modu (tabletli er): yalnızca HARİTA ve OPORD sekmeleri etkin; diğerleri soluk ve tıklanamaz.
+// Bu bir kolaylıktır; asıl engel sunucudadır (yazma uçları VIEW_ONLY döner, hassas veri gönderilmez).
+private _viewMode = (missionNamespace getVariable ["TC2_ui_mode", "DESK"]) isEqualTo "VIEW";
+{
+    private _button = _display displayCtrl (92010 + _forEachIndex);
+    _button ctrlEnable (!_viewMode || {_forEachIndex in [0, 1, 5]});
+} forEach (missionNamespace getVariable ["TC2_ui_tabs", []]);
+
 // Ağ paneli (92030-92034) yalnızca ANA sekmesinde.
 {
     (_display displayCtrl _x) ctrlShow (_index == 0);
@@ -31,7 +39,14 @@ missionNamespace setVariable ["TC2_ui_tab", _index];
 // HARİTA sekmesi (92040-92043) yalnızca HARİTA'da. Seçilince veriyi hemen iste.
 {
     (_display displayCtrl _x) ctrlShow (_index == 1);
-} forEach [92040, 92041, 92042, 92043];
+} forEach [92040, 92041, 92042, 92043, 92044];
+
+// İzleme modunda işaret koyma/silme düğmeleri yok (yalnızca okuma + LACE yetkisizdir).
+if (_viewMode) then {
+    {(_display displayCtrl _x) ctrlShow false} forEach [92041, 92042];
+};
+
+(_display displayCtrl 92046) ctrlShow false;
 
 if (_index == 1) then {
     missionNamespace setVariable ["TC2_cop_mode", ""];
@@ -52,6 +67,13 @@ if (_index == 2) then {
 
 // TOPÇU (3) ve FDC (4) sekmeleri: görünürlük artyUiUpdate'te; seçilince veriyi hemen iste.
 call TC2_fnc_artyUiUpdate;
+// RAPOR (6)
+call TC2_fnc_rptUiUpdate;
+if (_index == 6) then {
+    missionNamespace setVariable ["TC2_rpt_statusText", ""];
+    call TC2_fnc_rptUiChanged;
+    call TC2_fnc_rptUiRequest;
+};
 // OPORD (5)
 call TC2_fnc_opordUiUpdate;
 if (_index == 5) then {

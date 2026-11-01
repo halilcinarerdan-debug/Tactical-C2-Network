@@ -36,7 +36,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
     [_unit, "TC2_fnc_artyOnAck", [_code, []]] call TC2_fnc_netToUnit;
 };
 
-if !([_unit, "OBSERVER"] call TC2_fnc_hasRole || {[_unit, "JTAC"] call TC2_fnc_hasRole}) exitWith {
+if !([_unit, _terminal, "ARTY"] call TC2_fnc_canWriteFires) exitWith {
     diag_log format ["[TC2][TOPCU] RED NOT_OBSERVER birim=%1", name _unit];
     [_unit, "TC2_fnc_artyOnAck", ["NOT_OBSERVER", []]] call TC2_fnc_netToUnit;
 };

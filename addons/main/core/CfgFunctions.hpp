@@ -5,4 +5,5 @@ class core
     class notify {};
     class debugInfo {};
     class debugCard {};
+    class debugGive {};
 };

@@ -7,7 +7,7 @@
       Orta:  belge üst bilgisi (başlık, DTG, gizlilik etiketi, sürüm, seviyeniz, onay sayısı) ve bölüm metni (kaydırılabilir okuma alanı)
       Alt:   Level 3 için DÜZENLE / OKU geçişi, bölüm seviyesi, KAYDET, ŞABLON; durum satırı
     IDC: 92600 bölüm listesi, 92601 OKUDUM, 92602 üst bilgi, 92603 okuma alanı, 92604 düzenleme alanı, 92605 seviye, 92606 KAYDET,
-         92607 DÜZENLE/OKU, 92608 ŞABLON, 92609 durum.
+         92607 DÜZENLE/OKU, 92608 ŞABLON, 92609 durum, 92610 belge türü (OPORD / WARNO).
 
     Parametreler:
         0: pencere <DISPLAY>   1: sol   2: üst   3: genişlik   4: yükseklik   (içerik alanı)
@@ -21,7 +21,27 @@ private _rowH = (((_height - 0.01) / 11) min 0.04);
 private _dark = [0.1, 0.45, 0.15, 1];
 private _green = [0.25, 1, 0.35, 1];
 
-private _section = [_display, 92600, "RscCombo", _left, _top, _width - 0.21, _rowH] call TC2_fnc_uiMakeControl;
+private _docType = [_display, 92610, "RscCombo", _left, _top, 0.2, _rowH - 0.004] call TC2_fnc_uiMakeControl;
+_docType ctrlSetBackgroundColor [0, 0.08, 0.02, 1];
+_docType ctrlSetTextColor [0.25, 1, 0.35, 1];
+{
+    private _index = _docType lbAdd (_x select 0);
+    _docType lbSetData [_index, _x select 1];
+} forEach [["OPORD (Operasyon Emri)", "OPORD"], ["WARNO (Uyarı Emri)", "WARNO"]];
+_docType lbSetCurSel 0;
+_docType ctrlAddEventHandler ["LBSelChanged", {
+    params ["_control", "_index"];
+    missionNamespace setVariable ["TC2_opord_doc", _control lbData _index];
+    missionNamespace setVariable ["TC2_opord_data", ["EMPTY", 1, [], [], [], 0, false]];
+    missionNamespace setVariable ["TC2_opord_sig", ""];
+    missionNamespace setVariable ["TC2_opord_loadedKey", ""];
+    missionNamespace setVariable ["TC2_opord_viewText", "\n"];
+    missionNamespace setVariable ["TC2_opord_infoText", ""];
+    call TC2_fnc_opordUiRequest;
+    call TC2_fnc_opordUiUpdate;
+}];
+
+private _section = [_display, 92600, "RscCombo", _left + 0.21, _top, _width - 0.42, _rowH] call TC2_fnc_uiMakeControl;
 _section ctrlSetBackgroundColor [0, 0.08, 0.02, 1];
 _section ctrlSetTextColor _green;
 _section ctrlAddEventHandler ["LBSelChanged", {call TC2_fnc_opordUiUpdate}];
@@ -74,7 +94,8 @@ _status ctrlSetBackgroundColor [0, 0.12, 0.03, 1];
 _status ctrlSetTextColor _green;
 _status ctrlSetFontHeight (_rowH * 0.45);
 
-missionNamespace setVariable ["TC2_opord_ids", [92600, 92601, 92602, 92609]];
+missionNamespace setVariable ["TC2_opord_ids", [92600, 92601, 92602, 92609, 92610]];
+missionNamespace setVariable ["TC2_opord_doc", "OPORD"];
 missionNamespace setVariable ["TC2_opord_idsEdit", [92605, 92606, 92607]];
 missionNamespace setVariable ["TC2_opord_edit", false];
 missionNamespace setVariable ["TC2_opord_loadedKey", ""];

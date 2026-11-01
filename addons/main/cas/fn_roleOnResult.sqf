@@ -20,6 +20,9 @@ private _roleName = switch (_role) do {
     case "JTAC":     {"JTAC"};
     case "OBSERVER": {"GÖZLEMCİ (FO/JFO)"};
     case "FDC":      {"FDC OPERATÖRÜ"};
+    case "CO":       {"BÖLÜK KOMUTANI (CO)"};
+    case "S2":       {"İSTİHBARAT SUBAYI (S2)"};
+    case "S4":       {"LOJİSTİK SUBAYI (S4)"};
     default {_role};
 };
 

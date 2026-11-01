@@ -36,8 +36,8 @@ private _body = switch (_index) do {
     case 3: {""};  // TOPÇU sekmesi: gözlemci CFF formu (artyObsBuild)
     case 4: {""};  // FDC sekmesi: FDC operatörü ekranı (artyFdcBuild)
     case 5: {""};  // OPORD sekmesi: yetki seviyeli belge (opordBuild)
-    case 6: {"INTSUM (istihbarat özeti) belgeleri (yetki seviyesine göre).<br/><br/>Aşama 6'nın devamında eklenecek."};
-    case 7: {"Lojistik talepleri.<br/><br/>Aşama 6'nın devamında eklenecek."};
+    case 6: {""};  // RAPOR sekmesi: SALUTE / SITREP / LACE (rptBuild)
+    case 7: {"Lojistik talepleri (S4).<br/><br/>Sonraki aşamada eklenecek."};
     case 8: {"UAV: yetkili İHA listesi, bağlantı durumu, yayın isteği.<br/><br/>Ağ (Aşama 3) kurulduktan sonra eklenecek. Bkz. docs/UAV_ENTEGRASYON.md"};
     default {""};
 };

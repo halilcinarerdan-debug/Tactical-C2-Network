@@ -21,7 +21,9 @@ switch (_reason) do {
     case "UNCONSCIOUS":     {"ERİŞİM REDDEDİLDİ: Bilinçsiz durumdasınız."};
     case "DISABLED":        {"Terminal sistemi devre dışı."};
     case "FIELD_DISABLED":  {"Saha cihazı devre dışı."};
-    case "NO_DEVICE":       {"ERİŞİM REDDEDİLDİ: Saha cihazı eşyası yok."};
+    case "NO_DEVICE":       {"ERİŞİM REDDEDİLDİ: Saha cihazı eşyası (tablet) yok."};
+    case "VIEW_ONLY":       {"SALT OKUNUR MOD: bu cihazla yalnızca harita ve işaretleri izleyebilirsiniz."};
+    case "NO_LEVEL":        {"YETKİ YETERSİZ: bu işlem için seviye kartınız/yetkiniz yok."};
     case "NOT_TERMINAL":    {"Bu obje bir komuta terminali değil."};
     case "BAD_PARAMS":      {"Geçersiz erişim talebi."};
     case "TIMEOUT":         {"SUNUCU YANIT VERMEDİ: Erişim talebi zaman aşımına uğradı. (Sunucuda mod yüklü mü?)"};

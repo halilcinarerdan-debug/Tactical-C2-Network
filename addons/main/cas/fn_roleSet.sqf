@@ -28,6 +28,9 @@ private _variable = switch (toUpper _role) do {
     case "JTAC":     {"TC2_jtac"};
     case "OBSERVER": {"TC2_observer"};
     case "FDC":      {"TC2_fdc"};
+    case "CO":       {"TC2_co"};
+    case "S2":       {"TC2_s2"};
+    case "S4":       {"TC2_s4"};
     default {""};
 };
 if (_variable isEqualTo "") exitWith {};

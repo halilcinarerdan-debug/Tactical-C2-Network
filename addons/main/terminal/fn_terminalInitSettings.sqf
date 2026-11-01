@@ -57,9 +57,9 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
 [
     "TC2_field_deviceItem",
     "EDITBOX",
-    ["Saha cihazı eşyası (classname)", "Doluysa saha cihazını açmak için bu eşya envanterde olmalı (örn. bir tablet / MicroDAGR sınıfı). BOŞ = ek eşya gerekmez."],
+    ["Saha cihazı eşyası (classname)", "Saha cihazını açmak için bu eşya envanterde olmalı (varsayılan: TC2_Tablet). BOŞ = ek eşya gerekmez."],
     _category,
-    "",
+    "TC2_Tablet",
     true
 ] call CBA_settings_fnc_init;
 

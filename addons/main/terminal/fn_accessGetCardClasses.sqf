@@ -3,7 +3,7 @@
     Çalışma yeri: Her makine
 
     Kabul edilen kart sınıflarını KÜÇÜK HARFLİ liste olarak verir:
-      - projenin kendi kartı TC2_CAC_Card HER ZAMAN kabul edilir (CBA'nın kayıtlı eski bir ayar
+      - projenin kendi kartları TC2_CAC_Card ve renkli seviye kartları (Kırmızı/Mavi/Altın) HER ZAMAN kabul edilir (CBA'nın kayıtlı eski bir ayar
         değeri bile bunu bozamaz),
       - TC2_access_cardClasses ayarındaki sınıflar EK olarak kabul edilir (harici moddan kart için).
 
@@ -18,7 +18,7 @@
 */
 
 private _raw = missionNamespace getVariable ["TC2_access_cardClasses", "Item_CAC_Card"];
-private _classes = ["tc2_cac_card"];
+private _classes = ["tc2_cac_card", "tc2_card_red", "tc2_card_blue", "tc2_card_gold"];
 
 {
     private _class = toLower _x;

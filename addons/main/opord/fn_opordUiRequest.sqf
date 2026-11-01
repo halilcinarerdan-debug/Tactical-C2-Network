@@ -13,7 +13,7 @@ private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNul
 if (isNull _terminal || {isNull (findDisplay 92000)}) exitWith {};
 if ((missionNamespace getVariable ["TC2_ui_tab", 0]) != 5) exitWith {};
 
-private _args = [ACE_player, _terminal, call TC2_fnc_netGetRadioState];
+private _args = [ACE_player, _terminal, call TC2_fnc_netGetRadioState, missionNamespace getVariable ["TC2_opord_doc", "OPORD"]];
 
 if (isServer) then {
     _args call TC2_fnc_opordPoll;

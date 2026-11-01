@@ -2,7 +2,10 @@
     Fonksiyon: TC2_fnc_opordLoad
     Çalışma yeri: SADECE SUNUCU (XEH_postInit)
 
-    Mission klasöründe `tc2_opord.sqf` varsa okur ve OPORD'u yayımlar. Dosya şu diziyi döndürmelidir:
+    Mission klasöründe varsa okur ve yayımlar:
+        tc2_opord.sqf  -> OPORD (operasyon emri)
+        tc2_warno.sqf  -> WARNO (uyarı emri)
+    Dosya şu diziyi döndürmelidir:
         [başlık, DTG, gizlilik etiketi, [[anahtar, başlık, seviye, metin], ...], yayımlayan (isteğe bağlı)]
     Örnek: docs/ornek_tc2_opord.sqf
 
@@ -12,14 +15,17 @@
 
 if (!isServer) exitWith {};
 
-private _file = "tc2_opord.sqf";
-if (!fileExists _file) exitWith {};
+{
+    _x params ["_file", "_docType"];
 
-private _data = call compile preprocessFileLineNumbers _file;
+    if (fileExists _file) then {
+        private _data = call compile preprocessFileLineNumbers _file;
 
-if !(_data isEqualType [] && {count _data >= 4}) exitWith {
-    diag_log "[TC2][OPORD] tc2_opord.sqf gecersiz: [baslik, dtg, etiket, [bolumler]] dizisi bekleniyor.";
-};
-
-_data params ["_title", "_dtg", "_classification", "_sections", ["_issuer", "", [""]]];
-[_title, _dtg, _classification, _sections, _issuer] call TC2_fnc_opordSet;
+        if !(_data isEqualType [] && {count _data >= 4}) then {
+            diag_log format ["[TC2][OPORD] %1 gecersiz: [baslik, dtg, etiket, [bolumler]] dizisi bekleniyor.", _file];
+        } else {
+            _data params ["_title", "_dtg", "_classification", "_sections", ["_issuer", "", [""]]];
+            [_title, _dtg, _classification, _sections, _issuer, _docType] call TC2_fnc_opordSet;
+        };
+    };
+} forEach [["tc2_opord.sqf", "OPORD"], ["tc2_warno.sqf", "WARNO"]];

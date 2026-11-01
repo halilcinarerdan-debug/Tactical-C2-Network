@@ -4,7 +4,7 @@
 
     Bir terminal oturumunu sunucu kaydına (TC2_net_sessions) ekler/günceller. Her kayıt:
         0 netId   1 birim   2 terminal kimliği   3 telsiz ID   4 telsiz taban sınıfı   5 kanal
-        6 son rapor zamanı (diag_tickTime)   7 simüle mi (test)   8 son gönderim zamanı
+        6 son rapor zamanı (diag_tickTime)   7 simüle mi (test)   8 son gönderim zamanı   9 kullanım modu (DESK | FIELD | VIEW)
 
     Doğrulamalar (istemciye güvenilmez):
       - Erişim hâlâ geçerli mi? (accessCheck: kart, 5 m, canlı, bilinçli) -> değilse kayıt SİLİNİR.
@@ -65,7 +65,8 @@ if (!_has) then {
 private _lastSend = 0;
 if (_index >= 0) then {_lastSend = (_sessions select _index) select 8};
 
-private _entry = [_netId, _unit, [_terminal] call TC2_fnc_terminalGetId, _radioId, _base, _channel, _now, false, _lastSend];
+// 9: kullanım modu (DESK | FIELD | VIEW). VIEW (er, yalnızca izleme) yazma işlemlerinde sunucuda reddedilir.
+private _entry = [_netId, _unit, [_terminal] call TC2_fnc_terminalGetId, _radioId, _base, _channel, _now, false, _lastSend, [_unit, _terminal] call TC2_fnc_accessMode];
 
 if (_index >= 0) then {
     _sessions set [_index, _entry];

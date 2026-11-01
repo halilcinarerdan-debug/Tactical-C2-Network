@@ -13,13 +13,14 @@
         2: gizlilik etiketi <STRING>  örn. "TC2 EGITIM - DAGITIM SINIRLI"
         3: bölümler <ARRAY>
         4: yayımlayan <STRING>    (isteğe bağlı)
+        5: belge türü <STRING>    "OPORD" (varsayılan) | "WARNO" (uyarı emri)
 
     Dönüş: başarılı mı <BOOL>
 */
 
 if (!isServer) exitWith {false};
 
-params [["_title", "", [""]], ["_dtg", "", [""]], ["_classification", "", [""]], ["_sections", [], [[]]], ["_issuer", "", [""]]];
+params [["_title", "", [""]], ["_dtg", "", [""]], ["_classification", "", [""]], ["_sections", [], [[]]], ["_issuer", "", [""]], ["_docType", "OPORD", [""]]];
 
 private _clean = (_sections select {
     count _x == 4 && {(_x select 0) isEqualType ""} && {(_x select 1) isEqualType ""} && {(_x select 2) isEqualType 0} && {(_x select 3) isEqualType ""}
@@ -32,7 +33,7 @@ if (_clean isEqualTo []) exitWith {
     false
 };
 
-missionNamespace setVariable ["TC2_opord", [_title, _dtg, _classification, 1, _issuer, _clean, []]];
-diag_log format ["[TC2][OPORD] yayimlandi '%1' | %2 bolum | yayimlayan=%3", _title, count _clean, _issuer];
+missionNamespace setVariable [["TC2_opord", "TC2_warno"] select (_docType isEqualTo "WARNO"), [_title, _dtg, _classification, 1, _issuer, _clean, []]];
+diag_log format ["[TC2][OPORD] yayimlandi %1 '%2' | %3 bolum | yayimlayan=%4", _docType, _title, count _clean, _issuer];
 
 true

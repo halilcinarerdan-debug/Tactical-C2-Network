@@ -15,6 +15,11 @@ class terminal
     // Erisim (OPSEC) - ortak mantik
     class accessGetCardClasses {};
     class accessHasCard {};
+    class hasTablet {};
+    class accessCardLevel {};
+    class accessLevel {};
+    class accessMode {};
+    class canWriteFires {};
     class accessCheck {};
     class accessReasonText {};
 

@@ -17,9 +17,29 @@
     Alt paragraf başlıkları (1.a..1.e, 3.c..3.f, 5.a..5.c) ABD Ordusu beş paragraf biçimindendir (FM 6-0 / ATP 5-0.1). JP 5-0 yüklenirse
     alt başlıklar doğrulanır. Ateş paragrafı için JP 3-09.3 (görev, amaç, yöntem, etki = TPME) kullanıldı.
 
-    Parametreler: yok
+    WARNO (uyarı emri) şablonu: JP 1-02 tanımı (3): "durumu açıklayan, kuvvet ve kaynakları tahsis eden, komuta ilişkilerini
+    kuran, başlangıç planlama rehberini veren ve planlamayı başlatan emir". Uyarı emri, astlara planlamaya zaman bırakmak için
+    en erken fırsatta verilir (JP 3-0); tam biçim JP 1-02'de yoktur, alt başlıklar tanımdan türetilmiştir.
+
+    Parametreler:
+        0: belge türü <STRING>  "OPORD" (varsayılan) | "WARNO"
+
     Dönüş: bölümler <ARRAY>  [[anahtar, başlık, seviye, metin]]
 */
+
+params [["_docType", "OPORD", [""]]];
+
+if (_docType isEqualTo "WARNO") exitWith {
+    [
+        ["SIT", "1. DURUM (Situation)", 1, "[Durumun özeti: düşman, dost kuvvetler, harekât ortamı.]"],
+        ["MISSION", "2. GÖREV (Mission)", 1, "[Beklenen görev (taslak): kim, ne, ne zaman, nerede, neden.]"],
+        ["FORCES", "3. KUVVET VE KAYNAK TAHSİSİ (Forces and Resources Allocated)", 1, "[Göreve ayrılan kuvvetler ve kaynaklar.]"],
+        ["CMD", "4. KOMUTA İLİŞKİLERİ (Command Relationships)", 1, "[Kim kime bağlı; destek ve bağlama ilişkileri.]"],
+        ["GUIDANCE", "5. BAŞLANGIÇ PLANLAMA REHBERİ (Initial Planning Guidance)", 2, "[Komutanın ilk planlama rehberi: öncelikler, kısıtlar, dikkat edilecek hususlar.]"],
+        ["TIMELINE", "6. ZAMAN ÇİZELGESİ (Timeline)", 1, "[OPORD brifing saati, hazırlık ve hareket saatleri, provalar.]"],
+        ["PREP", "7. HAZIRLIK (Preparation)", 1, "[Birliklerin hemen başlaması gereken hazırlıklar.]"]
+    ]
+};
 
 [
     ["TASKORG", "GÖREV ORGANİZASYONU (Task Organization)", 1, "[Birliklerin bu görev için nasıl düzenlendiği: alt birimler, atanan/bağlanan unsurlar, çağrı adları.]"],

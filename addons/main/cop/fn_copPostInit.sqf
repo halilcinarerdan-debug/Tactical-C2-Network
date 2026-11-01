@@ -11,7 +11,7 @@
 */
 
 missionNamespace setVariable ["TC2_cop_mode", ""];
-missionNamespace setVariable ["TC2_cop_data", [[], []]];
+missionNamespace setVariable ["TC2_cop_data", [[], [], []]];
 
 // İlk bildirim açılıştan kısa süre sonra, sonra 10 sn'de bir.
 [{call TC2_fnc_copHeartbeat}, [], 5] call CBA_fnc_waitAndExecute;

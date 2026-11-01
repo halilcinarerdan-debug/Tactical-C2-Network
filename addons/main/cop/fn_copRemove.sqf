@@ -30,6 +30,10 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
     [_unit, "TC2_fnc_copOnAck", [_code, ""]] call TC2_fnc_netToUnit;
 };
 
+if ((_entry param [9, "DESK"]) isEqualTo "VIEW") exitWith {
+    [_unit, "TC2_fnc_copOnAck", ["VIEW_ONLY", ""]] call TC2_fnc_netToUnit;
+};
+
 private _base = _entry select 4;
 private _channel = _entry select 5;
 

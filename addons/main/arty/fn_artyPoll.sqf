@@ -34,7 +34,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
 
 [-1] call TC2_fnc_artyMissionIndex;
 
-private _isObserver = [_unit, "OBSERVER"] call TC2_fnc_hasRole || {[_unit, "JTAC"] call TC2_fnc_hasRole};
+private _isObserver = [_unit, _terminal, "ARTY"] call TC2_fnc_canWriteFires;
 private _isFdc = [_unit, "FDC"] call TC2_fnc_hasRole;
 private _netId = netId _unit;
 

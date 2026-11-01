@@ -7,7 +7,8 @@
     "Saha varlığı" kaydı (TC2_cop_field). Her kayıt:
         0 netId   1 birim   2 telsiz ID   3 telsiz taban sınıfı   4 kanal   5 son rapor zamanı   6 son DAGR özeti (hash)
 
-    Doğrulamalar: gönderen (remoteExecutedOwner), birim canlı mı, telsiz gerçekten birimin envanterinde mi.
+    Doğrulamalar: gönderen (remoteExecutedOwner), birim canlı mı, telsiz gerçekten birimin envanterinde mi,
+    TABLET KURALI (hasTablet: hava aracı mürettebatı dışında tablet envanterde olmalı; yoksa kayıt silinir -> ağdan bilgi alamaz/veremez).
     Kanal istemciden gelir (sunucu ACRE durumunu okuyamaz) -> bilinen sınır. Eski kayıtlar (25 sn) silinir.
     Kayıttan sonra bu birimin MicroDAGR özeti hesaplanır; değiştiyse istemciye gönderilir (copSyncUnit).
 
@@ -38,7 +39,7 @@ private _index = -1;
 
 _state params [["_has", false, [false]], ["_radioId", "", [""]], ["_base", "", [""]], ["_channel", -1, [0]]];
 
-private _valid = _has && {alive _unit} && {(toLower _radioId) in ((items _unit) apply {toLower _x})};
+private _valid = _has && {alive _unit} && {(toLower _radioId) in ((items _unit) apply {toLower _x})} && {[_unit] call TC2_fnc_hasTablet};
 
 if (!_valid) exitWith {
     if (_index >= 0) then {_field deleteAt _index};

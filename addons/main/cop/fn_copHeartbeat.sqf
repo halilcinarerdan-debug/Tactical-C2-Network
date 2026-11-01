@@ -11,6 +11,9 @@
 if (!(missionNamespace getVariable ["TC2_terminal_enabled", true])) exitWith {};
 if (isNull ACE_player) exitWith {};
 
+// Tablet kuralı: hava aracı mürettebatı dışında, tablet yoksa terminale konum/durum bildirilmez (ve dolayısıyla ağdan bilgi alınmaz).
+if !([ACE_player] call TC2_fnc_hasTablet) exitWith {};
+
 private _state = call TC2_fnc_netGetRadioState;
 if !(_state select 0) exitWith {};
 

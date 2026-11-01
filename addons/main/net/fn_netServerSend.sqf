@@ -49,6 +49,10 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
     if (_wantAck) then {[_unit, "TC2_fnc_netOnAck", [_type, _code, 0]] call TC2_fnc_netToUnit};
 };
 
+if ((_entry param [9, "DESK"]) isEqualTo "VIEW") exitWith {
+    if (_wantAck) then {[_unit, "TC2_fnc_netOnAck", [_type, "VIEW_ONLY", 0]] call TC2_fnc_netToUnit};
+};
+
 private _now = diag_tickTime;
 if (_wantAck && {(_now - (_entry select 8)) < 2}) exitWith {
     [_unit, "TC2_fnc_netOnAck", [_type, "COOLDOWN", 0]] call TC2_fnc_netToUnit;

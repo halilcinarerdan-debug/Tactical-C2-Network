@@ -17,7 +17,8 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC, zorunlu geri okuma, abort) | ✅ hazır (test bekliyor) |
 | 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), AI/oyuncu bataryası | ✅ hazır (test bekliyor) |
 | 6a | **OPORD** (JP 3-0): beş paragraf, Level 1/2/3 yetki, sunucuda süzme | ✅ hazır (test bekliyor) |
-| 6b | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
+| 6b | **Raporlar** (SALUTE / SITREP / LACE) + WARNO; kart seviyeleri (Kırmızı/Mavi/Altın), CO/S2/S4 rolleri, saha tableti, izleme modu, haritada LACE | ✅ hazır (test bekliyor) |
+| 6c | INTSUM + lojistik talepleri (S4) | ⏳ |
 
 ## Depo yapısı
 
@@ -34,6 +35,7 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_notify.sqf                    ACE tarzı bildirim (hata/başarı/bilgi)
         fn_debugInfo.sqf                 teşhis: rol, kart sınıfı, envanter, yakın terminaller (panoya kopyalar)
         fn_debugCard.sqf                 TEST: kartı ver / al
+        fn_debugGive.sqf                 TEST: kırmızı/mavi/altın kart ve tablet ver / al
     terminal/                            1. aşama
         fn_terminalInitSettings.sqf      CBA ayarları
         fn_terminalPostInit.sqf          istemci kurulumu
@@ -142,6 +144,22 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
+
+## Aşama 6b – Raporlar (SALUTE / SITREP / LACE), WARNO, kartlar, tablet
+
+**RAPOR** sekmesi (SALUTE / SITREP / LACE), **WARNO** (OPORD sekmesinde belge türü) ve harita üzerinde **LACE**. Doktrin notu ve sınırlar:
+[`docs/DOKTRIN_NOTLARI_RAPORLAR.md`](docs/DOKTRIN_NOTLARI_RAPORLAR.md) — **LACE JP 1-02'de yok**; SALUTE yalnızca kısaltma olarak, SITREP ve WARNORD tanım olarak var.
+
+| Konu | Kural |
+|------|-------|
+| Kartlar | **Kırmızı = Level 1** (kendi görevleri), **Mavi = Level 2** (gizli belge yok; 9-Line, CFF, rapor yazar), **Siyah/Altın = Level 3** (her şey). Masa başında seviye = max(kart, kadro). |
+| Kadro | **CO** ve **S2 = Level 3**, **S4 = Level 2 ya da 3** (CBA). Zeus/Eden modülleri ya da `TC2_co` / `TC2_s2` / `TC2_s4` değişkeni. |
+| Saha tableti | Hava aracı mürettebatı dışında herkes, terminale bilgi **göndermek ve almak** için envanterinde `TC2_Tablet` taşımalıdır (CBA'dan değiştirilebilir). |
+| Tablet kullanımı | Grup/takım lideri, JTAC, gözlemci, FDC: **tam** (Level 2'ye kadar). Er: **izleme** (yalnızca harita ve işaretler); LACE ve raporlar görünmez, yazma sunucuda reddedilir. |
+| SALUTE | Lider gönderir; **S2/CO doğrulayana** kadar haritada soru işaretli simge; doğrulanınca düşman işareti. |
+| LACE | Sistemin doğruladığı sayılar (mevcut, yaralı, araç hasarı) + liderin beyanı (L/A/C/E rengi); harita lider simgesi en kötü duruma göre boyanır. Yalnızca Level 2+. |
+
+Test: [`docs/TEST_ASAMA6_RAPORLAR.md`](docs/TEST_ASAMA6_RAPORLAR.md). Test yardımcısı: `["BLUE"] call TC2_fnc_debugGive;` (RED / BLUE / GOLD / TABLET / NONE).
 
 ## Aşama 6a – OPORD (yetki seviyeli operasyon emri)
 

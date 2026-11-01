@@ -36,7 +36,7 @@ if (_action isEqualTo "SAVE") then {
 };
 
 if (_action in ["ACK", "SAVE", "TEMPLATE"]) then {
-    private _call = [ACE_player, _terminal, call TC2_fnc_netGetRadioState, _action, _args];
+    private _call = [ACE_player, _terminal, call TC2_fnc_netGetRadioState, _action, _args, missionNamespace getVariable ["TC2_opord_doc", "OPORD"]];
     if (isServer) then {
         _call call TC2_fnc_opordEdit;
     } else {

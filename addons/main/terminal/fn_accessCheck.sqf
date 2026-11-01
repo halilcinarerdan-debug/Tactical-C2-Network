@@ -44,10 +44,8 @@ if !(alive _unit) exitWith {[false, "DEAD"]};
 if ((_unit getVariable ["ACE_isUnconscious", false]) || {lifeState _unit == "INCAPACITATED"}) exitWith {[false, "UNCONSCIOUS"]};
 
 if (_fieldMode) exitWith {
-    private _device = missionNamespace getVariable ["TC2_field_deviceItem", ""];
-    private _owned = (items _unit + assignedItems _unit) apply {toLower _x};
-
-    if (!(_device isEqualTo "") && {!((toLower _device) in _owned)}) exitWith {[false, "NO_DEVICE"]};
+    // Tablet kuralı (hasTablet): hava aracı mürettebatı muaf; CBA eşya boşsa şart yok.
+    if !([_unit] call TC2_fnc_hasTablet) exitWith {[false, "NO_DEVICE"]};
     if ((missionNamespace getVariable ["TC2_field_requireCard", false]) && {!([_unit] call TC2_fnc_accessHasCard)}) exitWith {[false, "NO_CARD"]};
 
     [true, "OK"]

@@ -8,19 +8,23 @@
     HİÇ GÖNDERİLMEZ; yalnızca başlık ve gereken seviye ("GİZLİ - Level N") gider. İstemci kurcalansa bile gizli metin makinede bulunmaz.
     Erişim: fiziksel terminalde telsiz GEREKMEZ (belge üstedir); saha cihazında telsiz ağı gerekir.
 
-    Yanıt (opordOnData): [kod, seviye, [başlık, DTG, etiket, sürüm, yayımlayan], görünür bölümler, gizli bölümler, onay sayısı, kendi onayım var mı]
+    Seviye: accessLevel (masa başında kart/kadro; sahada rütbe/rol ve EN FAZLA 2 -> Level 3 belgeler yalnızca masa başında okunur).
+    Belge türü: "OPORD" (operasyon emri) ya da "WARNO" (uyarı emri).
+
+    Yanıt (opordOnData): [kod, seviye, [başlık, DTG, etiket, sürüm, yayımlayan], görünür bölümler, gizli bölümler, onay sayısı, kendi onayım var mı, belge türü]
 
     Parametreler:
         0: birim <OBJECT>
         1: terminal / saha cihazı <OBJECT>
         2: telsiz durumu <ARRAY>
+        3: belge türü <STRING> (varsayılan "OPORD")
 
     Dönüş: yok
 */
 
 if (!isServer) exitWith {};
 
-params [["_unit", objNull, [objNull]], ["_terminal", objNull, [objNull]], ["_state", [], [[]]]];
+params [["_unit", objNull, [objNull]], ["_terminal", objNull, [objNull]], ["_state", [], [[]]], ["_docType", "OPORD", [""]]];
 
 if (isNull _unit) exitWith {};
 if !([_unit] call TC2_fnc_netSenderOk) exitWith {};
@@ -32,14 +36,14 @@ private _physical = _terminal isKindOf "TC2_Terminal_F";
 private _allowed = _ok && {_code isEqualTo "OK" || {_physical && {_code in ["NO_RADIO", "NO_ACRE"]}}};
 
 if (!_allowed) exitWith {
-    [_unit, "TC2_fnc_opordOnData", [_code, 1, [], [], [], 0, false]] call TC2_fnc_netToUnit;
+    [_unit, "TC2_fnc_opordOnData", [_code, 1, [], [], [], 0, false, _docType]] call TC2_fnc_netToUnit;
 };
 
-private _document = missionNamespace getVariable ["TC2_opord", []];
-private _level = [_unit] call TC2_fnc_userLevel;
+private _document = missionNamespace getVariable [["TC2_opord", "TC2_warno"] select (_docType isEqualTo "WARNO"), []];
+private _level = [_unit, _terminal] call TC2_fnc_accessLevel;
 
 if (_document isEqualTo []) exitWith {
-    [_unit, "TC2_fnc_opordOnData", ["EMPTY", _level, [], [], [], 0, false]] call TC2_fnc_netToUnit;
+    [_unit, "TC2_fnc_opordOnData", ["EMPTY", _level, [], [], [], 0, false, _docType]] call TC2_fnc_netToUnit;
 };
 
 _document params ["_title", "_dtg", "_classification", "_version", "_issuer", "_sections", "_acks"];
@@ -52,4 +56,4 @@ private _key = if (_uid isEqualTo "") then {name _unit} else {_uid};
 private _current = _acks select {(_x select 2) == _version};
 private _mine = count (_current select {(_x select 0) isEqualTo _key}) > 0;
 
-[_unit, "TC2_fnc_opordOnData", ["OK", _level, [_title, _dtg, _classification, _version, _issuer], _visible, _hidden, count _current, _mine]] call TC2_fnc_netToUnit;
+[_unit, "TC2_fnc_opordOnData", ["OK", _level, [_title, _dtg, _classification, _version, _issuer], _visible, _hidden, count _current, _mine, _docType]] call TC2_fnc_netToUnit;

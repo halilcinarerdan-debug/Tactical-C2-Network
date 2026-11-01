@@ -56,6 +56,7 @@ private _fieldAction = [
         (missionNamespace getVariable ["TC2_field_enabled", true])
         && {(missionNamespace getVariable ["TC2_access_pendingId", -1]) < 0}
         && {isNull (findDisplay 92000)}
+        && {[_player] call TC2_fnc_hasTablet}
     }
 ] call ace_interact_menu_fnc_createAction;
 

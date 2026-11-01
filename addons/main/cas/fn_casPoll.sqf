@@ -31,7 +31,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
 
 [-1] call TC2_fnc_casReqIndex;
 
-private _isJtac = [_unit] call TC2_fnc_isJtac;
+private _isJtac = [_unit, _terminal, "CAS"] call TC2_fnc_canWriteFires;
 private _targets = [_unit, _entry select 4, _entry select 5] call TC2_fnc_casTargets;
 
 private _mine = [];

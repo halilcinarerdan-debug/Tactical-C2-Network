@@ -35,7 +35,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
     [_unit, "TC2_fnc_casOnAck", [_code, []]] call TC2_fnc_netToUnit;
 };
 
-if !([_unit] call TC2_fnc_isJtac) exitWith {
+if !([_unit, _terminal, "CAS"] call TC2_fnc_canWriteFires) exitWith {
     diag_log format ["[TC2][CAS] RED NOT_JTAC birim=%1", name _unit];
     [_unit, "TC2_fnc_casOnAck", ["NOT_JTAC", []]] call TC2_fnc_netToUnit;
 };

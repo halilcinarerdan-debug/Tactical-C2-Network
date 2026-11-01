@@ -10,11 +10,13 @@
         0: izleyici birim <OBJECT>
         1: telsiz tipi <STRING>
         2: kanal <NUMBER>
+        3: LACE dahil mi <BOOL>  (yalnızca Level 2+ ve izleme modunda olmayan oturumlar için true; varsayılan false)
 
-    Dönüş: [[konum ASL, etiket, lider mi]] <ARRAY>
+    Dönüş: [[konum ASL, etiket, lider mi, lace]] <ARRAY>
+        lace = lider ve istendiyse rptLaceInfo çıktısı [[mevcut, ilk, yaralı, araç %], son rapor], aksi halde []
 */
 
-params [["_viewer", objNull, [objNull]], ["_base", "", [""]], ["_channel", -1, [0]]];
+params [["_viewer", objNull, [objNull]], ["_base", "", [""]], ["_channel", -1, [0]], ["_includeLace", false, [false]]];
 
 if (_base isEqualTo "" || {isNull _viewer}) exitWith {[]};
 
@@ -30,14 +32,17 @@ private _out = [];
         && {_unitBase isEqualTo _base} && {_unitChannel == _channel} && {(_viewer distance _unit) <= _range}
     ) then {
         private _label = [format ["%1 %2", groupId (group _unit), name _unit], 40] call TC2_fnc_netSanitize;
-        _out pushBack [getPosASL _unit, _label, (leader (group _unit)) isEqualTo _unit];
+        private _isLeader = (leader (group _unit)) isEqualTo _unit;
+        _out pushBack [getPosASL _unit, _label, _isLeader, if (_includeLace && _isLeader) then {[group _unit] call TC2_fnc_rptLaceInfo} else {[]}];
     };
 } forEach (missionNamespace getVariable ["TC2_cop_field", []]);
 
 // Simüle test eşleri (net kayıtları: 0 netId 1 birim 2 etiket 3 telsiz 4 tip 5 kanal 6 zaman 7 sim)
 {
     if ((_x select 7) && {(_x select 4) isEqualTo _base} && {(_x select 5) == _channel} && {alive (_x select 1)} && {(_viewer distance (_x select 1)) <= _range}) then {
-        _out pushBack [getPosASL (_x select 1), _x select 2, false];
+        private _simUnit = _x select 1;
+        private _simLeader = (leader (group _simUnit)) isEqualTo _simUnit;
+        _out pushBack [getPosASL _simUnit, _x select 2, _simLeader, if (_includeLace && _simLeader) then {[group _simUnit] call TC2_fnc_rptLaceInfo} else {[]}];
     };
 } forEach (missionNamespace getVariable ["TC2_net_sessions", []]);
 
