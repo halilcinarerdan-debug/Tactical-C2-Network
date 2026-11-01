@@ -3,10 +3,11 @@
     Çalışma yeri: İstemci (uiOpen çağırır, ekran alanı kurulmadan ÖNCE)
 
     Cihaz çerçevesini çizer; yalnızca görünüm (düz renkli şekiller, kare başına iş yok). Çerçeve ekran alanının DIŞINDA kalır.
-    Yuvarlak köşe = iki çakışan dikdörtgen + dört daire (oyunun dot_CA simgesi); daire boyu piksel olarak kare kalacak şekilde oranlanır.
+    Yuvarlak köşe = orta dikdörtgen + üstte/altta çeyrek daire yayını izleyen ince şeritler (doku yok, kare piksel oranı korunur).
+    Ekranın kendi köşeleri uiBuildFrameCorners ile (içerik kurulduktan SONRA) kaplanır.
       DESK  masa başı terminal: masaüstü monitörü; kalın siyah çerçeve, yuvarlak köşeler, alt çenede LED / güç tuşu / "TC2", boyun ve ayak
       FIELD saha cihazı: ATAK tarzı sağlam kılıflı tablet; kalın kum rengi kılıf, yuvarlak köşeler, siyah ekran kenarı, tutucular, yan tuşlar, kamera
-    IDC: 93000 ve sonrası (en çok ~50)
+    IDC: 93000-93199
 
     Parametreler:
         0: pencere <DISPLAY>   1: mod <STRING> "DESK" | "FIELD"   2: sol   3: üst   4: genişlik   5: yükseklik   (ekran alanı)
@@ -28,6 +29,28 @@ private _rect = {
     _control ctrlCommit 0;
     _control
 };
+// Daire dokusu KULLANILMAZ (dot_CA kenarlarında boşluk var, köşeler içe çökük görünüyordu). Köşe = ince yatay şeritler (çeyrek daire yayı).
+// Şerit k'nın yatay girintisi: r * (1 - sqrt(1 - ((n - k - 0.5) / n)^2)); şeritler 1 piksel kadar çakıştırılır, dikiş kalmaz.
+private _steps = 6;
+private _strips = {
+    params ["_x", "_y", "_rw", "_rh", "_r", "_color", "_flip"];
+    private _rv = _r * _ratio;
+    private _stripH = _rv / _steps;
+    for "_k" from 0 to (_steps - 1) do {
+        private _t = (_steps - _k - 0.5) / _steps;
+        private _inset = _r * (1 - sqrt (1 - _t * _t));
+        private _py = if (_flip) then {_y + _rh - (_k + 1) * _stripH} else {_y + _k * _stripH};
+        [_x + _inset, _py, _rw - 2 * _inset, _stripH + 0.0012, _color] call _rect;
+    };
+};
+// yuvarlak köşeli dikdörtgen; r = köşe yarıçapı (x biriminde)
+private _round = {
+    params ["_x", "_y", "_rw", "_rh", "_r", "_color"];
+    private _rv = _r * _ratio;
+    [_x, _y + _rv - 0.0006, _rw, _rh - 2 * _rv + 0.0012, _color] call _rect;
+    [_x, _y, _rw, _rh, _r, _color, false] call _strips;
+    [_x, _y, _rw, _rh, _r, _color, true] call _strips;
+};
 private _dot = {
     params ["_x", "_y", "_sizeX", "_color"];
     private _control = _display ctrlCreate ["RscPicture", _idc];
@@ -38,17 +61,8 @@ private _dot = {
     _control ctrlCommit 0;
     _control
 };
-// yuvarlak köşeli dikdörtgen; r = köşe yarıçapı (x biriminde)
-private _round = {
-    params ["_x", "_y", "_rw", "_rh", "_r", "_color"];
-    private _rv = _r * _ratio;
-    [_x + _r, _y, _rw - 2 * _r, _rh, _color] call _rect;
-    [_x, _y + _rv, _rw, _rh - 2 * _rv, _color] call _rect;
-    [_x, _y, 2 * _r, _color] call _dot;
-    [_x + _rw - 2 * _r, _y, 2 * _r, _color] call _dot;
-    [_x, _y + _rh - 2 * _rv, 2 * _r, _color] call _dot;
-    [_x + _rw - 2 * _r, _y + _rh - 2 * _rv, 2 * _r, _color] call _dot;
-};
+
+missionNamespace setVariable ["TC2_ui_frame", [_mode, _left, _top, _w, _h]];
 
 private _cx = _left + _w / 2;
 

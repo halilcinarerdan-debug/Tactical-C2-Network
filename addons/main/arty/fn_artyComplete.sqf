@@ -4,7 +4,7 @@
 
     Atışı bitirir ve görevi bir sonraki duruma geçirir:
       DONE  : "ROUNDS COMPLETE". Adjust fazındaysa SPOTTING (gözlemci düzeltme gönderir), aksi halde SURVEILLANCE (gözlemci gözetim + END OF MISSION).
-      CHECK : "CHECK FIRING" (acil durdurma, ATP 3-09.30, 4-57): atış durdurulur; AI mürettebata `doStop` verilir (elinden gelen en iyi çaba).
+      CHECK : "CHECK FIRING" (acil durdurma, ATP 3-09.30, 4-57): atış durdurulur (oyuncu mürettebata durdurma bildirimi olay günlüğündedir).
     Toplardaki görev işaretleri temizlenir.
 
     Parametreler:
@@ -28,10 +28,6 @@ if !((_mission select 7) in ["FIRING", "READY"]) exitWith {};
     private _gun = objectFromNetId _x;
     if (!isNull _gun) then {
         _gun setVariable ["TC2_arty_mission", -1];
-        if (_reason isEqualTo "CHECK") then {
-            private _gunner = gunner _gun;
-            if (!isNull _gunner && {!isPlayer _gunner}) then {doStop _gunner};
-        };
     };
 } forEach (_mission select 12);
 

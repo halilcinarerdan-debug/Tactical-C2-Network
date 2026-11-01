@@ -4,15 +4,16 @@
 
     Bir tarafın kullanılabilir topçu bataryalarını verir. Topçu araçları OTOMATİK bulunur (artyIsGun); aynı mürettebat grubunu
     paylaşan toplar tek BATARYA sayılır, mürettebatsız bir araç kendi başına bir bataryadır.
-    Mürettebat türü:
+    Mürettebat türü (AI topçu YOK; yalnızca oyuncu mürettebatlı bataryalar kullanılır):
       PLAYER -> en az bir oyuncu mürettebatı var (emirler oyunculara bildirilir; FDC SHOT/SPLASH/COMPLETE'i elle girer)
-      AI     -> yalnızca AI mürettebat (CBA ayarı o taraf için açıksa FDC emirleri otomatik uygulanır)
-      EMPTY  -> mürettebat yok (kullanılamaz)
+      SIM    -> TEST: topta TC2_arty_simCrew = true (debugArtyCrew); oyuncu yokmuş gibi emir alır, FDC her şeyi elle girer
+      AI     -> AI mürettebat: KULLANILAMAZ
+      EMPTY  -> mürettebat yok: KULLANILAMAZ
 
     Parametreler:
         0: taraf <SIDE>
 
-    Dönüş: [[anahtar, etiket, mürettebat türü, [araç netId'leri], AI kullanılabilir mi]] <ARRAY>
+    Dönüş: [[anahtar, etiket, mürettebat türü, [araç netId'leri], kullanılabilir mi]] <ARRAY>
 */
 
 params [["_side", west, [west]]];
@@ -33,7 +34,9 @@ private _batteries = [];
             } else {
                 format ["%1 (mürettebatsız)", getText (_config >> "displayName")]
             };
-            private _crewType = if (!_crewed) then {"EMPTY"} else {["AI", "PLAYER"] select (count ((crew _vehicle) select {isPlayer _x}) > 0)};
+            private _crewType = if (_vehicle getVariable ["TC2_arty_simCrew", false]) then {"SIM"} else {
+                if (!_crewed) then {"EMPTY"} else {["AI", "PLAYER"] select (count ((crew _vehicle) select {isPlayer _x}) > 0)}
+            };
 
             private _index = -1;
             {
@@ -45,21 +48,15 @@ private _batteries = [];
             } else {
                 ((_batteries select _index) select 3) pushBack (netId _vehicle);
                 // karışık mürettebat: oyuncu varsa PLAYER sayılır
-                if (_crewType isEqualTo "PLAYER") then {(_batteries select _index) set [2, "PLAYER"]};
+                if (_crewType in ["PLAYER", "SIM"]) then {(_batteries select _index) set [2, _crewType]};
             };
         };
     };
 } forEach vehicles;
 
-private _aiAllowed = switch (_side) do {
-    case west:        {missionNamespace getVariable ["TC2_arty_aiWest", true]};
-    case east:        {missionNamespace getVariable ["TC2_arty_aiEast", true]};
-    case independent: {missionNamespace getVariable ["TC2_arty_aiGuer", true]};
-    default {false};
-};
-
+// AI topçu yok: yalnızca oyuncu (ya da TEST için SIM) mürettebatlı bataryalar kullanılabilir.
 {
-    _x set [4, !(((_x select 2) isEqualTo "AI")) || {_aiAllowed}];
+    _x set [4, (_x select 2) in ["PLAYER", "SIM"]];
 } forEach _batteries;
 
 _batteries

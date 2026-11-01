@@ -1,8 +1,8 @@
 # Aşama 5B — topçu (CFF / FDC) testi (tek kişilik)
 
 Doktrin: `docs/DOKTRIN_NOTLARI_TOPCU.md` (ATP 3-09.30). Gerekenler: Aşama 1-4 çalışıyor, ACRE telsizi, terminal **ya da saha cihazı** (laptop gerekmez).
-Roller: **gözlemci** (FO/JFO; JTAC de CFF gönderebilir) ve **FDC operatörü**. Atış: topçu araçları OTOMATİK bulunur; AI mürettebatlı toplar
-CBA ayarına (BLUFOR / OPFOR / INDFOR) göre kullanılır, oyuncu mürettebatlı toplara ateş emri bildirilir.
+Roller: **gözlemci** (FO/JFO; JTAC de CFF gönderebilir) ve **FDC operatörü**. Atış: topçu araçları OTOMATİK bulunur; **AI topçu YOK (kaldırıldı)**. Yalnızca oyuncu mürettebatlı toplar (ya da TEST için simüle mürettebat)
+kullanılır; ateş emri oyunculara bildirilir, **FDC SHOT / SPLASH / ROUNDS COMPLETE'i elle girer**.
 
 ## Akış (özet)
 
@@ -18,12 +18,12 @@ sistem **MTO / SHOT / SPLASH / ROUNDS COMPLETE** satırlarını üretir ⇒ `GÖ
    player setVariable ["TC2_observer", true, true];
    player setVariable ["TC2_fdc", true, true];
    ```
-3. AI mürettebatlı bir havan kur (host Local Exec / dedicated Server Exec; dedicated'de `player` yerine `(allPlayers select 0)`):
+3. Bir havan kur ve **simüle mürettebat** işareti koy (host Local Exec / dedicated Server Exec; dedicated'de `player` yerine `(allPlayers select 0)`):
    ```sqf
    TC2_gun = createVehicle ["B_Mortar_01_F", player getPos [300, 180], [], 0, "NONE"];
-   createVehicleCrew TC2_gun;
+   [TC2_gun] call TC2_fnc_debugArtyCrew;
    ```
-   (BLUFOR Mk6 havan + AI mürettebat; topçu otomatik bulunur.)
+   (BLUFOR Mk6 havan, mürettebatsız ama TEST için kullanılabilir sayılır. Gerçek oyunda havana oyuncu biner.)
 4. Terminal ya da **Saha Cihazı** ile gir. **HARİTA** sekmesinde, **sizden 600 m'den uzak** (danger close olmasın) ve havandan ~800-3000 m uzakta
    bir `DÜŞMAN PİYADE` işareti koyun.
 
@@ -62,11 +62,11 @@ sistem **MTO / SHOT / SPLASH / ROUNDS COMPLETE** satırlarını üretir ⇒ `GÖ
 ## D. AT MY COMMAND ve CHECK FIRING
 
 - KONTROL = `AT MY COMMAND`; FDC KABUL ⇒ günlük `<batarya> IS READY, OVER.` ⇒ gözlemci **FIRE (AMC)** ⇒ `FIRE, OUT.` ⇒ atış.
-- Atış sürerken **CHECK FIRING** (gözlemci ya da FDC) ⇒ `CHECK FIRING. Atış durduruldu.` (AI mürettebata `doStop`; mermi havadaysa düşer.)
+- Atış sürerken **CHECK FIRING** (gözlemci ya da FDC) ⇒ `CHECK FIRING. Atış durduruldu.` (mermi havadaysa düşer.)
 
-## E. AI ve oyuncu mürettebat
+## E. Oyuncu mürettebat (AI topçu yok)
 
-- **AI kapalı:** CBA'da `AI mürettebatlı toplar: BLUFOR` KAPAT ⇒ FDC KABUL ⇒ `AI mürettebatlı topların kullanımı bu taraf için CBA'da KAPALI`.
+- **AI mürettebat / mürettebatsız top:** `debugArtyCrew` işareti olmayan, AI mürettebatlı ya da boş bir top kullanılamaz: FDC KABUL ⇒ `Bu bataryada oyuncu mürettebat yok (AI topçu desteklenmez)`. Batarya listesinde `(OYUNCU YOK)`.
 - **Oyuncu mürettebatlı:** havana binin (gunner) ⇒ FDC KABUL ⇒ size bildirim + sohbet: `ATEŞ EMRİ #1: <batarya> x N mermi (<şarjör>) | hedef GRID … | azimut … mil | mesafe … m`.
   Bu bataryada **SHOT / SPLASH / ROUNDS COMPLETE** düğmeleri FDC'de etkindir ve **elle** basılır (oyuncu mermisini sistem sayamaz).
 
@@ -85,4 +85,4 @@ Aynı adımlar. Sunucu RPT'sinde `[TC2][TOPCU]` satırları (CFF, KABUL, EOM, RE
 | B | POLAR / SHIFT konumları çözülür |
 | C | danger close, creeping, immediate, duration kuralları zorlanır |
 | D | AT MY COMMAND (IS READY → FIRE), CHECK FIRING |
-| E | AI ayarı, oyuncu bataryasında ateş emri + elle bildirimler |
+| E | oyuncu yok ⇒ kullanılamaz; oyuncu bataryasında ateş emri + elle bildirimler |

@@ -30,7 +30,7 @@ private _text = switch (_code) do {
     case "CREEP":        {"DANGER CLOSE: menzil düzeltmesi en çok 100 m (creeping fire)."};
     case "BAD_STATE":    {"Bu işlem şu an uygun değil (görev durumu)."};
     case "NO_BATTERY":   {"Batarya seçilemedi/kullanılamaz."};
-    case "AI_DISABLED":  {"AI mürettebatlı topların kullanımı bu taraf için CBA'da KAPALI."};
+    case "NO_PLAYER_CREW": {"Bu bataryada oyuncu mürettebat yok (AI topçu desteklenmez)."};
     case "NO_AMMO":      {format ["Bataryada %1 mühimmatı yok.", _first]};
     case "OUT_OF_RANGE": {"Hedef bataryanın menzili dışında."};
     case "COOLDOWN":     {"Bekleyin (3 sn aralık)."};

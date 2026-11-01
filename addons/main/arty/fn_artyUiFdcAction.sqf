@@ -3,7 +3,7 @@
     Çalışma yeri: İSTEMCİ (FDC sekmesi düğmeleri)
 
     FDC operatörünün işlemini sunucuya gönderir: ACCEPT (batarya + mermi + değişiklikler), REJECT (neden), SHOT, SPLASH, COMPLETE, CHECK.
-    Görev, kuyruk listesinde seçili olandır. Karar ve doğrulamalar (menzil, mühimmat, AI ayarı) sunucuda.
+    Görev, kuyruk listesinde seçili olandır. Karar ve doğrulamalar (menzil, mühimmat, oyuncu mürettebat) sunucuda.
 
     Parametreler:
         0: işlem <STRING>

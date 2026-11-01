@@ -14,6 +14,7 @@ class arty
     // Sunucu - yardimcilar
     class artyResolvePos {};
     class artyIsGun {};
+    class debugArtyCrew {};
     class artyBatteries {};
     class artyAmmo {};
     class artyNearestFriendly {};
@@ -27,7 +28,6 @@ class arty
     class artyFdcAction {};
     class artyObsAction {};
     class artyExecute {};
-    class artyGunFired {};
     class artyComplete {};
 
     // Istemci

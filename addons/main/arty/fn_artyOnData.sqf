@@ -10,7 +10,7 @@
         3: alıcı FDC'ler <ARRAY>  [[netId, ad]]
         4: kendi görev özeti <ARRAY>
         5: FDC kuyruğu <ARRAY>    (görev özetleri)
-        6: bataryalar <ARRAY>     [[anahtar, etiket, mürettebat, top sayısı, AI uygun]]
+        6: bataryalar <ARRAY>     [[anahtar, etiket, mürettebat, top sayısı, kullanılabilir mi]]
         7: bilinen hedef numaraları <ARRAY>  [[numara, grid]]
 
     Dönüş: yok

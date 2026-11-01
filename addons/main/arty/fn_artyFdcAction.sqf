@@ -6,7 +6,7 @@
 
     FDC operatörünün işlemleri. Doğrulamalar: gönderen, oturum, FDC rolü, görev bu FDC'ye adreslenmiş.
       ACCEPT   [batarya anahtarı, hacim (0 = CFF'tekini koru), değişiklikler (metin)]
-               Batarya bu tarafın, kullanılabilir (mürettebatlı; AI ise CBA'da açık), mühimmatı var, hedef menzilde (inRangeOfArtillery) olmalı.
+               Batarya bu tarafın, kullanılabilir (oyuncu mürettebatlı), mühimmatı var, hedef menzilde (inRangeOfArtillery) olmalı.
                Hedef numarası verilir ve MTO gönderilir: birim(ler), değişiklikler, mermi sayısı, hedef no (ATP 3-09.30, 4-66..4-70).
                AT MY COMMAND ise "<batarya> IS READY" (gözlemci FIRE der); değilse atış başlar (FIRE WHEN READY).
       REJECT   [neden]       CFF reddedilir (CFF bir istektir, emir değildir; FDC karar verir).
@@ -69,7 +69,7 @@ switch (_action) do {
 
         if (_battery isEqualTo []) exitWith {["NO_BATTERY", []] call _ack};
         if ((_battery select 2) isEqualTo "EMPTY") exitWith {["NO_BATTERY", []] call _ack};
-        if !(_battery select 4) exitWith {["AI_DISABLED", []] call _ack};
+        if !(_battery select 4) exitWith {["NO_PLAYER_CREW", []] call _ack};
 
         private _guns = ((_battery select 3) apply {objectFromNetId _x}) select {!isNull _x && {alive _x}};
         private _data = _mission select 8;

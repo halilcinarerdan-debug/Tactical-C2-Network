@@ -25,7 +25,8 @@ _friends = _friends apply {
 
 missionNamespace setVariable ["TC2_cop_data", [_friends, _markers, _unverified]];
 
-call TC2_fnc_copGameMarkers;
+// Oyun işaretleri yalnızca harita görünürken hazırlanır (diğer sekmeler de copRequest çağırır).
+if ((missionNamespace getVariable ["TC2_ui_tab", 0]) == 1) then {call TC2_fnc_copGameMarkers};
 
 if ((missionNamespace getVariable ["TC2_cop_mode", ""]) isEqualTo "") then {
     if (_code isEqualTo "OK") then {

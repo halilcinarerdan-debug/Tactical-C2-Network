@@ -97,7 +97,8 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
 2. Kategori seç, tür seç ⇒ **İŞARET KOY** ⇒ haritaya tıkla ⇒ o türün **oyun NATO sembolü** (kırmızı; tehlikeler turuncu) ve adı + yaşı çizilir. MicroDAGR'a `TC2 <TÜR> <grid>` waypoint'i düşer.
 3. CAS / TOPÇU / RAPOR / MEDEVAC sekmelerindeki işaret listelerinde tür adı doğru görünür (ör. `#3 DÜŞMAN TOPÇU grid ...`).
 4. Sembollerden biri boş (görünmez) çıkarsa türünü ve kodunu yazın (oyunun simge dosyası farklı adlanıyor olabilir).
-5. **Çerçeve:** masa başında **masaüstü monitör** (kalın siyah çerçeve, yuvarlak köşe, alt çene: LED + güç tuşu + "TC2", boyun ve ayak). Saha cihazında **kalın kum rengi kılıflı tablet** (yuvarlak köşe, siyah ekran kenarı, tutucular, yan tuşlar, kamera, sağda geri/çoklu görev tuşları). Köşeler "daire + dikdörtgen" ile yuvarlatılır; ekran içi köşeler köşelidir.
+5. **Çerçeve:** masa başında **masaüstü monitör** (kalın siyah çerçeve, yuvarlak köşe, alt çene: LED + güç tuşu + "TC2", boyun ve ayak). Saha cihazında **kalın kum rengi kılıflı tablet** (yuvarlak köşe, siyah ekran kenarı, tutucular, yan tuşlar, kamera, sağda geri/çoklu görev tuşları). Köşeler ince yatay şeritlerle (çeyrek daire yayı) yuvarlatılır; ekranın kendi dört köşesi de çerçeve renginde şeritlerle kaplanır (içerik de yuvarlak köşeli görünür). Köşede hâlâ içe çökük/küçük görünen yer varsa ekran görüntüsüyle bildirin.
+6. **Topçu:** AI topçu yok; oyuncu mürettebatlı batarya ya da `[TC2_gun] call TC2_fnc_debugArtyCrew;` (bkz. `TEST_ASAMA5B.md`).
 
 ## Bilinen sınırlar
 

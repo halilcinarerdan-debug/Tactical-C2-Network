@@ -69,7 +69,7 @@ if !(_signature isEqualTo (missionNamespace getVariable ["TC2_arty_sig", ""])) t
 
     [_display displayCtrl 92450, _queue apply {[format ["#%1  %2  %3", _x select 0, _x select 2, (_x select 1) call _stateName], str (_x select 0)]}, ["— kuyruk —", "0"]] call TC2_fnc_uiFillCombo;
 
-    [_display displayCtrl 92452, _batteries apply {[format ["%1  [%2]  %3 top%4", _x select 1, _x select 2, _x select 3, ["  (AI KAPALI)", ""] select (_x select 4)], _x select 0]}, ["— batarya seçin —", ""]] call TC2_fnc_uiFillCombo;
+    [_display displayCtrl 92452, _batteries apply {[format ["%1  [%2]  %3 top%4", _x select 1, _x select 2, _x select 3, ["  (OYUNCU YOK)", ""] select (_x select 4)], _x select 0]}, ["— batarya seçin —", ""]] call TC2_fnc_uiFillCombo;
 };
 
 // --- TOPÇU (gözlemci) metinleri
@@ -191,7 +191,7 @@ if (_tab == 4) then {
         private _batteryText = "<t size='0.75'>Batarya seçilmedi.</t>";
         {
             if ((_x select 0) isEqualTo _batteryKey) exitWith {
-                _batteryText = format ["<t size='0.75'>%1<br/>MÜRETTEBAT %2   TOP %3<br/>AI KULLANIMI %4</t>", _x select 1, _x select 2, _x select 3, ["KAPALI (CBA)", "uygun"] select (_x select 4)];
+                _batteryText = format ["<t size='0.75'>%1<br/>MÜRETTEBAT %2   TOP %3<br/>KULLANIM %4</t>", _x select 1, _x select 2, _x select 3, ["KULLANILAMAZ (oyuncu yok)", "uygun"] select (_x select 4)];
             };
         } forEach _batteries;
         if !(_batteryText isEqualTo (missionNamespace getVariable ["TC2_arty_batteryText", ""])) then {

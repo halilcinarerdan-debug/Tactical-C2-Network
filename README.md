@@ -15,7 +15,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 3 | ACRE2 veri ağı + basit mesajlaşma (telsiz/kanal/menzil kontrolü, PING/PONG) | ✅ hazır (test bekliyor) |
 | 4 | Ortak harekat resmi (COP): terminal haritası, düşman işareti, ACE MicroDAGR | ✅ hazır (test bekliyor) |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC, zorunlu geri okuma, abort) | ✅ hazır (test bekliyor) |
-| 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), AI/oyuncu bataryası | ✅ hazır (test bekliyor) |
+| 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), oyuncu mürettebatlı batarya (AI topçu yok) | ✅ hazır (test bekliyor) |
 | 6a | **OPORD** (JP 3-0): beş paragraf, Level 1/2/3 yetki, sunucuda süzme | ✅ hazır (test bekliyor) |
 | 6b | **Raporlar** (SALUTE / SITREP / LACE) + WARNO; kart seviyeleri (Kırmızı/Mavi/Altın), CO/S2/S4 rolleri, saha tableti, izleme modu, haritada LACE | ✅ hazır (test bekliyor) |
 | 6b+ | **9-Line MEDEVAC** (CASEVAC): 9 satır form, helikopter mürettebatına talep, kabul + ETA, iptal | ✅ hazır (test bekliyor) |
@@ -82,7 +82,7 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_artySendCff / artyPoll        [SUNUCU] CFF gönder (danger close 600 m denetimi), sekme verisi
         fn_artyFdcAction                 [SUNUCU] FDC: ACCEPT (MTO, menzil, mühimmat), REJECT, SHOT/SPLASH/COMPLETE, CHECK
         fn_artyObsAction                 [SUNUCU] gözlemci: CORRECT / REPEAT / FIRE / CHECK / EOM
-        fn_artyExecute / GunFired / Complete  [SUNUCU] atış (AI: commandArtilleryFire; oyuncu: ateş emri), SHOT/SPLASH/ROUNDS COMPLETE
+        fn_artyExecute / Complete  [SUNUCU] atış (oyuncu mürettebata ateş emri), SHOT/SPLASH/ROUNDS COMPLETE (FDC elle)
         fn_artyBatteries / artyIsGun     [SUNUCU] topçu araçlarını otomatik bul, batarya olarak grupla
         fn_artyUi* / artyObsBuild / artyFdcBuild  [İSTEMCİ] TOPÇU ve FDC sekmeleri
     opord/                               6a. aşama (OPORD, yetki seviyeleri)
@@ -209,9 +209,9 @@ Doktrin: ATP 3-09.30 ([`docs/DOKTRIN_NOTLARI_TOPCU.md`](docs/DOKTRIN_NOTLARI_TOP
 | Komutlar | MTO, SHOT, SPLASH (yüksek açı / hava gözlemcisi), ROUNDS COMPLETE, AT MY COMMAND (IS READY → FIRE), CHECK FIRING, END OF MISSION (+ RECORD AS TARGET). |
 | Düzeltme | Gözlemci düzeltmeyi kendisi gözleyip gönderir: DIRECTION, LEFT/RIGHT, ADD/DROP, UP/DOWN, ADJUST/FFE, REPEAT. Sunucu OT hattına göre nişan noktasını hesaplar. |
 | DANGER CLOSE | hedef dostlara **600 m** içindeyse bildirilmeden CFF kabul edilmez; danger close'ta menzil düzeltmesi en çok 100 m (creeping). |
-| Toplar | topçu araçları **otomatik** bulunur (artillery computer / StaticMortar / CBA sınıf listesi); aynı mürettebat grubu = bir batarya. **AI mürettebat** CBA'dan BLUFOR / OPFOR / INDFOR için açılıp kapatılır (`commandArtilleryFire`); **oyuncu mürettebata** ateş emri bildirimi gider, FDC SHOT / SPLASH / COMPLETE'i elle girer. |
+| Toplar | topçu araçları **otomatik** bulunur (artillery computer / StaticMortar / CBA sınıf listesi); aynı mürettebat grubu = bir batarya. **AI topçu yoktur (kaldırıldı)**: yalnızca **oyuncu mürettebatlı** bataryalar kullanılır, oyunculara ateş emri bildirimi gider, FDC SHOT / SPLASH / COMPLETE'i elle girer. Tek başına test için `[top] call TC2_fnc_debugArtyCrew;` (simüle mürettebat). |
 
-**Sınırlar:** mermi düşüşünü sistem gözlemlemez (gözlemci kendisi gözler); AI topları sunucuda yerel olmalıdır; HOB / tapa tipi ve yeni mühimmat seçenekleri (laser grid, kayıt atışı, TOT, aydınlatma koordinasyonu, sheaf) bu sürümde YOK
+**Sınırlar:** mermi düşüşünü sistem gözlemlemez (gözlemci kendisi gözler); HOB / tapa tipi ve yeni mühimmat seçenekleri (laser grid, kayıt atışı, TOT, aydınlatma koordinasyonu, sheaf) bu sürümde YOK
 (temel set). Yüksek açı/alçak açı yalnızca bilgi olarak taşınır; atış, aracın kendi silahına bağlıdır. ACE'in Mk6 havan tabloları AI atışını etkilemez; oyuncu mürettebat kendi tablolarını kullanır.
 
 Test: [`docs/TEST_ASAMA5B.md`](docs/TEST_ASAMA5B.md).

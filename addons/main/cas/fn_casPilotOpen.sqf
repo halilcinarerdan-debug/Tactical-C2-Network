@@ -115,7 +115,8 @@ _display displayAddEventHandler ["KeyDown", {
     false
 }];
 
-// Yazı kutusu dışına sol tık: klavye odağını kutudan al (bkz. uiReleaseFocus).
+// Yazı kutularının odağını izle ve dışına sol tık: klavye odağını kutudan al (bkz. uiTrackFocus / uiReleaseFocus).
+[_display, [92110, 92111, 92112, 92113, 92114, 92115]] call TC2_fnc_uiTrackFocus;
 _display displayAddEventHandler ["MouseButtonDown", {
     params ["_display", "_button", "_mx", "_my"];
     if (_button != 0) exitWith {};

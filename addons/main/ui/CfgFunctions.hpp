@@ -8,8 +8,10 @@ class ui
     class uiWatch {};
     class uiOnUnload {};
     class uiBuildFrame {};
+    class uiBuildFrameCorners {};
     class uiStatusText {};
     class uiReleaseFocus {};
+    class uiTrackFocus {};
     class uiMakeControl {};
     class uiBuildRows {};
     class uiFillCombo {};

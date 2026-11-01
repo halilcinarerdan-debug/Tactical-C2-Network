@@ -236,6 +236,9 @@ if (!isNull findDisplay 92000) exitWith {};
         false
     }];
 
+    // Yazı kutularının odağını izle (uiReleaseFocus bunu kullanır).
+    [_display, [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457, 92604, 92720, 92721, 92722, 92723, 92724, 92725, 92811]] call TC2_fnc_uiTrackFocus;
+
     // Yazı kutusu dışına sol tık: klavye odağını kutudan al (bkz. uiReleaseFocus).
     _display displayAddEventHandler ["MouseButtonDown", {
         params ["_display", "_button", "_mx", "_my"];
@@ -257,6 +260,9 @@ if (!isNull findDisplay 92000) exitWith {};
 
     [0] call TC2_fnc_uiSelectTab;
     call TC2_fnc_uiStatusText;
+
+    // Ekran köşelerini çerçeve renginde kapla (en son: üst üste çizim sırası).
+    call TC2_fnc_uiBuildFrameCorners;
 
     [_terminal, call TC2_fnc_netGetRadioState] call TC2_fnc_netReportState;
     call TC2_fnc_netUiUpdate;
