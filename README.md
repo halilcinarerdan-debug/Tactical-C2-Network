@@ -109,7 +109,7 @@ Ayar boş bırakılırsa **kimse giremez** (güvenli varsayılan).
 | Ayar | Varsayılan | Kapsam | Açıklama |
 |------|-----------|--------|----------|
 | `TC2_terminal_enabled` | açık | global | Kapalıysa eylem görünmez, sunucu her talebi reddeder |
-| `TC2_access_cardClasses` | `Item_CAC_Card` | global | Gerekli kart sınıf(lar)ı; `;` veya `,` ile ayır |
+| `TC2_access_cardClasses` | `Item_CAC_Card;TC2_CAC_Card` | global | Gerekli kart sınıf(lar)ı; `;` veya `,` ile ayır |
 | `TC2_access_authTime` | 2 sn | global | Kart okutma çubuğu süresi; 0 = anında |
 | `TC2_debug` | kapalı | istemci | Bildirimleri sohbet satırına da yazar |
 

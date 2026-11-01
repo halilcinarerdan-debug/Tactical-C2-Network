@@ -16,7 +16,7 @@ class CfgPatches
         url = "";
         // units[]: Zeus (curator) bu listeden addon'u aktive eder.
         units[] = {"TC2_Terminal_F"};
-        weapons[] = {};
+        weapons[] = {"TC2_CAC_Card"};
         requiredVersion = 0.1;
         // A3_Structures_F_Items_Electronics: Land_Laptop_unfolded_F bu yamada tanimli;
         // taban sinifin bizden ONCE yuklenmesi icin gerekli.
@@ -71,6 +71,31 @@ class CfgVehicles
         author = "TC2";
         editorCategory = "TC2_EdCat";
         editorSubcategory = "TC2_EdSubcat_Terminals";
+    };
+};
+
+// ----------------------------------------------------------------------------
+//  Kimlik karti (CAC): terminale giris icin gereken envanter esyasi.
+//  Harici bir moddaki Item_CAC_Card yoksa bu kart kullanilir. CBA_MiscItem: cba_main'in
+//  genel esya taban sinifi.
+// ----------------------------------------------------------------------------
+class CfgWeapons
+{
+    class CBA_MiscItem;
+    class CBA_MiscItem_ItemInfo;
+
+    class TC2_CAC_Card: CBA_MiscItem
+    {
+        author = "TC2";
+        scope = 2;
+        displayName = "CAC Kimlik Karti";
+        descriptionShort = "Common Access Card. Komuta terminallerine giris icin gerekir.";
+        picture = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\itemacc_ca.paa";
+
+        class ItemInfo: CBA_MiscItem_ItemInfo
+        {
+            mass = 1;
+        };
     };
 };
 

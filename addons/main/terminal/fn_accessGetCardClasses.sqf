@@ -14,7 +14,7 @@
     Dönüş: <ARRAY of STRING> küçük harfli sınıf adları (ayar boşsa boş dizi)
 */
 
-private _raw = missionNamespace getVariable ["TC2_access_cardClasses", "Item_CAC_Card"];
+private _raw = missionNamespace getVariable ["TC2_access_cardClasses", "Item_CAC_Card;TC2_CAC_Card"];
 private _classes = [];
 
 {
