@@ -10,7 +10,9 @@
     Dönüş: yok
 */
 
-params [["_request", "", [""]]];
+// Parametresiz çağrıda (call TC2_fnc_copUiMode) üst kapsamın _this değeri sızabilir; yalnızca metin kabul edilir.
+private _request = _this param [0, ""];
+if !(_request isEqualType "") then {_request = ""};
 
 private _mode = missionNamespace getVariable ["TC2_cop_mode", ""];
 

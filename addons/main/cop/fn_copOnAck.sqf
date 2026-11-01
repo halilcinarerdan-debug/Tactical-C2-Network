@@ -29,7 +29,7 @@ private _line = switch (_code) do {
 };
 
 missionNamespace setVariable ["TC2_cop_mode", ""];
-call TC2_fnc_copUiMode;
+[""] call TC2_fnc_copUiMode;
 _line call TC2_fnc_copUiStatus;
 
 call TC2_fnc_copUiRequest;
