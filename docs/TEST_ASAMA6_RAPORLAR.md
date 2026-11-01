@@ -105,7 +105,8 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
 1. **AI lider:** CBA `Ortak Harekat Resmi (COP)` ⇒ `AI grup liderlerini haritada göster` (varsayılan açık). Görünmesi için AI grubunun **lideri** envanterinde `TC2_Tablet` taşımalı (Eden başlatma alanı: `this addItem "TC2_Tablet"`; Zeus'ta sonradan: `(leader group cursorObject) addItem "TC2_Tablet"`). Aynı taraf ve **sizin telsiz menzilinizde** (ör. PRC343 = 500 m) olmalı. HARİTA'da `<çağrı adı> AI` etiketiyle dost simgesi, Level 2+ iseniz LACE rengiyle çıkar; BİRİM / LACE ile sayılar okunur (rapor beyanı yoktur).
 2. Tabletsiz AI lider ya da menzil dışı AI: görünmez. Ayarı kapatınca hepsi kalkar (5 sn).
 3. **MicroDAGR:** grup liderinin envanterinde `ACE_microDAGR` (ACE "MicroDAGR" eşyası) ve tablet olsun. Haritaya düşman işareti koyun ⇒ lider DAGR'ı açar (ACE: MicroDAGR) ⇒ **WAYPOINTS** sekmesinde `TC2 #5 INF 024057` gibi kayıtlar (işaret no, tür, grid). Oyuncunun kendi waypoint'leri (eklediyse) başta kalır. Bir `TC2 ...` waypoint'ini **SET WP** ile hedef seçin ⇒ yeni işaret eklenince/silinince hedef **aynı işarette kalmalı**, işaret silinirse hedef kalkmalı. Sadece grup lideri alır; er DAGR'a işaret almaz.
-4. Doğrulanmamış SALUTE noktaları DAGR'a **gitmez**; yalnızca işaret olanlar (S2/CO doğrulayınca) gider.
+4. **Bakış oku:** HARİTA'da grup/takım liderlerinin (oyuncu ve tabletli AI) simgesinin önünde, baktıkları yönü gösteren bir **ok** olur (yayada gözün baktığı yön, araçta aracın yönü; 5 dereceye yuvarlanır, 5 sn'de bir yenilenir). Lideri döndürün: ok dönmeli; haritayı yakınlaştırınca ok simgeden aynı ekran uzaklığında kalmalı. Lider olmayan dostta ok yoktur.
+5. Doğrulanmamış SALUTE noktaları DAGR'a **gitmez**; yalnızca işaret olanlar (S2/CO doğrulayınca) gider.
 
 ## Bilinen sınırlar
 

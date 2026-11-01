@@ -33,8 +33,11 @@ params ["_map"];
 
 (missionNamespace getVariable ["TC2_cop_data", [[], [], []]]) params ["_friends", "_markers", ["_unverified", []]];
 
+// Ok mesafesi: ekranda yaklaşık 0.035 birim (harita ölçeğinden metreye çevrilir; kare başına tek hesap).
+private _arrowReach = (_map ctrlMapScreenToWorld [0.5, 0.5]) distance2D (_map ctrlMapScreenToWorld [0.535, 0.5]);
+
 {
-    _x params ["_pos", "_label", "_leader", "", ["_status", ""]];
+    _x params ["_pos", "_label", "_leader", "", ["_status", ""], ["_heading", -1]];
     private _color = switch (_status) do {
         case "GREEN": {[0.2, 0.85, 0.3, 1]};
         case "AMBER": {[1, 0.78, 0.1, 1]};
@@ -47,6 +50,12 @@ params ["_map"];
         [20, 28] select _leader, [20, 28] select _leader, 0,
         ["", [_label, format ["%1  [%2]", _label, _status]] select !(_status isEqualTo "")] select _leader, 1, 0.045, "PuristaMedium", "right"
     ];
+
+    // Lider bakış oku: simgenin önünde, bakılan yönde (ok ile simge arası ekranda sabit uzaklık: haritayı yakınlaştırınca da aynı kalır).
+    if (_leader && {_heading >= 0}) then {
+        private _tip = [(_pos select 0) + (sin _heading) * _arrowReach, (_pos select 1) + (cos _heading) * _arrowReach, _pos select 2];
+        _map drawIcon ["\A3\ui_f\data\map\markers\military\arrow_CA.paa", _color, _tip, 24, 24, _heading, "", 0];
+    };
 } forEach _friends;
 
 {

@@ -6,7 +6,7 @@
 
     Parametreler:
         0: kod <STRING>  "OK" | "NO_RADIO" | "NO_ACRE" | erişim ret nedeni
-        1: dostlar <ARRAY>   [[konum ASL, etiket, lider mi, lace]]  (önbelleğe lace özet durumu eklenir)
+        1: dostlar <ARRAY>   [[konum ASL, etiket, lider mi, lace, bakış yönü]]  (önbelleğe lace özet durumu eklenir)
         2: işaretler <ARRAY> [[id, tür, konum ASL, koyan, yaş sn]]
         3: doğrulanmamış SALUTE <ARRAY> [[rapor id, konum ASL, yaş sn, çağrı adı]]  (Level 2+)
 
@@ -19,8 +19,8 @@ params [["_code", "", [""]], ["_friends", [], [[]]], ["_markers", [], [[]]], ["_
 
 // Dostlara LACE özet durumu eklenir (5. öğe); çizim her karede yeniden hesaplamasın diye burada bir kez.
 _friends = _friends apply {
-    _x params ["_pos", "_label", "_leader", ["_lace", []]];
-    [_pos, _label, _leader, _lace, [_lace] call TC2_fnc_rptLaceStatus]
+    _x params ["_pos", "_label", "_leader", ["_lace", []], ["_heading", -1]];
+    [_pos, _label, _leader, _lace, [_lace] call TC2_fnc_rptLaceStatus, _heading]
 };
 
 missionNamespace setVariable ["TC2_cop_data", [_friends, _markers, _unverified]];

@@ -13,7 +13,7 @@
         2: kanal <NUMBER>
         3: LACE dahil mi <BOOL>  (yalnızca Level 2+ ve izleme modunda olmayan oturumlar için true; varsayılan false)
 
-    Dönüş: [[konum ASL, etiket, lider mi, lace]] <ARRAY>
+    Dönüş: [[konum ASL, etiket, lider mi, lace, bakış yönü derece]] <ARRAY>
         lace = lider ve istendiyse rptLaceInfo çıktısı [[mevcut, ilk, yaralı, araç %], son rapor], aksi halde []
 */
 
@@ -34,7 +34,7 @@ private _out = [];
     ) then {
         private _label = [format ["%1 %2", groupId (group _unit), name _unit], 40] call TC2_fnc_netSanitize;
         private _isLeader = (leader (group _unit)) isEqualTo _unit;
-        _out pushBack [getPosASL _unit, _label, _isLeader, if (_includeLace && _isLeader) then {[group _unit] call TC2_fnc_rptLaceInfo} else {[]}];
+        _out pushBack [getPosASL _unit, _label, _isLeader, if (_includeLace && _isLeader) then {[group _unit] call TC2_fnc_rptLaceInfo} else {[]}, [_unit] call TC2_fnc_copHeading];
     };
 } forEach (missionNamespace getVariable ["TC2_cop_field", []]);
 
@@ -46,7 +46,8 @@ private _out = [];
             getPosASL _aiUnit,
             [format ["%1 AI", groupId (group _aiUnit)], 40] call TC2_fnc_netSanitize,
             true,
-            if (_includeLace) then {[group _aiUnit] call TC2_fnc_rptLaceInfo} else {[]}
+            if (_includeLace) then {[group _aiUnit] call TC2_fnc_rptLaceInfo} else {[]},
+            [_aiUnit] call TC2_fnc_copHeading
         ];
     };
 } forEach ([] call TC2_fnc_copAiLeaders);
@@ -56,7 +57,7 @@ private _out = [];
     if ((_x select 7) && {(_x select 4) isEqualTo _base} && {(_x select 5) == _channel} && {alive (_x select 1)} && {(_viewer distance (_x select 1)) <= _range}) then {
         private _simUnit = _x select 1;
         private _simLeader = (leader (group _simUnit)) isEqualTo _simUnit;
-        _out pushBack [getPosASL _simUnit, _x select 2, _simLeader, if (_includeLace && _simLeader) then {[group _simUnit] call TC2_fnc_rptLaceInfo} else {[]}];
+        _out pushBack [getPosASL _simUnit, _x select 2, _simLeader, if (_includeLace && _simLeader) then {[group _simUnit] call TC2_fnc_rptLaceInfo} else {[]}, [_simUnit] call TC2_fnc_copHeading];
     };
 } forEach (missionNamespace getVariable ["TC2_net_sessions", []]);
 

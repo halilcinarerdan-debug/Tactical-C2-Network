@@ -29,6 +29,7 @@ class cop
     class copMarkersFor {};
     class copFriendsOf {};
     class copAiLeaders {};
+    class copHeading {};
     class copUiCursor {};
     class copMeasureText {};
     class copGameMarkers {};
