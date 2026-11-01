@@ -63,6 +63,7 @@ if (_type isEqualTo "PONG") then {
 };
 
 if (_peers isEqualTo []) exitWith {
+    diag_log format ["[TC2][NET] %1 NO_PEERS | gonderen=%2 | tip=%3 kanal=%4 | menzil=%5 m | kayitli oturum=%6", _type, name _unit, _entry select 4, _entry select 5, [_entry select 4] call TC2_fnc_netRangeOf, count (missionNamespace getVariable ["TC2_net_sessions", []])];
     if (_wantAck) then {[_unit, "TC2_fnc_netOnAck", [_type, "NO_PEERS", 0]] call TC2_fnc_netToUnit};
 };
 
@@ -71,7 +72,13 @@ if (_wantAck) then {_entry set [8, _now]};
 private _netId = _entry select 0;
 private _from = [format ["%1 / %2", name _unit, _entry select 2], 60] call TC2_fnc_netSanitize;
 
-diag_log format ["[TC2][NET] %1 | gonderen=%2 (%3) | esler=%4 | kanal=%5 %6 | metin=%7", _type, name _unit, _entry select 2, count _peers, _entry select 4, _entry select 5, _clean];
+diag_log format [
+    "[TC2][NET] %1 | gonderen=%2 (%3) | esler=%4 | kanal=%5 %6 | menzil=%7 m | mesafeler=%8 | metin=%9",
+    _type, name _unit, _entry select 2, count _peers, _entry select 4, _entry select 5,
+    [_entry select 4] call TC2_fnc_netRangeOf,
+    _peers apply {round (_unit distance (_x select 1))},
+    _clean
+];
 
 {
     private _peer = _x;

@@ -28,11 +28,8 @@ if (_type isEqualTo "MSG" && {_clean isEqualTo ""}) exitWith {};
 
 if (_type != "PONG") then {
     missionNamespace setVariable ["TC2_net_nextSend", diag_tickTime + 2];
-    if (_type isEqualTo "MSG") then {
-        [format ["SEN: %1", _clean], "#40ff59"] call TC2_fnc_netLog;
-    } else {
-        ["PING gönderiliyor...", "#1f9930"] call TC2_fnc_netLog;
-    };
+    // Gönderilen metin saklanır; günlüğe SUNUCU onaylayınca (netOnAck) yazılır. Böylece gitmeyen mesaj gitmiş gibi görünmez.
+    missionNamespace setVariable ["TC2_net_pendingText", _clean];
 };
 
 private _state = call TC2_fnc_netGetRadioState;
