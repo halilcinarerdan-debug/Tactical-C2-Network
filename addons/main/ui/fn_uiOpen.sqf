@@ -10,7 +10,7 @@
 
     Düzen:
         [ başlık: TC2 KOMUTA TERMİNALİ | terminal | kullanıcı ................ [KAPAT] ]
-        [ ANA | HARİTA | CAS | TOPÇU | FDC | İSTİHBARAT | LOJİSTİK | UAV ]
+        [ ANA | HARİTA | CAS | TOPÇU | FDC | OPORD | İSTİHBARAT | LOJİSTİK | UAV ]
         [ içerik (sekmeye göre)                                                        ]
         [ alt satır: ESC = kapat                                                       ]
 
@@ -43,7 +43,7 @@ if (!isNull findDisplay 92000) exitWith {};
 
     missionNamespace setVariable ["TC2_terminal_current", _terminal];
 
-    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "İSTİHBARAT", "LOJİSTİK", "UAV"];
+    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "İSTİHBARAT", "LOJİSTİK", "UAV"];
     missionNamespace setVariable ["TC2_ui_tabs", _tabs];
 
     private _w = 0.7 * safeZoneW;
@@ -95,6 +95,7 @@ if (!isNull findDisplay 92000) exitWith {};
         private _tabButton = _display ctrlCreate ["RscButtonMenu", 92010 + _forEachIndex];
         _tabButton ctrlSetPosition [_left + _forEachIndex * _tabW, _top + _headerH, _tabW, _tabH];
         _tabButton ctrlSetText _x;
+        _tabButton ctrlSetFontHeight 0.03;
         _tabButton ctrlSetTextColor _green;
         _tabButton ctrlAddEventHandler ["ButtonClick", {
             [(ctrlIDC (_this select 0)) - 92010] call TC2_fnc_uiSelectTab;
@@ -173,6 +174,12 @@ if (!isNull findDisplay 92000) exitWith {};
     missionNamespace setVariable ["TC2_arty_code", "OK"];
     {missionNamespace setVariable [_x, ""]} forEach ["TC2_arty_infoText", "TC2_arty_logText", "TC2_arty_detailText", "TC2_arty_fdcLogText", "TC2_arty_batteryText"];
 
+    // OPORD sekmesi (Aşama 6): yetki seviyeli belge; varsayılan gizli.
+    [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_opordBuild;
+    missionNamespace setVariable ["TC2_opord_data", ["EMPTY", 1, [], [], [], 0, false]];
+    {missionNamespace setVariable [_x, ""]} forEach ["TC2_opord_infoText"];
+    missionNamespace setVariable ["TC2_opord_viewText", "\n"];
+
     // Ağ durumunu sıfırla (yeni oturum) ve sunucuya ilk raporu gönder.
     missionNamespace setVariable ["TC2_net_status", []];
     missionNamespace setVariable ["TC2_net_statusTime", diag_tickTime];
@@ -205,7 +212,7 @@ if (!isNull findDisplay 92000) exitWith {};
         if (_button != 0) exitWith {};
         [
             _display, _mx, _my,
-            [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457],
+            [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457, 92604],
             92010 + (missionNamespace getVariable ["TC2_ui_tab", 0])
         ] call TC2_fnc_uiReleaseFocus;
     }];

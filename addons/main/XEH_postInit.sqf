@@ -8,6 +8,9 @@
     CfgFunctions ile zaten derlenmiş durumdadır ve remoteExec ile çağrılır.
 */
 
+// OPORD: sunucu, mission klasöründeki tc2_opord.sqf varsa yayımlar (arayüzü olmayan sunucuda da çalışır).
+if (isServer) then {call TC2_fnc_opordLoad};
+
 // ACE menüsü ve bildirimler yalnızca arayüzü olan makinelerde anlamlı.
 if (!hasInterface) exitWith {};
 

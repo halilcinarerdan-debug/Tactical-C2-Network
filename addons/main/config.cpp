@@ -168,6 +168,38 @@ class TC2_CasDialog
     class controls {};
 };
 
+// ----------------------------------------------------------------------------
+//  OPORD sekmesi: kaydirilabilir cok satirli metin alanlari. Kendi basina duran, vanilla sinifa bagimli olmayan siniflar
+//  (style 16 = ST_MULTI). View: salt okunur (canModify = 0); Edit: duzenlenebilir (yalniz Level 3).
+// ----------------------------------------------------------------------------
+class TC2_RscMultiView
+{
+    idc = -1;
+    type = 2;
+    style = 16;
+    x = 0;
+    y = 0;
+    w = 0.3;
+    h = 0.1;
+    font = "PuristaMedium";
+    sizeEx = 0.032;
+    lineSpacing = 1;
+    shadow = 0;
+    colorBackground[] = {0,0.05,0.01,1};
+    colorText[] = {0.25,1,0.35,1};
+    colorSelection[] = {0.1,0.45,0.15,1};
+    colorDisabled[] = {0.25,1,0.35,0.5};
+    autocomplete = "";
+    text = "";
+    canModify = 0;
+};
+
+class TC2_RscMultiEdit: TC2_RscMultiView
+{
+    colorBackground[] = {0,0.1,0.03,1};
+    canModify = 1;
+};
+
 class CfgFunctions
 {
     class TC2
@@ -194,6 +226,9 @@ class CfgFunctions
 
         // 5B. Asama: topcu (CFF / FDC)
         #include "arty\CfgFunctions.hpp"
+
+        // 6. Asama: OPORD (yetki seviyeli belgeler)
+        #include "opord\CfgFunctions.hpp"
     };
 };
 
@@ -364,6 +399,28 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_artyOnGunOrder
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 6. Asama (OPORD). Sunucuya giden: opordPoll, opordEdit. Istemciye giden: opordOnData, opordOnAck.
+        class TC2_fnc_opordPoll
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_opordEdit
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_opordOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_opordOnAck
         {
             allowedTargets = 0;
             jip = 0;

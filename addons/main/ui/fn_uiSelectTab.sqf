@@ -52,6 +52,13 @@ if (_index == 2) then {
 
 // TOPÇU (3) ve FDC (4) sekmeleri: görünürlük artyUiUpdate'te; seçilince veriyi hemen iste.
 call TC2_fnc_artyUiUpdate;
+// OPORD (5)
+call TC2_fnc_opordUiUpdate;
+if (_index == 5) then {
+    missionNamespace setVariable ["TC2_opord_statusText", ""];
+    call TC2_fnc_opordUiRequest;
+};
+
 if (_index in [3, 4]) then {
     missionNamespace setVariable ["TC2_arty_statusText", ""];
     call TC2_fnc_artyUiRequest;

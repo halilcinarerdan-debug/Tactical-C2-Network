@@ -16,7 +16,8 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 4 | Ortak harekat resmi (COP): terminal haritası, düşman işareti, ACE MicroDAGR | ✅ hazır (test bekliyor) |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC, zorunlu geri okuma, abort) | ✅ hazır (test bekliyor) |
 | 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), AI/oyuncu bataryası | ✅ hazır (test bekliyor) |
-| 6 | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
+| 6a | **OPORD** (JP 3-0): beş paragraf, Level 1/2/3 yetki, sunucuda süzme | ✅ hazır (test bekliyor) |
+| 6b | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
 
 ## Depo yapısı
 
@@ -81,6 +82,13 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_artyExecute / GunFired / Complete  [SUNUCU] atış (AI: commandArtilleryFire; oyuncu: ateş emri), SHOT/SPLASH/ROUNDS COMPLETE
         fn_artyBatteries / artyIsGun     [SUNUCU] topçu araçlarını otomatik bul, batarya olarak grupla
         fn_artyUi* / artyObsBuild / artyFdcBuild  [İSTEMCİ] TOPÇU ve FDC sekmeleri
+    opord/                               6a. aşama (OPORD, yetki seviyeleri)
+        fn_userLevel.sqf                 asker seviyesi (TC2_level > rütbe / grup lideri / rol)
+        fn_opordTemplate.sqf             beş paragraf şablonu (JP 3-0'a göre)
+        fn_opordLoad / opordSet          [SUNUCU] mission'daki tc2_opord.sqf'i yükle / belgeyi tanımla
+        fn_opordPoll.sqf                 [SUNUCU] belgeyi SEVİYEYE GÖRE SÜZEREK gönder (gizli bölüm metni istemciye gitmez)
+        fn_opordEdit.sqf                 [SUNUCU] ACK / SAVE / TEMPLATE (Level 3)
+        fn_opordBuild / opordUi*         [İSTEMCİ] OPORD sekmesi
     cas/                                 5. aşama (dijital 9-Line CAS) + roller (hasRole, Zeus modülleri)
         fn_casValidate.sqf               doktrin doğrulaması (19 alanlı form; sunucu karar verir, istemci ön kontrol)
         fn_casLines / casGrid            9 satırı okunur biçimde yaz; 10 haneli grid (ACE)
@@ -99,6 +107,9 @@ docs/
     TEST_ASAMA4.md                       COP / işaret / MicroDAGR testi
     TEST_ASAMA5.md                       9-Line CAS testi (tek kişilik)
     TEST_ASAMA5B.md                      topçu CFF / FDC testi (tek kişilik)
+    TEST_ASAMA6_OPORD.md                 OPORD / seviye filtresi testi
+    DOKTRIN_NOTLARI_OPORD.md             JP 3-0: emrin içeriği (görev, niyet, CCIR, CONOPS, ROE)
+    ornek_tc2_opord.sqf                  mission klasörüne konacak örnek OPORD dosyası
     DOKTRIN_NOTLARI_TOPCU.md             ATP 3-09.30 özeti (call for fire, düzeltme, danger close)
     UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
@@ -131,6 +142,26 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
+
+## Aşama 6a – OPORD (yetki seviyeli operasyon emri)
+
+**OPORD** sekmesi: beş paragraf düzeninde operasyon emri (Situation, Mission, Execution, Sustainment, Command and Signal + görev organizasyonu + ateş eki).
+Doktrin: JP 3-0 ([`docs/DOKTRIN_NOTLARI_OPORD.md`](docs/DOKTRIN_NOTLARI_OPORD.md)).
+
+| Konu | Kural |
+|------|-------|
+| Seviyeler | **Level 1** herkes; **Level 2** grup lideri, JTAC / gözlemci / FDC ya da rütbe ≥ eşik; **Level 3** komuta (rütbe ≥ eşik). Objede `TC2_level` (1-3) rütbeyi geçersiz kılar. Eşikler CBA'da. |
+| Gizlilik | **Sunucuda süzülür:** her bölümün gereken seviyesi vardır (varsayılan: düşman, manevra, ateş = 2; **CCIR ve haberleşme = 3**, JP 3-0: CCIR yalnızca komutana aittir). Yetersiz seviyede bölümün **metni istemciye hiç gönderilmez**, yalnızca başlık ve gereken seviye görünür. |
+| Düzenleme | yalnızca **Level 3**: ŞABLON OLUŞTUR (belge yokken), bölüm metni ve seviyesi düzenle, KAYDET (sürüm artar; ağa "OPORD güncellendi" bilgi satırı). |
+| Onay | herkes OKUDUM / ANLADIM der (sürüm başına); Level 3 sayıyı görür. |
+| Mission'dan yükleme | mission klasöründe `tc2_opord.sqf` ([örnek](docs/ornek_tc2_opord.sqf)) ⇒ sunucu mission başında yayımlar. |
+| Erişim | fiziksel terminalde telsiz gerekmez (belge üstedir); saha cihazında telsiz ağı gerekir. |
+
+**Sınırlar (dürüstçe):** JP 3-0 beş paragraf alt başlıklarını vermez (JP 5-0'dadır); alt başlıklar ABD Ordusu düzenindendir ve doğrulanmamıştır.
+Başlık/DTG/etiketin oyun içi düzenlenmesi yok (mission dosyası ya da `TC2_fnc_opordSet` ile). Belge sunucu belleğindedir (sunucu yeniden başlayınca mission dosyasından gelir; oyun içi düzenlemeler kalıcı değildir).
+Sonraki: INTSUM ve lojistik talepleri (aynı seviye altyapısıyla).
+
+Test: [`docs/TEST_ASAMA6_OPORD.md`](docs/TEST_ASAMA6_OPORD.md).
 
 ## Aşama 5B – Topçu (CFF / FDC)
 
