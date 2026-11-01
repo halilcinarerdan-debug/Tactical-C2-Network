@@ -1,0 +1,12 @@
+# Mikero / imzalama çıktıları ve anahtarlar (özel anahtar ASLA commit'lenmemeli)
+*.pbo
+*.bisign
+*.biprivatekey
+*.bikey
+*.log
+*.rpt
+*.bak
+Thumbs.db
+
+# HEMTT
+.hemttout/
