@@ -22,3 +22,6 @@ call TC2_fnc_copPostInit;
 
 // 5. Dijital 9-Line CAS: pilot tarafı (ACE self menü eylemi)
 call TC2_fnc_casPostInit;
+
+// 6b. MEDEVAC: hava aracı mürettebatı tarafı (ACE self menü eylemi)
+call TC2_fnc_medPostInit;

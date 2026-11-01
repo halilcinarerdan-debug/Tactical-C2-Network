@@ -284,6 +284,9 @@ class CfgFunctions
 
         // 6. Asama: saha raporlari (SALUTE / SITREP / LACE)
         #include "rpt\CfgFunctions.hpp"
+
+        // 6b. Asama: 9-Line MEDEVAC
+        #include "med\CfgFunctions.hpp"
     };
 };
 
@@ -503,6 +506,48 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_rptOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 6b. Asama (MEDEVAC). Sunucuya giden: medSend, medRespond, medCancel, medPoll. Istemciye giden: medOnData, medOnAck, medOnIncoming, medOnUpdate.
+        class TC2_fnc_medSend
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_medRespond
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_medCancel
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_medPoll
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_medOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_medOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_medOnIncoming
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_medOnUpdate
         {
             allowedTargets = 0;
             jip = 0;

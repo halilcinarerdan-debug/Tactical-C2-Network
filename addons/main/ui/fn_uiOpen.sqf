@@ -10,7 +10,7 @@
 
     Düzen:
         [ başlık: TC2 KOMUTA TERMİNALİ | terminal | kullanıcı ................ [KAPAT] ]
-        [ ANA | HARİTA | CAS | TOPÇU | FDC | OPORD | RAPOR | LOJİSTİK | UAV ]
+        [ ANA | HARİTA | CAS | TOPÇU | FDC | OPORD | RAPOR | MEDEVAC | LOJİSTİK | UAV ]
         [ içerik (sekmeye göre)                                                        ]
         [ alt satır: ESC = kapat                                                       ]
 
@@ -45,7 +45,7 @@ if (!isNull findDisplay 92000) exitWith {};
     // Kullanım modu (DESK / FIELD / VIEW): VIEW'de yalnızca HARİTA + OPORD sekmeleri etkin (kolaylık; asıl denetim sunucuda).
     missionNamespace setVariable ["TC2_ui_mode", [_player, _terminal] call TC2_fnc_accessMode];
 
-    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "RAPOR", "LOJİSTİK", "UAV"];
+    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "RAPOR", "MEDEVAC", "LOJİSTİK", "UAV"];
     missionNamespace setVariable ["TC2_ui_tabs", _tabs];
 
     private _fieldMode = _terminal isKindOf "CAManBase";
@@ -203,6 +203,9 @@ if (!isNull findDisplay 92000) exitWith {};
     // RAPOR sekmesi (Aşama 6): SALUTE / SITREP / LACE; varsayılan gizli.
     [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_rptBuild;
 
+    // MEDEVAC sekmesi: 9-Line MEDEVAC talebi; varsayılan gizli.
+    [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_medBuild;
+
     // Ağ durumunu sıfırla (yeni oturum) ve sunucuya ilk raporu gönder.
     missionNamespace setVariable ["TC2_net_status", []];
     missionNamespace setVariable ["TC2_net_statusTime", diag_tickTime];
@@ -235,7 +238,7 @@ if (!isNull findDisplay 92000) exitWith {};
         if (_button != 0) exitWith {};
         [
             _display, _mx, _my,
-            [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457, 92604, 92720, 92721, 92722, 92723, 92724, 92725],
+            [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219, 92403, 92404, 92405, 92406, 92409, 92416, 92418, 92430, 92431, 92432, 92433, 92440, 92453, 92454, 92457, 92604, 92720, 92721, 92722, 92723, 92724, 92725, 92811],
             92005
         ] call TC2_fnc_uiReleaseFocus;
     }];

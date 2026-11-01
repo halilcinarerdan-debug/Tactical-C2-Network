@@ -18,6 +18,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), AI/oyuncu bataryası | ✅ hazır (test bekliyor) |
 | 6a | **OPORD** (JP 3-0): beş paragraf, Level 1/2/3 yetki, sunucuda süzme | ✅ hazır (test bekliyor) |
 | 6b | **Raporlar** (SALUTE / SITREP / LACE) + WARNO; kart seviyeleri (Kırmızı/Mavi/Altın), CO/S2/S4 rolleri, saha tableti, izleme modu, haritada LACE | ✅ hazır (test bekliyor) |
+| 6b+ | **9-Line MEDEVAC** (CASEVAC): 9 satır form, helikopter mürettebatına talep, kabul + ETA, iptal | ✅ hazır (test bekliyor) |
 | 6c | INTSUM + lojistik talepleri (S4) | ⏳ |
 
 ## Depo yapısı
@@ -85,6 +86,7 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_artyBatteries / artyIsGun     [SUNUCU] topçu araçlarını otomatik bul, batarya olarak grupla
         fn_artyUi* / artyObsBuild / artyFdcBuild  [İSTEMCİ] TOPÇU ve FDC sekmeleri
     opord/                               6a. aşama (OPORD, yetki seviyeleri)
+    med/                                 6b+. 9-Line MEDEVAC (talep, kabul, ETA, iptal)
         fn_userLevel.sqf                 asker seviyesi (TC2_level > rütbe / grup lideri / rol)
         fn_opordTemplate.sqf             beş paragraf şablonu (JP 3-0'a göre)
         fn_opordLoad / opordSet          [SUNUCU] mission'daki tc2_opord.sqf'i yükle / belgeyi tanımla
@@ -160,6 +162,13 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 | LACE | Sistemin doğruladığı sayılar (mevcut, yaralı, araç hasarı) + liderin beyanı (L/A/C/E rengi); harita lider simgesi en kötü duruma göre boyanır (ATP 3-21.8 renkleri: yeşil 85+, amber 70-84, kırmızı 50-69, siyah 50 altı). Yalnızca Level 2+. |
 
 Test: [`docs/TEST_ASAMA6_RAPORLAR.md`](docs/TEST_ASAMA6_RAPORLAR.md). Test yardımcısı: `["BLUE"] call TC2_fnc_debugGive;` (RED / BLUE / GOLD / TABLET / NONE).
+
+### 9-Line MEDEVAC
+
+**MEDEVAC** sekmesi (7. sekme): Level 2+ (Mavi kart / tabletli lider / kurmay) 9 satırlık talebi doldurur; talep aynı ağdaki **helikopter mürettebatına** gider
+(bip + bildirim), mürettebat ACE self menüsünden **TC2 MEDEVAC → OKU / KABUL** der; talep sahibi durumu ve tahmini varışı görür, iptal edebilir.
+Doktrin: ATP 3-21.8 8-44..8-46 (9-line MEDEVAC isteği standart yöntem); **satır içerikleri yüklenen kaynaklarda yok, genel bilgidir** ([`docs/DOKTRIN_NOTLARI_MEDEVAC.md`](docs/DOKTRIN_NOTLARI_MEDEVAC.md)).
+Test: [`docs/TEST_ASAMA6_MEDEVAC.md`](docs/TEST_ASAMA6_MEDEVAC.md).
 
 ### Arayüz: çerçeve ve harita araçları (ATAK'tan esinlenen)
 

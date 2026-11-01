@@ -37,8 +37,9 @@ private _body = switch (_index) do {
     case 4: {""};  // FDC sekmesi: FDC operatörü ekranı (artyFdcBuild)
     case 5: {""};  // OPORD sekmesi: yetki seviyeli belge (opordBuild)
     case 6: {""};  // RAPOR sekmesi: SALUTE / SITREP / LACE (rptBuild)
-    case 7: {"Lojistik talepleri (S4).<br/><br/>Sonraki aşamada eklenecek."};
-    case 8: {"UAV: yetkili İHA listesi, bağlantı durumu, yayın isteği.<br/><br/>Ağ (Aşama 3) kurulduktan sonra eklenecek. Bkz. docs/UAV_ENTEGRASYON.md"};
+    case 7: {""};  // MEDEVAC sekmesi: 9-Line MEDEVAC (medBuild)
+    case 8: {"Lojistik talepleri (S4).<br/><br/>Sonraki aşamada eklenecek."};
+    case 9: {"UAV: yetkili İHA listesi, bağlantı durumu, yayın isteği.<br/><br/>Ağ (Aşama 3) kurulduktan sonra eklenecek. Bkz. docs/UAV_ENTEGRASYON.md"};
     default {""};
 };
 
