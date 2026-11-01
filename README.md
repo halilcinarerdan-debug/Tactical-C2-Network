@@ -12,7 +12,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 |---|-------|-------|
 | 1 | Fiziksel terminal + OPSEC (kimlik kartıyla erişim) | ✅ hazır (test bekliyor) |
 | 2 | Terminal arayüzü (yeşil/siyah, sekmeli; UAV sekmesi yer tutucu) | ✅ hazır (test bekliyor) |
-| 3 | ACRE2 sinyal entegrasyonu (menzil/telsiz kontrolü) | ⏳ |
+| 3 | ACRE2 veri ağı + basit mesajlaşma (telsiz/kanal/menzil kontrolü, PING/PONG) | ✅ hazır (test bekliyor) |
 | 4 | Ortak harekat resmi (COP) + harita işaretleme | ⏳ |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC) | ⏳ |
 | 6 | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
@@ -52,10 +52,22 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_uiTabText.sqf                 sekme metinleri (sonraki aşamalar buraya dolar)
         fn_uiWatch.sqf                   saniyede 1: oturum geçerli mi (yalnızca pencere açıkken)
         fn_uiOnUnload.sqf                temizlik + TC2_terminalClosed olayı
+    net/                                 3. aşama (ACRE2 veri ağı)
+        fn_netGetRadioState.sqf          [İSTEMCİ] aktif ACRE telsizi oku (acre_api: getCurrentRadio/getBaseRadio/getRadioChannel)
+        fn_netReportState.sqf            [İSTEMCİ] durumu sunucuya bildir
+        fn_netSend.sqf / fn_netUiSend    [İSTEMCİ] MSG / PING / PONG gönder
+        fn_netOnStatus / netOnAck        [İSTEMCİ] sunucu yanıtları (BAĞLANTI VAR/YOK)
+        fn_netReceive.sqf                [İSTEMCİ] gelen mesaj / PING (otomatik PONG) / PONG
+        fn_netServerSession.sqf          [SUNUCU] oturum kaydı + doğrulama (erişim, telsiz envanterde mi)
+        fn_netServerPeers.sqf            [SUNUCU] aynı tip+kanal+menzil içi eşler
+        fn_netServerReport / ServerSend  [SUNUCU] rapor ve gönderim işleyicileri
+        fn_netRangeOf / netSanitize ...  menzil tablosu, metin temizleme, yardımcılar
+        fn_debugNetPeer.sqf              TEST: AI'ı simüle ağ eşi yap
 docs/
     DOKTRIN_NOTLARI.md                   doktrinden çıkan kurallar (9-Line, Type 1/2/3, BOT/BOC, roller)
     TEST_ASAMA1.md                       tek başına test: editör, hosted MP, yerel dedicated
     TEST_ASAMA2.md                       arayüz testi
+    TEST_ASAMA3.md                       ağ/mesajlaşma testi (tek kişilik, simüle eş)
     UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
 
@@ -87,6 +99,35 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
+
+## Aşama 3 – ACRE2 veri ağı ve basit mesajlaşma
+
+Terminal ANA sekmesinde **ağ paneli**: durum satırı, mesaj kutusu, GÖNDER, PING ve günlük.
+
+**Kural:** iki terminal arası veri yalnızca **ikisinin de aktif ACRE2 telsizi varsa**, **aynı telsiz tipi ve aynı kanaldaysa** ve
+**menzil içindeyse** gider. Aksi halde **BAĞLANTI YOK** (aktif telsiz yok / ACRE2 yok / menzilde terminal yok).
+Ek ağ adı yoktur; "aynı kanal = aynı ağ".
+
+| Parça | Nerede | Nasıl |
+|-------|--------|-------|
+| Telsiz okuma | **istemci** | ACRE2 genel API'si yalnızca yerel oyuncuyu sorgular: `getCurrentRadio`, `getBaseRadio`, `getRadioChannel` |
+| Rapor | istemci → **sunucu** | terminal açılınca, durum değişince, açıkken 5 sn'de bir (mevcut 1 sn'lik uiWatch döngüsünde; yeni döngü yok) |
+| Doğrulama / karar | **sunucu** | gönderen (`remoteExecutedOwner`), erişim (`accessCheck`), telsiz **envanterde mi** (sunucu kendisi bakar), tip+kanal+mesafe |
+| Mesaj/PING/PONG | istemci → sunucu → eş istemciler | yalnızca menzildeki eşlere `remoteExecCall`; PING'e eşin istemcisi otomatik PONG döner |
+| Güvenlik | sunucu | mesaj temizlenir (`<`,`>`,`&` atılır), 120 karakter, 2 sn gönderim aralığı, tüm gönderimler RPT'ye `[TC2][NET]` |
+| JIP | — | ağ kaydı yalnızca terminal açıkken vardır; kalıcı durum yok |
+
+**Menzil tablosu** (CBA: `Tactical C2 Network > Ağ (ACRE2)`), metre: PRC-343 500, PRC-148 5000, PRC-152 8000, PRC-117F 20000, PRC-77 15000,
+BF-888S 1500, SEM-52SL 3000, SEM-70 10000, diğer 3000. Değerler yaklaşık oyun-dengesi tahminidir; ayardan değiştirilir.
+
+**Bilinen sınırlar (dürüstçe):**
+- **ACRE2'nin arazi/yayılım modeli kullanılmıyor.** ACRE'nin sinyal hesabı genel API değil (`Public: No`) ve dış eklenti üzerinden asenkron çalışıyor; bunun yerine telsiz tipine bağlı sabit menzil tablosu kullanıldı. İleride ACRE sinyaliyle değiştirilebilir (bir prototip gerekir).
+- **Kanal bilgisi istemciden gelir** (sunucu başkasının ACRE durumunu okuyamaz); telsizin envanterde olması sunucuda doğrulanır.
+- Araç/rack telsizleri (envanterde olmayan) bu aşamada sayılmaz.
+- Telsiz tipi aynı olmalı: farklı tipler (ör. PRC-343 ile PRC-152) aynı kanal numarasında olsa da birbirini görmez.
+- ACRE2'de genel bir "telsiz kapalı" durumu yok; **aktif telsiz yok = bağlantı yok** olarak ele alındı.
+
+Test: [`docs/TEST_ASAMA3.md`](docs/TEST_ASAMA3.md) (tek kişilik; AI ile simüle edilen ağ eşi).
 
 ## Aşama 2 – Terminal arayüzü
 

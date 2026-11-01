@@ -22,7 +22,7 @@ private _main = "#40ff59";
 private _body = switch (_index) do {
     case 0: {
         format [
-            "<t color='%1'>KULLANICI</t>   %3 %4<br/><t color='%1'>BİRLİK</t>      %5<br/><t color='%1'>TERMİNAL</t>   %6<br/><t color='%1'>KİMLİK</t>      DOĞRULANDI (CAC)<br/><t color='%1'>AĞ</t>            kurulmadı (Aşama 3: ACRE2)<br/><t color='%1'>YETKİ</t>        belirlenmedi (Aşama 6)",
+            "<t color='%1'>KULLANICI</t>   %3 %4<br/><t color='%1'>BİRLİK</t>      %5<br/><t color='%1'>TERMİNAL</t>   %6<br/><t color='%1'>KİMLİK</t>      DOĞRULANDI (CAC)",
             _dim,
             _main,
             rank _unit,

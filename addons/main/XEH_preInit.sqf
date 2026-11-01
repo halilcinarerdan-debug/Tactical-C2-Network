@@ -8,3 +8,6 @@
 
 // 1. Fiziksel terminal + erişim kontrolü
 call TC2_fnc_terminalInitSettings;
+
+// 3. ACRE2 veri agi
+call TC2_fnc_netInitSettings;

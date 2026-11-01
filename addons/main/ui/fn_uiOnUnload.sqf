@@ -17,4 +17,10 @@ missionNamespace setVariable ["TC2_ui_watchHandle", -1];
 private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];
 missionNamespace setVariable ["TC2_terminal_current", objNull];
 
+// Ağ oturumunu kapat (sunucu kaydından düşer; artık mesaj almaz).
+if (!isNull _terminal) then {
+    [_terminal, [], true] call TC2_fnc_netReportState;
+};
+missionNamespace setVariable ["TC2_net_status", []];
+
 ["TC2_terminalClosed", [_terminal]] call CBA_fnc_localEvent;

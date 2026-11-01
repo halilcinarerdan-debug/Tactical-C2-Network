@@ -104,6 +104,65 @@ if (!isNull findDisplay 92000) exitWith {};
     _content ctrlSetBackgroundColor [0, 0, 0, 0];
     _content ctrlCommit 0;
 
+    // Ağ paneli (Aşama 3): yalnızca ANA sekmesinde görünür. IDC: 92030 durum, 92031 mesaj kutusu,
+    // 92032 GÖNDER, 92033 PING, 92034 günlük. ANA bilgi bloğunun (4 satır) altına yerleşir.
+    private _contentH = _h - (_headerH + _tabH + _footerH + 3 * _pad);
+    private _netTop = _contentY + 0.22;
+    private _rowH = 0.04;
+    private _inputTop = _netTop + _rowH + 0.01;
+    private _inputH = 0.045;
+    private _buttonW = 0.13;
+    private _gap = 0.01;
+    private _logTop = _inputTop + _inputH + 0.01;
+
+    private _netStatus = _display ctrlCreate ["RscText", 92030];
+    _netStatus ctrlSetPosition [_left + _pad, _netTop, _w - 2 * _pad, _rowH];
+    _netStatus ctrlSetBackgroundColor [0, 0.12, 0.03, 1];
+    _netStatus ctrlCommit 0;
+
+    private _edit = _display ctrlCreate ["RscEdit", 92031];
+    _edit ctrlSetPosition [_left + _pad, _inputTop, _w - 2 * _pad - 2 * (_buttonW + _gap), _inputH];
+    _edit ctrlSetBackgroundColor [0, 0.08, 0.02, 1];
+    _edit ctrlSetTextColor _green;
+    _edit ctrlAddEventHandler ["KeyDown", {
+        params ["", "_key"];
+        if (_key in [28, 156]) exitWith {
+            call TC2_fnc_netUiSend;
+            true
+        };
+        false
+    }];
+    _edit ctrlCommit 0;
+
+    private _sendButton = _display ctrlCreate ["RscButtonMenu", 92032];
+    _sendButton ctrlSetPosition [_left + _w - _pad - 2 * _buttonW - _gap, _inputTop, _buttonW, _inputH];
+    _sendButton ctrlSetText "GÖNDER";
+    _sendButton ctrlSetTextColor _green;
+    _sendButton ctrlSetBackgroundColor [0.1, 0.45, 0.15, 1];
+    _sendButton ctrlAddEventHandler ["ButtonClick", {call TC2_fnc_netUiSend}];
+    _sendButton ctrlCommit 0;
+
+    private _pingButton = _display ctrlCreate ["RscButtonMenu", 92033];
+    _pingButton ctrlSetPosition [_left + _w - _pad - _buttonW, _inputTop, _buttonW, _inputH];
+    _pingButton ctrlSetText "PING";
+    _pingButton ctrlSetTextColor _green;
+    _pingButton ctrlSetBackgroundColor [0.02, 0.1, 0.03, 1];
+    _pingButton ctrlAddEventHandler ["ButtonClick", {["PING"] call TC2_fnc_netSend}];
+    _pingButton ctrlCommit 0;
+
+    private _netLog = _display ctrlCreate ["RscStructuredText", 92034];
+    _netLog ctrlSetPosition [_left + _pad, _logTop, _w - 2 * _pad, (_contentY + _contentH) - _logTop];
+    _netLog ctrlSetBackgroundColor [0, 0, 0, 0];
+    _netLog ctrlCommit 0;
+
+    // Ağ durumunu sıfırla (yeni oturum) ve sunucuya ilk raporu gönder.
+    missionNamespace setVariable ["TC2_net_status", []];
+    missionNamespace setVariable ["TC2_net_statusTime", diag_tickTime];
+    missionNamespace setVariable ["TC2_net_statusText", "\n"];
+    missionNamespace setVariable ["TC2_net_logText", "\n"];
+    missionNamespace setVariable ["TC2_net_log", []];
+    missionNamespace setVariable ["TC2_net_nextSend", 0];
+
     // Alt satır
     private _footer = _display ctrlCreate ["RscText", 92021];
     _footer ctrlSetPosition [_left, _top + _h - _footerH, _w, _footerH];
@@ -131,6 +190,9 @@ if (!isNull findDisplay 92000) exitWith {};
     missionNamespace setVariable ["TC2_ui_watchHandle", _handle];
 
     [0] call TC2_fnc_uiSelectTab;
+
+    [_terminal, call TC2_fnc_netGetRadioState] call TC2_fnc_netReportState;
+    call TC2_fnc_netUiUpdate;
 
     // Sonraki aşamalar bu olaya bağlanabilir.
     ["TC2_terminalOpened", [_terminal, _player]] call CBA_fnc_localEvent;

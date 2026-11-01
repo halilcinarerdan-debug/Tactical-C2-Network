@@ -127,6 +127,9 @@ class CfgFunctions
 
         // 2. Asama: Terminal arayuzu
         #include "ui\CfgFunctions.hpp"
+
+        // 3. Asama: ACRE2 veri agi + basit mesajlasma
+        #include "net\CfgFunctions.hpp"
     };
 };
 
@@ -148,6 +151,33 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_accessResult
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // 3. Asama (ag). *Server*: yalnizca sunucuya. Digerleri sunucu -> istemci yanitlari (hosted MP icin 0).
+        class TC2_fnc_netServerReport
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_netServerSend
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_netOnStatus
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_netOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_netReceive
         {
             allowedTargets = 0;
             jip = 0;
