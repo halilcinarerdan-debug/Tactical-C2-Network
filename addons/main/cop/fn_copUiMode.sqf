@@ -20,7 +20,7 @@ if !(_request isEqualTo "") then {
     missionNamespace setVariable ["TC2_cop_mode", _mode];
 
     switch (_mode) do {
-        case "PLACE":  {["  Haritaya tıklayın: DÜŞMAN PİYADE konacak.", [1, 0.5, 0.5, 1]] call TC2_fnc_copUiStatus};
+        case "PLACE":  {[format ["  Haritaya tıklayın: %1 konacak.", [missionNamespace getVariable ["TC2_cop_placeType", "INF"]] call TC2_fnc_copTypeName], [1, 0.5, 0.5, 1]] call TC2_fnc_copUiStatus};
         case "DELETE": {["  Silmek istediğiniz işarete tıklayın.", [1, 0.8, 0.2, 1]] call TC2_fnc_copUiStatus};
         case "INFO":   {["  Bir dost birime tıklayın: LACE bilgisi.", [0.25, 1, 0.35, 1]] call TC2_fnc_copUiStatus};
         case "MEASURE": {

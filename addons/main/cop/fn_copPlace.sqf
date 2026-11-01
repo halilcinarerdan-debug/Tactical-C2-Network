@@ -13,7 +13,7 @@
         0: birim <OBJECT>
         1: terminal <OBJECT>
         2: telsiz durumu <ARRAY>
-        3: tür <STRING>  ("INF")
+        3: tür <STRING>  (copTypeCatalog kodu: "INF", "ART", "MINE" ...)
         4: konum ASL <ARRAY>
 
     Dönüş: yok (yanıt: copOnAck)
@@ -26,7 +26,7 @@ params [["_unit", objNull, [objNull]], ["_terminal", objNull, [objNull]], ["_sta
 if (isNull _unit) exitWith {};
 if !([_unit] call TC2_fnc_netSenderOk) exitWith {};
 
-if !(_type in ["INF"]) exitWith {};
+if !(([_type] call TC2_fnc_copTypeInfo) select 4) exitWith {};
 if !(count _pos == 3 && {(_pos select 0) isEqualType 0} && {(_pos select 1) isEqualType 0} && {(_pos select 2) isEqualType 0}) exitWith {};
 
 private _session = [_unit, _terminal, _state] call TC2_fnc_netServerSession;

@@ -3,7 +3,7 @@
     Çalışma yeri: İSTEMCİ (terminal haritasının "MouseButtonClick" olayı)
 
     Haritaya tıklama. Mod (TC2_cop_mode):
-      "PLACE"  -> tıklanan yere DÜŞMAN PİYADE işareti koy,
+      "PLACE"  -> tıklanan yere seçili türde (kategori + tür listesi) düşman işareti koy,
       "DELETE" -> tıklamaya en yakın işareti sil (tolerans: ekranın ~%2'si kadar mesafe),
       "MEASURE"-> iki noktaya sırayla tıkla: mesafe, yön (derece / mil), yükseklik farkı (A ve B çizilir; üçüncü tık yeniden başlatır),
       "INFO"   -> tıklamaya en yakın dost birimin LACE bilgisini panelde göster (salt okuma, sunucuya istek yok),
@@ -63,7 +63,7 @@ if (_mode isEqualTo "INFO") exitWith {
 };
 
 if (_mode isEqualTo "PLACE") exitWith {
-    private _args = [ACE_player, _terminal, _state, "INF", ATLToASL [_world select 0, _world select 1, 0]];
+    private _args = [ACE_player, _terminal, _state, missionNamespace getVariable ["TC2_cop_placeType", "INF"], ATLToASL [_world select 0, _world select 1, 0]];
     if (isServer) then {_args call TC2_fnc_copPlace} else {_args remoteExecCall ["TC2_fnc_copPlace", 2]};
 };
 

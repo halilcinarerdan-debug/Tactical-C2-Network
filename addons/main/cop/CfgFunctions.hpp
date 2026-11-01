@@ -8,6 +8,9 @@ class cop
 
     // Saf yardimcilar
     class copTypeName {};
+    class copTypeInfo {};
+    class copTypeCatalog {};
+    class copUiCategory {};
 
     // Istemci
     class copHeartbeat {};

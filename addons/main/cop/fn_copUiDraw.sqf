@@ -60,9 +60,10 @@ params ["_map"];
 
 {
     _x params ["", "_type", "_pos", "", "_age"];
+    ([_type] call TC2_fnc_copTypeInfo) params ["", "_icon", "_iconSize", "_iconColor"];
     _map drawIcon [
-        "\A3\ui_f\data\map\markers\nato\o_inf.paa", [1, 0.1, 0.1, 1], _pos,
-        26, 26, 0,
+        _icon, _iconColor, _pos,
+        _iconSize, _iconSize, 0,
         format ["%1  %2 dk", [_type] call TC2_fnc_copTypeName, floor (_age / 60)], 1, 0.045, "PuristaMedium", "right"
     ];
 } forEach _markers;

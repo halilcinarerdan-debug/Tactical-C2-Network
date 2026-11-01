@@ -39,11 +39,11 @@ private _viewMode = (missionNamespace getVariable ["TC2_ui_mode", "DESK"]) isEqu
 // HARİTA sekmesi (92040-92043) yalnızca HARİTA'da. Seçilince veriyi hemen iste.
 {
     (_display displayCtrl _x) ctrlShow (_index == 1);
-} forEach [92040, 92041, 92042, 92043, 92044, 92045, 92047, 92048, 92049];
+} forEach [92040, 92041, 92042, 92043, 92044, 92045, 92047, 92048, 92049, 92070, 92071];
 
 // İzleme modunda işaret koyma/silme düğmeleri yok (yalnızca okuma + LACE yetkisizdir).
 if (_viewMode) then {
-    {(_display displayCtrl _x) ctrlShow false} forEach [92041, 92042];
+    {(_display displayCtrl _x) ctrlShow false} forEach [92041, 92042, 92070, 92071];
 };
 
 (_display displayCtrl 92046) ctrlShow false;

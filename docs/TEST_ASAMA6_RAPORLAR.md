@@ -91,6 +91,14 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
    * **MERKEZ** ⇒ harita sizin konumunuza gider.
    * **KATMAN** ⇒ oyundaki harita işaretleri (Eden / Zeus / oyuncu işaretleri, alanlar, çizgiler) oyunun kendi sembolleriyle görünür; KAPALI ⇒ gizlenir. Denemek için normal Arma haritasına bir işaret koyun (çift tık) ya da Zeus ile işaret yerleştirin; 5 sn içinde terminal haritasında görünmeli.
 
+## J. İşaret kategorileri ve çerçeve
+
+1. **HARİTA**: üst satırda **İŞARET KOY**; altındaki satırda **kategori** ve **tür** listeleri. Kategoriler: PİYADE (piyade, keşif, motorize, mekanize), ZIRH, ATEŞ DESTEK (topçu, havan, hava savunma), HAVA (helikopter, uçak, İHA), KOMUTA / DESTEK (komuta, ikmal, bakım, servis, sağlık), DENİZ / TESİS, TEHLİKE / DİĞER (mayın/IED, pusu, bilinmeyen temas).
+2. Kategori seç, tür seç ⇒ **İŞARET KOY** ⇒ haritaya tıkla ⇒ o türün **oyun NATO sembolü** (kırmızı; tehlikeler turuncu) ve adı + yaşı çizilir. MicroDAGR'a `TC2 <TÜR> <grid>` waypoint'i düşer.
+3. CAS / TOPÇU / RAPOR / MEDEVAC sekmelerindeki işaret listelerinde tür adı doğru görünür (ör. `#3 DÜŞMAN TOPÇU grid ...`).
+4. Sembollerden biri boş (görünmez) çıkarsa türünü ve kodunu yazın (oyunun simge dosyası farklı adlanıyor olabilir).
+5. **Çerçeve:** masa başında **masaüstü monitör** (kalın siyah çerçeve, yuvarlak köşe, alt çene: LED + güç tuşu + "TC2", boyun ve ayak). Saha cihazında **kalın kum rengi kılıflı tablet** (yuvarlak köşe, siyah ekran kenarı, tutucular, yan tuşlar, kamera, sağda geri/çoklu görev tuşları). Köşeler "daire + dikdörtgen" ile yuvarlatılır; ekran içi köşeler köşelidir.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).
