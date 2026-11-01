@@ -37,9 +37,9 @@ if (count _summary > 0 && {(_summary select 0) == _id}) then {
 };
 
 private _message = switch (_state) do {
-    case "READBACK_OK":   {["GERİ OKUMA DOĞRU.", "success"]};
-    case "READBACK_FAIL": {["GERİ OKUMA YANLIŞ: hatalı satırlar için sonuç ekranına bakın.", "error"]};
-    case "ABORTED":       {["CAS TALEBİ İPTAL EDİLDİ (JTAC).", "error"]};
+    case "READBACK_OK":   {["GERİ OKUMA DOĞRU", "success"]};
+    case "READBACK_FAIL": {["GERİ OKUMA YANLIŞ", "error"]};
+    case "ABORTED":       {["CAS TALEBİ İPTAL EDİLDİ", "error"]};
     default {["", "info"]};
 };
 if !((_message select 0) isEqualTo "") then {_message call TC2_fnc_notify};

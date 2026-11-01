@@ -16,12 +16,12 @@ if (!hasInterface) exitWith {};
 params [["_code", "", [""]], ["_extra", [], [[]]]];
 
 private _text = switch (_code) do {
-    case "SENT":      {format ["9-LINE İLETİLDİ  |  alıcı: %1  |  geri okuma bekleniyor", if (count _extra > 1) then {_extra select 1} else {"?"}]};
+    case "SENT":      {format ["İLETİLDİ | %1 | geri okuma bekleniyor", if (count _extra > 1) then {(_extra select 1) select [0, 22 min count (_extra select 1)]} else {"?"}]};
     case "ABORTED":   {"TALEP İPTAL EDİLDİ."};
     case "INVALID":   {format ["FORM GEÇERSİZ (%1 hata): %2", count _extra, if (_extra isEqualTo []) then {""} else {_extra select 0}]};
-    case "NOT_JTAC":  {"JTAC yetkiniz yok. (Yalnızca JTAC/FAC(A) 9-Line gönderebilir.)"};
-    case "NO_TARGET": {"Alıcı bulunamadı: seçilen mürettebat ağda/menzilde değil."};
-    case "NO_LINK":   {"BAĞLANTI YOK: JTAC ile aynı telsiz tipi/kanalda ve menzilde değilsiniz."};
+    case "NOT_JTAC":  {"JTAC yetkiniz yok."};
+    case "NO_TARGET": {"Alıcı ağda/menzilde değil."};
+    case "NO_LINK":   {"BAĞLANTI YOK: JTAC ile aynı ağda değilsiniz."};
     case "COOLDOWN":  {"Bekleyin (3 sn aralık)."};
     case "NO_RADIO":  {"BAĞLANTI YOK: aktif telsiz yok."};
     case "NO_ACRE":   {"BAĞLANTI YOK: ACRE2 yüklü değil."};

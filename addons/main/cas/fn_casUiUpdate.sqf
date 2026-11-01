@@ -60,11 +60,12 @@ if (!_isJtac) then {
     _color = [1, 0.8, 0.2, 1];
 } else {
     if (_statusText isEqualTo "" && {count _summary > 0}) then {
+        private _pilotName = (_summary select 2) select [0, 22 min count (_summary select 2)];
         _statusText = switch (_summary select 1) do {
-            case "SENT":          {format ["TALEP #%1  |  %2  |  geri okuma bekleniyor", _summary select 0, _summary select 2]};
-            case "READBACK_OK":   {format ["TALEP #%1  |  GERİ OKUMA DOĞRU", _summary select 0]};
-            case "READBACK_FAIL": {format ["TALEP #%1  |  GERİ OKUMA YANLIŞ", _summary select 0]};
-            case "ABORTED":       {format ["TALEP #%1  |  İPTAL EDİLDİ", _summary select 0]};
+            case "SENT":          {format ["#%1 | %2 | geri okuma bekleniyor", _summary select 0, _pilotName]};
+            case "READBACK_OK":   {format ["#%1 | geri okuma DOĞRU", _summary select 0]};
+            case "READBACK_FAIL": {format ["#%1 | geri okuma YANLIŞ", _summary select 0]};
+            case "ABORTED":       {format ["#%1 | iptal edildi", _summary select 0]};
             default {""};
         };
     };
@@ -78,6 +79,13 @@ _statusControl ctrlSetTextColor _color;
 // Geri okuma sonucu
 private _resultsText = "";
 if (count _summary > 0) then {
-    _resultsText = format ["<t size='0.9'>TALEP #%1  |  %2<br/>%3</t>", _summary select 0, _summary select 1, [_summary select 3] call TC2_fnc_casResultText];
+    private _stateName = switch (_summary select 1) do {
+        case "SENT":          {"BEKLİYOR"};
+        case "READBACK_OK":   {"DOĞRU"};
+        case "READBACK_FAIL": {"YANLIŞ"};
+        case "ABORTED":       {"İPTAL"};
+        default {""};
+    };
+    _resultsText = format ["<t size='0.7'>#%1  %2<br/>%3</t>", _summary select 0, _stateName, [_summary select 3] call TC2_fnc_casResultText];
 };
 (_display displayCtrl 92222) ctrlSetStructuredText parseText _resultsText;

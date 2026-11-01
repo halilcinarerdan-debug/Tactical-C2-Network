@@ -8,11 +8,12 @@
     Parametreler:
         0: metin <STRING>  ('<' ve '&' içermemeli: structured text olarak işlenir)
         1: tür <STRING>    "info" (varsayılan) | "success" | "error"
+        2: boyut <NUMBER>  yazı boyutu (varsayılan 1.0; ACE varsayılanı 1.5 ekrana büyük geliyordu)
 
     Dönüş: yok
 */
 
-params [["_text", "", [""]], ["_type", "info", [""]]];
+params [["_text", "", [""]], ["_type", "info", [""]], ["_size", 1, [0]]];
 
 private _color = switch (toLower _type) do {
     case "error":   {"#ff5555"};
@@ -20,7 +21,7 @@ private _color = switch (toLower _type) do {
     default         {"#d0d0d0"};
 };
 
-[parseText format ["<t color='%1'>%2</t>", _color, _text], 1.5] call ace_common_fnc_displayTextStructured;
+[parseText format ["<t color='%1'>%2</t>", _color, _text], _size] call ace_common_fnc_displayTextStructured;
 
 if (missionNamespace getVariable ["TC2_debug", false]) then {
     systemChat format ["[TC2] %1", _text];

@@ -187,6 +187,17 @@ if (!isNull findDisplay 92000) exitWith {};
         false
     }];
 
+    // Yazı kutusu dışına sol tık: klavye odağını kutudan al (bkz. uiReleaseFocus).
+    _display displayAddEventHandler ["MouseButtonDown", {
+        params ["_display", "_button", "_mx", "_my"];
+        if (_button != 0) exitWith {};
+        [
+            _display, _mx, _my,
+            [92031, 92203, 92204, 92206, 92207, 92208, 92211, 92212, 92214, 92215, 92216, 92217, 92218, 92219],
+            92010 + (missionNamespace getVariable ["TC2_ui_tab", 0])
+        ] call TC2_fnc_uiReleaseFocus;
+    }];
+
     _display displayAddEventHandler ["Unload", {
         call TC2_fnc_uiOnUnload;
     }];

@@ -7,4 +7,5 @@ class ui
     class uiTabText {};
     class uiWatch {};
     class uiOnUnload {};
+    class uiReleaseFocus {};
 };

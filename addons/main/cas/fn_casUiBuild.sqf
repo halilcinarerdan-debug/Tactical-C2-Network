@@ -127,7 +127,7 @@ _abortButton ctrlAddEventHandler ["ButtonClick", {call TC2_fnc_casUiAbort}];
 private _status = [_display, 92223, "RscText", _left + 0.35, _bottom, _width - 0.35, _rowH] call _make;
 _status ctrlSetBackgroundColor [0, 0.12, 0.03, 1];
 _status ctrlSetTextColor _green;
-_status ctrlSetFontHeight (_rowH * 0.55);
+_status ctrlSetFontHeight (_rowH * 0.45);
 
 // Geri okuma sonuç alanı (sağ sütun, alt)
 private _results = [_display, 92222, "RscStructuredText", _left + _colW + _gap, _top + 6 * _rowH, _colW, _rowH * 4] call _make;

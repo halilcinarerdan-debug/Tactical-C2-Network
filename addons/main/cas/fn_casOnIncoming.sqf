@@ -25,6 +25,6 @@ missionNamespace setVariable ["TC2_cas_incoming", [_id, _jtac, _pilot, _data, _p
 
 if (isClass (configFile >> "CfgSounds" >> "FD_Timer_F")) then {playSound "FD_Timer_F"};
 
-[format ["CAS 9-LINE ALINDI: %1  |  ACE self menü > CAS 9-Line", _jtac], "info"] call TC2_fnc_notify;
+[format ["CAS 9-LINE ALINDI (%1)", _jtac], "info"] call TC2_fnc_notify;
 
 call TC2_fnc_casPilotUpdate;

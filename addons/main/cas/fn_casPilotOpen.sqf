@@ -40,6 +40,7 @@ _header ctrlSetPosition [_left, _top, _w - _closeW, _headerH];
 _header ctrlSetBackgroundColor [0, 0.2, 0.05, 1];
 _header ctrlSetTextColor _green;
 _header ctrlSetText "  CAS 9-LINE";
+_header ctrlSetFontHeight 0.032;
 _header ctrlCommit 0;
 
 private _close = _display ctrlCreate ["RscButtonMenu", 92103];
@@ -112,6 +113,13 @@ _display displayAddEventHandler ["KeyDown", {
         true
     };
     false
+}];
+
+// Yazı kutusu dışına sol tık: klavye odağını kutudan al (bkz. uiReleaseFocus).
+_display displayAddEventHandler ["MouseButtonDown", {
+    params ["_display", "_button", "_mx", "_my"];
+    if (_button != 0) exitWith {};
+    [_display, _mx, _my, [92110, 92111, 92112, 92113, 92114, 92115], 92116] call TC2_fnc_uiReleaseFocus;
 }];
 
 // Kapanınca: tamamlanmış (doğru geri okuma) ya da iptal edilmiş talebi temizle -> ACE eylemi kaybolur.
