@@ -17,6 +17,15 @@ private _category = ["Tactical C2 Network", "Ortak Harekat Resmi (COP)"];
 ] call CBA_settings_fnc_init;
 
 [
+    "TC2_cop_showAi",
+    "CHECKBOX",
+    ["AI grup liderlerini haritada göster", "Açıksa, envanterinde saha tableti olan AI GRUP LİDERLERİ aynı taraftaki terminal / saha cihazı haritasında dost simgesi olarak görünür (oyuncularla aynı telsiz menzili kuralı; LACE sayıları sistemden okunur). AI'ya tablet vermek için Eden'de başlatma alanına: this addItem 'TC2_Tablet'"],
+    _category,
+    true,
+    true
+] call CBA_settings_fnc_init;
+
+[
     "TC2_cop_dagrEnabled",
     "CHECKBOX",
     ["MicroDAGR'a işaret gönder", "Açıksa, ağdaki GRUP LİDERLERİNİN ACE MicroDAGR cihazına düşman işaretleri waypoint olarak yazılır ('TC2 ...' adlı). Normal Arma haritasında görünmez."],

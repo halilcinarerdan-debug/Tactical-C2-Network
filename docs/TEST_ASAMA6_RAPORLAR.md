@@ -100,6 +100,13 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
 5. **Çerçeve:** masa başında **masaüstü monitör** (kalın siyah çerçeve, yuvarlak köşe, alt çene: LED + güç tuşu + "TC2", boyun ve ayak). Saha cihazında **kalın kum rengi kılıflı tablet** (yuvarlak köşe, siyah ekran kenarı, tutucular, yan tuşlar, kamera, sağda geri/çoklu görev tuşları). Köşeler ince yatay şeritlerle (çeyrek daire yayı) yuvarlatılır; ekranın kendi dört köşesi de çerçeve renginde şeritlerle kaplanır (içerik de yuvarlak köşeli görünür). Köşede hâlâ içe çökük/küçük görünen yer varsa ekran görüntüsüyle bildirin.
 6. **Topçu:** AI topçu yok; oyuncu mürettebatlı batarya ya da `[TC2_gun] call TC2_fnc_debugArtyCrew;` (bkz. `TEST_ASAMA5B.md`).
 
+## K. AI liderler haritada, MicroDAGR uyumu
+
+1. **AI lider:** CBA `Ortak Harekat Resmi (COP)` ⇒ `AI grup liderlerini haritada göster` (varsayılan açık). Görünmesi için AI grubunun **lideri** envanterinde `TC2_Tablet` taşımalı (Eden başlatma alanı: `this addItem "TC2_Tablet"`; Zeus'ta sonradan: `(leader group cursorObject) addItem "TC2_Tablet"`). Aynı taraf ve **sizin telsiz menzilinizde** (ör. PRC343 = 500 m) olmalı. HARİTA'da `<çağrı adı> AI` etiketiyle dost simgesi, Level 2+ iseniz LACE rengiyle çıkar; BİRİM / LACE ile sayılar okunur (rapor beyanı yoktur).
+2. Tabletsiz AI lider ya da menzil dışı AI: görünmez. Ayarı kapatınca hepsi kalkar (5 sn).
+3. **MicroDAGR:** grup liderinin envanterinde `ACE_microDAGR` (ACE "MicroDAGR" eşyası) ve tablet olsun. Haritaya düşman işareti koyun ⇒ lider DAGR'ı açar (ACE: MicroDAGR) ⇒ **WAYPOINTS** sekmesinde `TC2 #5 INF 024057` gibi kayıtlar (işaret no, tür, grid). Oyuncunun kendi waypoint'leri (eklediyse) başta kalır. Bir `TC2 ...` waypoint'ini **SET WP** ile hedef seçin ⇒ yeni işaret eklenince/silinince hedef **aynı işarette kalmalı**, işaret silinirse hedef kalkmalı. Sadece grup lideri alır; er DAGR'a işaret almaz.
+4. Doğrulanmamış SALUTE noktaları DAGR'a **gitmez**; yalnızca işaret olanlar (S2/CO doğrulayınca) gider.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

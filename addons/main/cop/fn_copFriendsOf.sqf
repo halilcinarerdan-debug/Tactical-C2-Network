@@ -4,6 +4,7 @@
 
     İzleyicinin ağındaki dostları verir: aynı telsiz tipi + aynı kanal + izleyicinin telsiz menzili içinde,
     canlı, raporu taze (25 sn). Telsizi olan HERKES (saha birlikleri dahil) sayılır; terminalde oturum açık olması gerekmez.
+    Ek olarak tabletli AI grup liderleri (copAiLeaders) aynı taraf ve menzil içindeyse eklenir.
     Test için debugNetPeer ile eklenen simüle eşler de dahildir.
 
     Parametreler:
@@ -36,6 +37,19 @@ private _out = [];
         _out pushBack [getPosASL _unit, _label, _isLeader, if (_includeLace && _isLeader) then {[group _unit] call TC2_fnc_rptLaceInfo} else {[]}];
     };
 } forEach (missionNamespace getVariable ["TC2_cop_field", []]);
+
+// AI grup liderleri (tabletli): aynı taraf, izleyicinin telsiz menzili içinde. AI telsiz tipi/kanalı taşımaz; menzil, izleyicinin telsiz tipinindir.
+{
+    _x params ["_aiUnit", "_aiSide"];
+    if (alive _aiUnit && {_aiSide isEqualTo (side (group _viewer))} && {!(_aiUnit isEqualTo _viewer)} && {(_viewer distance _aiUnit) <= _range}) then {
+        _out pushBack [
+            getPosASL _aiUnit,
+            [format ["%1 AI", groupId (group _aiUnit)], 40] call TC2_fnc_netSanitize,
+            true,
+            if (_includeLace) then {[group _aiUnit] call TC2_fnc_rptLaceInfo} else {[]}
+        ];
+    };
+} forEach ([] call TC2_fnc_copAiLeaders);
 
 // Simüle test eşleri (net kayıtları: 0 netId 1 birim 2 etiket 3 telsiz 4 tip 5 kanal 6 zaman 7 sim)
 {
