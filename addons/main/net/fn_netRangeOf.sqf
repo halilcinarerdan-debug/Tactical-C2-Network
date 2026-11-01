@@ -17,6 +17,12 @@
 
 params [["_class", "", [""]]];
 
+// Ayar boş / henüz hazır değilse (örn. sunucuda CBA ayarı oturmadan çağrılırsa) kodda gömülü varsayılan tablo kullanılır.
+private _table = missionNamespace getVariable ["TC2_net_ranges", ""];
+if (_table isEqualTo "") then {
+    _table = "ACRE_PRC343=500;ACRE_PRC148=5000;ACRE_PRC152=8000;ACRE_PRC117F=20000;ACRE_PRC77=15000;ACRE_BF888S=1500;ACRE_SEM52SL=3000;ACRE_SEM70=10000;default=3000";
+};
+
 private _default = 3000;
 private _result = -1;
 
@@ -28,6 +34,6 @@ private _result = -1;
         if (_key == "default") then {_default = _value};
         if (_key == toLower _class) then {_result = _value};
     };
-} forEach ((missionNamespace getVariable ["TC2_net_ranges", ""]) splitString ";");
+} forEach (_table splitString ";");
 
 if (_result < 0) then {_default} else {_result}
