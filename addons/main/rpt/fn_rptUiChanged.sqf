@@ -3,7 +3,7 @@
     Çalışma yeri: İstemci (tür listesi olayı)
 
     Rapor türü değişince form etiketlerini ve alan düzenini ayarlar, ardından sekmeyi günceller.
-      SALUTE: S, A, L (konum listesi), U, T, E        SITREP: 6 serbest metin alanı        LACE: 4 durum listesi + not alanı
+      SALUTE: S, A, L (konum listesi), U, T, E        SITREP: 6 serbest metin alanı (faaliyet/ilerleme, düşman, düşman KIA, güvenlik duruşu, ikmal talebi, notlar)        LACE: 4 durum listesi + not alanı
 
     Parametreler: yok
     Dönüş: yok
@@ -19,8 +19,8 @@ missionNamespace setVariable ["TC2_rpt_type", _type];
 
 private _labels = switch (_type) do {
     case "SALUTE": {["S  Size", "A  Activity", "L  Location", "U  Unit", "T  Time", "E  Equipment"]};
-    case "SITREP": {["Faaliyet", "Düşman", "Personel", "Lojistik", "Niyet", "Notlar"]};
-    default {["L  Liquids", "A  Ammunition", "C  Casualties", "E  Equipment", "", ""]};
+    case "SITREP": {["Faaliyet", "Düşman", "Düşman KIA", "Güvenlik", "İkmal talebi", "Notlar"]};
+    default {["L  Liquid", "A  Ammunition", "C  Casualties", "E  Equipment", "", ""]};
 };
 {
     (_display displayCtrl (92740 + _forEachIndex)) ctrlSetText _x;

@@ -52,7 +52,7 @@ private _combo = {
 private _type = [_display, 92700, _left, _top, _leftW, _rowH - 0.004, [
     ["SALUTE - düşman gözlem raporu", "SALUTE"],
     ["SITREP - durum raporu", "SITREP"],
-    ["LACE - birlik durumu (Liquids, Ammo, Casualties, Equipment)", "LACE"]
+    ["LACE - birlik durumu (Liquid, Ammo, Casualties, Equipment)", "LACE"]
 ]] call _combo;
 _type ctrlAddEventHandler ["LBSelChanged", {call TC2_fnc_rptUiChanged}];
 
@@ -74,10 +74,11 @@ missionNamespace setVariable ["TC2_rpt_pos", _positions];
 
 private _statusItems = [
     ["— durum seçin —", ""],
-    ["YEŞİL (GREEN)  yaklaşık 80-100 yüzde", "GREEN"],
-    ["AMBER  yaklaşık 60-79 yüzde", "AMBER"],
-    ["KIRMIZI (RED)  yaklaşık 40-59 yüzde", "RED"],
-    ["SİYAH (BLACK)  40 yüzde altı", "BLACK"]
+    ["YEŞİL - tam operasyonel (85 yüzde +)", "GREEN"],
+    ["AMBER - büyük ölçüde (70-84)", "AMBER"],
+    ["KIRMIZI - sınırlı (50-69)", "RED"],
+    ["SİYAH - operasyonel değil (50 altı)", "BLACK"],
+    ["BİLİNMİYOR", "UNKNOWN"]
 ];
 for "_k" from 0 to 3 do {
     [_display, 92710 + _k, _editX, _top + (_k + 1) * _rowH, 0.2, _rowH - 0.004, _statusItems] call _combo;

@@ -148,7 +148,7 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 ## Aşama 6b – Raporlar (SALUTE / SITREP / LACE), WARNO, kartlar, tablet
 
 **RAPOR** sekmesi (SALUTE / SITREP / LACE), **WARNO** (OPORD sekmesinde belge türü) ve harita üzerinde **LACE**. Doktrin notu ve sınırlar:
-[`docs/DOKTRIN_NOTLARI_RAPORLAR.md`](docs/DOKTRIN_NOTLARI_RAPORLAR.md) — **LACE JP 1-02'de yok**; SALUTE yalnızca kısaltma olarak, SITREP ve WARNORD tanım olarak var.
+[`docs/DOKTRIN_NOTLARI_RAPORLAR.md`](docs/DOKTRIN_NOTLARI_RAPORLAR.md) — dayanak **ATP 3-21.8** (LACE, SALUTE, durum renkleri 85/70/50, WARNORD içeriği) ve JP 1-02 tanımları.
 
 | Konu | Kural |
 |------|-------|
@@ -157,7 +157,7 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 | Saha tableti | Hava aracı mürettebatı dışında herkes, terminale bilgi **göndermek ve almak** için envanterinde `TC2_Tablet` taşımalıdır (CBA'dan değiştirilebilir). |
 | Tablet kullanımı | Grup/takım lideri, JTAC, gözlemci, FDC: **tam** (Level 2'ye kadar). Er: **izleme** (yalnızca harita ve işaretler); LACE ve raporlar görünmez, yazma sunucuda reddedilir. |
 | SALUTE | Lider gönderir; **S2/CO doğrulayana** kadar haritada soru işaretli simge; doğrulanınca düşman işareti. |
-| LACE | Sistemin doğruladığı sayılar (mevcut, yaralı, araç hasarı) + liderin beyanı (L/A/C/E rengi); harita lider simgesi en kötü duruma göre boyanır. Yalnızca Level 2+. |
+| LACE | Sistemin doğruladığı sayılar (mevcut, yaralı, araç hasarı) + liderin beyanı (L/A/C/E rengi); harita lider simgesi en kötü duruma göre boyanır (ATP 3-21.8 renkleri: yeşil 85+, amber 70-84, kırmızı 50-69, siyah 50 altı). Yalnızca Level 2+. |
 
 Test: [`docs/TEST_ASAMA6_RAPORLAR.md`](docs/TEST_ASAMA6_RAPORLAR.md). Test yardımcısı: `["BLUE"] call TC2_fnc_debugGive;` (RED / BLUE / GOLD / TABLET / NONE).
 

@@ -3,9 +3,10 @@
     Çalışma yeri: Her makine (saf fonksiyon)
 
     Bir birliğin LACE özet durumu: sistemin doğruladığı sayılardan hesaplanan durum ile liderin beyan ettiği durumların EN KÖTÜSÜ.
-      etkin kuvvet oranı = (mevcut - yaralı/etkisiz) / ilk büyüklük   ->  >= 0.8 GREEN, >= 0.6 AMBER, >= 0.4 RED, altı BLACK
-      araç hasarı >= 70 yüzde -> en az RED, >= 40 yüzde -> en az AMBER
-    Eşikler SOP'a göre değişir; burada tipik değerler alınmıştır (bkz. docs/DOKTRIN_NOTLARI_RAPORLAR.md, doğrulanmamış genel bilgi).
+    Renk eşikleri ATP 3-21.8 2-80 (FM 1-02.2): tam operasyonel GREEN (yüzde 85 ve üstü), büyük ölçüde AMBER (70-84),
+    sınırlı RED (50-69), operasyonel değil BLACK (50 altı), UNKNOWN (bilinmiyor; en kötü hesabına katılmaz).
+      etkin kuvvet oranı = (mevcut - yaralı/etkisiz) / ilk büyüklük
+      araç durumu = 100 - hasar yüzde; araç tek başına en çok RED yapar
 
     Parametreler:
         0: lace <ARRAY>  rptLaceInfo çıktısı [[mevcut, ilk, yaralı, araç %], son rapor [yaş, [[durum, not] x4 düz 8 metin]]]
@@ -24,8 +25,9 @@ private _rank = ["GREEN", "AMBER", "RED", "BLACK"];
 private _worst = 0;
 
 private _ratio = if (_initial > 0) then {(_alive - _wounded) / _initial} else {0};
-_worst = _worst max (if (_ratio >= 0.8) then {0} else {if (_ratio >= 0.6) then {1} else {if (_ratio >= 0.4) then {2} else {3}}});
-if (_vehicle >= 70) then {_worst = _worst max 2} else {if (_vehicle >= 40) then {_worst = _worst max 1}};
+_worst = _worst max (if (_ratio >= 0.85) then {0} else {if (_ratio >= 0.7) then {1} else {if (_ratio >= 0.5) then {2} else {3}}});
+private _vehicleReady = (100 - _vehicle) / 100;
+_worst = _worst max (if (_vehicleReady >= 0.85) then {0} else {if (_vehicleReady >= 0.7) then {1} else {2}});
 
 if !(_report isEqualTo []) then {
     private _data = _report select 1;

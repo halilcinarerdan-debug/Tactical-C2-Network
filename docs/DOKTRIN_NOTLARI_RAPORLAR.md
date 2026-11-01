@@ -1,32 +1,32 @@
 # Doktrin notları — WARNO, SALUTE, SITREP, LACE (Aşama 6b)
 
-Kaynak: `doktrinler4.txt` = **JP 1-02 (DoD Dictionary)**. JP 1-02 bir **sözlüktür**: terimleri tanımlar, rapor FORMATLARINI vermez.
+## Kaynaklar
 
-## JP 1-02'de bulunanlar
+* **ATP 3-21.8** *Infantry Rifle Platoon and Squad* (`doktrinler_5.txt`): LACE, SALUTE kullanımı, durum renkleri, WARNORD içeriği. **LACE'in doktrin dayanağı budur.**
+* **JP 1-02** (DoD Dictionary): SALUTE açılımı, SITREP / spot report / warning order tanımları. Sözlüktür, rapor formatı vermez.
 
-| Terim | JP 1-02'deki durum | Sistemde kullanımı |
-|-------|--------------------|--------------------|
-| **warning order (WARNORD / WARNO)** | Var (JP 5-0): "bir emrin ya da eylemin habercisi ön bildirim"; 3. anlam: durumu anlatan, kuvvet ve kaynak ayıran, komuta ilişkilerini kuran, ilk planlama rehberini veren ve alt birlik planlamasını başlatan planlama direktifi. | **OPORD** sekmesinde belge türü **WARNO**. Şablon, bu tanımın saydığı öğeleri taşır (durum, kuvvet/kaynak, komuta ilişkisi, planlama rehberi, zaman çizelgesi). OPORD ile AYNI yetki seviyesi ve sunucuda süzme altyapısı. |
-| **situation report (SITREP)** | Var (JP 3-50): "bir raporlayan birliğin ya da oluşumun bölgesindeki durumu veren rapor". | **RAPOR** sekmesi, tür SITREP. Alanlar: konum, faaliyet, düşman, personel, lojistik, niyet, notlar. Alan listesi doktrin değil, tanımın kapsamından türetilmiş **tasarım kararıdır**. |
-| **SALUTE** | Yalnızca **kısaltma listesinde**: size, activity, location, unit, time, equipment. Format ve kullanım kuralı yok. | **RAPOR** sekmesi, tür SALUTE; 6 alan kısaltmanın açılımıdır. |
-| **spot report (SPOTREP)** | Var (JP 3-09.3): olay/durum hakkında en hızlı yolla iletilen kısa rapor. | SALUTE bu amaçla kullanılır; ayrıca doğrulama (aşağıda). |
-| **intelligence report (INTREP)** | Var (JP 2-01). | Doğrulanmış SALUTE → istihbarat işareti. |
-| **LACE** | **YOK.** Sözlükte ne tanım ne kısaltma var. | Aşağıya bakın. |
+| Terim | Dayanak | Sistemde kullanımı |
+|-------|---------|--------------------|
+| **LACE** | ATP 3-21.8 **8-13**: "liquid, ammunition, casualties, and equipment (LACE)" durumunun alt birliklerin raporuyla bilinmesi; kıtlık şimdi mi, ileride mi, görevi etkiler mi diye değerlendirilir. ATP 3-21.8 **7-116/7-117**: hedefte konsolidasyondan sonra element liderleri LACE raporunu devriye lideri ve yardımcısına verir. | **RAPOR** sekmesi, tür LACE: Liquid, Ammunition, Casualties, Equipment için renk + not. |
+| **Durum renkleri** | ATP 3-21.8 **2-80** (FM 1-02.2): yeşil tam operasyonel (**yüzde 85+**), amber büyük ölçüde (**70-84**), kırmızı sınırlı (**50-69**), siyah operasyonel değil (**50 altı**), bilinmiyor. | Liderin beyan listesi (5 seçenek) ve sistem hesabı (`rptLaceStatus`) bu eşikleri kullanır. |
+| **SALUTE** | ATP 3-21.8 **1-26**: manga lideri takım lideri'ne SALUTE spot raporu verir; **7-159**: güvenlik elemanı düşman yaklaşınca SALUTE ile bildirir. JP 1-02: size, activity, location, unit, time, equipment. | **RAPOR** sekmesi, tür SALUTE (6 alan). |
+| **Durum raporu (SITREP)** | ATP 3-21.8 **1-26**: manga lideri takım lideri'ne **konum ve ilerleme, düşman durumu, düşman KIA, güvenlik duruşu**; mühimmat/kayıp/teçhizat durumunu takım astsubayı'na bildirir. **4-118**: yeniden düzenlemede kritik eksiklerin tespiti ve **ikmal talebi**. JP 1-02: "raporlayan birliğin bölgesindeki durum". | **RAPOR** sekmesi, tür SITREP: faaliyet/ilerleme, düşman durumu, düşman KIA, güvenlik duruşu, ikmal talebi, notlar (+ otomatik konum). Mühimmat/kayıp/teçhizat için LACE kullanılır. |
+| **WARNORD (WARNO)** | JP 1-02 (JP 5-0) tanımı. ATP 3-21.8 **2-20..2-22**: beş paragraf biçimini izler, mümkün olan en erken verilir; takım WARNORD'u şunları içerir: operasyon türü, genel yer, ilk zaman çizelgesi, başlatılacak hareketler, ortak planlama oturumları, planlama ve hazırlık talimatları (PCC, PCI, prova), ilk bilgi ihtiyaçları (CCIR: PIR, FFIR), ilk bilgi toplama görevleri. | **OPORD** sekmesi, belge türü **WARNO**; 11 bölümlü şablon bu listeden (bölüm 10, CCIR, Level 3). |
+| **spot report** | JP 1-02 (JP 3-09.3): olay/durum hakkında en hızlı yolla kısa rapor. | SALUTE bu amaçla kullanılır. |
 
-## LACE hakkında dürüst durum
-
-**LACE JP 1-02'de (ve elimizdeki JP 3-09.3, JP 3-09, ATP 3-09.30, JP 3-0'da) bulunmuyor.** Genel bilgi olarak LACE, küçük birlik komutanlarının
-komutanına verdiği hızlı kaynak/durum özetidir: **L**iquids (su, yakıt), **A**mmunition (mühimmat), **C**asualties (kayıp), **E**quipment (teçhizat).
-Uygulamadaki yeşil / amber / kırmızı / siyah durum kodu ve yüzde eşikleri (yaklaşık %80 / %60 / %40) **birliğin SOP'una bağlıdır**; sistemde
-bu eşikler **ayarlanabilir ŞEKİLDE DEĞİL, koda gömülü tipik değerlerdir (`rptLaceStatus`)** ve doktrinle DOĞRULANMAMIŞTIR.
-Kaynak olarak ATP 3-21.8 (piyade müfrezesi/takımı) ya da FM 7-8 / ilgili SOP verilirse alan ve eşikler doktrine göre düzeltilecektir.
+**Sınırlar (dürüstçe):**
+* ATP 3-21.8 şekil 2-3 (WARNORD biçim örneği) elimizdeki metinde bir **görsel**, okunamadı; bölüm başlıkları metindeki listeden türetildi.
+* ATP 3-21.8 LACE için **sabit bir form** vermiyor; LACE alanlarını ve renk ölçeğini veriyor. Her alanın (örn. Liquid için su/yakıt) yüzdesi oyunda sayısal ölçülemediği için **beyan** niteliğindedir.
+* Casualties ve Equipment'ın **sayısal** kısmı (kuvvet oranı, araç hasarı) sistemce hesaplanır; hesap yöntemi (yaralı/etkisiz kuralı, araç hasarı = 100 - hasar yüzde) tasarım kararıdır.
+* LACE'in "kim kime" zinciri doktrinde takım/manga düzeyindedir; sistemde LACE ağdaki tüm Level 2+ oturumlara görünür (COP).
 
 ## LACE'in sistemde çalışışı (bilgi güvenirliği)
 
 * **Sistemin DOĞRULADIĞI sayılar** (lider değiştiremez, sunucu oyundan okur): mevcut personel, ilk büyüklük (grupta görülen en yüksek üye sayısı),
   yaralı/etkisiz (ACE bilinçsiz, vanilla INCAPACITATED ya da hasar > 0,3), araç hasarı yüzdesi.
-* **Liderin BEYAN ettiği** durumlar: Liquids, Ammunition, Casualties, Equipment için GREEN / AMBER / RED / BLACK + kısa not (45 dk içindeki son rapor geçerli).
-* Haritadaki renk, **en kötü** durumdur (sistem verisi ile beyanın en kötüsü). Casualties/Equipment için lider yanlış "yeşil" yazsa bile sayılar ağırlaşırsa renk bozulur.
+* **Liderin BEYAN ettiği** durumlar: Liquid, Ammunition, Casualties, Equipment için GREEN / AMBER / RED / BLACK / UNKNOWN + kısa not (45 dk içindeki son rapor geçerli).
+* Haritadaki renk, **en kötü** durumdur (sistem verisi ile beyanın en kötüsü; UNKNOWN hesaba katılmaz). Lider yanlış "yeşil" yazsa bile sayılar ağırlaşırsa renk bozulur.
+* Kuvvet oranı = (mevcut - yaralı/etkisiz) / ilk büyüklük; eşikler 85 / 70 / 50. Araç tek başına en çok KIRMIZI yapar.
 * LACE yalnızca **Level 2+ ve izleme modunda olmayan** oturumlarda görünür.
 
 ## SALUTE doğrulama (S2 / CO)

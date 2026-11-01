@@ -24,6 +24,7 @@ private _color = switch (_status) do {
     case "GREEN": {"#40ff59"};
     case "AMBER": {"#ffcc33"};
     case "RED":   {"#ff6a33"};
+    case "":      {"#bbbbbb"};
     default {"#bbbbbb"};
 };
 

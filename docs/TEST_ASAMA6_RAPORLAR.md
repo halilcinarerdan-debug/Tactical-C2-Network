@@ -1,6 +1,6 @@
 # Aşama 6b — Kartlar, tablet, roller ve raporlar (WARNO / SALUTE / SITREP / LACE) testi
 
-Doktrin ve sınırlar: [`DOKTRIN_NOTLARI_RAPORLAR.md`](DOKTRIN_NOTLARI_RAPORLAR.md). **Önemli:** LACE JP 1-02'de yok; formatı genel bilgidir.
+Doktrin ve sınırlar: [`DOKTRIN_NOTLARI_RAPORLAR.md`](DOKTRIN_NOTLARI_RAPORLAR.md) (ATP 3-21.8: LACE, SALUTE, durum renkleri, WARNORD içeriği).
 
 ## Hazırlık (tek başına, host MP ya da Eden önizleme)
 
@@ -61,11 +61,11 @@ Lider olmayan, tabletli bir oyuncu (ya da `player` lider değilken ikinci istemc
 
 ## E. SITREP
 
-RAPOR ⇒ SITREP ⇒ yalnızca *Faaliyet* zorunlu; diğerleri isteğe bağlı ⇒ gönder. Gelen kutusunda `KONUM` otomatik grid olarak eklenir.
+RAPOR ⇒ SITREP: *Faaliyet*, *Düşman*, *Düşman KIA*, *Güvenlik*, *İkmal talebi*, *Notlar* (ATP 3-21.8 manga lideri → takım lideri raporu). Yalnızca *Faaliyet* zorunlu ⇒ gönder. Gelen kutusunda `KONUM` otomatik grid olarak eklenir.
 
 ## F. LACE ve harita
 
-1. Lider **RAPOR ⇒ LACE**: dört satırda GREEN/AMBER/RED/BLACK seç + kısa not ⇒ gönder.
+1. Lider **RAPOR ⇒ LACE**: dört satırda (Liquid, Ammunition, Casualties, Equipment) YEŞİL (85+) / AMBER (70-84) / KIRMIZI (50-69) / SİYAH (50 altı) / BİLİNMİYOR seç + kısa not ⇒ gönder.
 2. Level 2+ kullanıcı (Mavi kart, S2, CO) **HARİTA ⇒ BİRİM / LACE**, haritada lider simgesine tıkla ⇒ panel: **GENEL: AMBER**, *DOĞRULANAN (sistem)* satırı (mevcut/ilk, yaralı, araç %), *LİDER RAPORU* satırları.
 3. Lider simgesi LACE durumuna göre boyanır (yeşil / sarı / turuncu / gri) ve etiketi `[AMBER]` gibi eki taşır.
 4. Birlik üyelerini öldürün/yaralayın (Zeus `setDamage`, ya da `{_x setDamage 1} forEach (units group aiLeader select [1,2])`) ⇒ en geç 5 sn'de **sayılar değişir**, lider yeşil beyan etse de **genel durum kötüleşir**.
@@ -74,7 +74,7 @@ RAPOR ⇒ SITREP ⇒ yalnızca *Faaliyet* zorunlu; diğerleri isteğe bağlı �
 ## G. WARNO
 
 OPORD sekmesi ⇒ belge türü listesinden **WARNO (Uyarı Emri)** ⇒ Level 3 ile **ŞABLON OLUŞTUR** ⇒ bölümleri düzenle ⇒ KAYDET. Mission dosyasından: `tc2_warno.sqf` ([örnek biçim `ornek_tc2_opord.sqf`](ornek_tc2_opord.sqf)).
-OPORD ile aynı seviye süzgeci: Level 3 bölümler Mavi kartta `[GİZLİ]`.
+11 bölümlü şablon (ATP 3-21.8 2-22 listesi): operasyon türü/yer, durum, görev, kuvvet, planlama rehberi, zaman çizelgesi, hareketler, ortak planlama, PCC/PCI/prova, CCIR, keşif görevleri. OPORD ile aynı seviye süzgeci: Level 3 bölüm (CCIR) Mavi kartta `[GİZLİ]`, rehber ve keşif görevleri Level 2.
 
 ## H. Dedicated sunucu
 
@@ -83,5 +83,5 @@ Aynı adımlar; `rpt` günlüklerinde `[TC2][RAPOR] SALUTE id=1 | gonderen=...` 
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).
-* LACE eşikleri ve alan listesi doğrulanmamış genel bilgidir (bkz. doktrin notu).
+* WARNORD biçim örneği (ATP 3-21.8 şekil 2-3) metinde görsel olduğu için okunamadı; bölüm başlıkları listeden türetildi.
 * Yalnızca sqflint ile denendi; oyun içi doğrulama kullanıcı testine bağlı.

@@ -18,8 +18,10 @@
     alt başlıklar doğrulanır. Ateş paragrafı için JP 3-09.3 (görev, amaç, yöntem, etki = TPME) kullanıldı.
 
     WARNO (uyarı emri) şablonu: JP 1-02 tanımı (3): "durumu açıklayan, kuvvet ve kaynakları tahsis eden, komuta ilişkilerini
-    kuran, başlangıç planlama rehberini veren ve planlamayı başlatan emir". Uyarı emri, astlara planlamaya zaman bırakmak için
-    en erken fırsatta verilir (JP 3-0); tam biçim JP 1-02'de yoktur, alt başlıklar tanımdan türetilmiştir.
+    kuran, başlangıç planlama rehberini veren ve planlamayı başlatan emir". İçerik listesi ATP 3-21.8 2-22'den (takım WARNORD'u):
+    operasyon türü, genel yer, ilk zaman çizelgesi, başlatılacak hareketler, ortak planlama oturumları, planlama ve hazırlık
+    talimatları (PCC, PCI, prova), ilk bilgi ihtiyaçları (CCIR: PIR, FFIR), ilk bilgi toplama görevleri. WARNORD beş paragraf biçimini
+    izler (ATP 3-21.8 2-22); şekil 2-3 (biçim örneği) elimizdeki metinde görsel olduğu için okunamadı, alt başlıklar listeden türetildi.
 
     Parametreler:
         0: belge türü <STRING>  "OPORD" (varsayılan) | "WARNO"
@@ -31,13 +33,17 @@ params [["_docType", "OPORD", [""]]];
 
 if (_docType isEqualTo "WARNO") exitWith {
     [
-        ["SIT", "1. DURUM (Situation)", 1, "[Durumun özeti: düşman, dost kuvvetler, harekât ortamı.]"],
-        ["MISSION", "2. GÖREV (Mission)", 1, "[Beklenen görev (taslak): kim, ne, ne zaman, nerede, neden.]"],
-        ["FORCES", "3. KUVVET VE KAYNAK TAHSİSİ (Forces and Resources Allocated)", 1, "[Göreve ayrılan kuvvetler ve kaynaklar.]"],
-        ["CMD", "4. KOMUTA İLİŞKİLERİ (Command Relationships)", 1, "[Kim kime bağlı; destek ve bağlama ilişkileri.]"],
+        ["TYPE", "1. OPERASYON TÜRÜ VE GENEL YER (Type of operation, general location)", 1, "[Operasyonun türü (saldırı, savunma, devriye, keşif...) ve genel bölge.]"],
+        ["SIT", "2. DURUM (Situation)", 1, "[Durumun özeti: düşman, dost kuvvetler, harekât ortamı.]"],
+        ["MISSION", "3. GÖREV (Mission, taslak)", 1, "[Beklenen görev: kim, ne, ne zaman, nerede, neden.]"],
+        ["FORCES", "4. KUVVET, KAYNAK VE KOMUTA İLİŞKİLERİ", 1, "[Göreve ayrılan kuvvet ve kaynaklar; kim kime bağlı, destek ve bağlama ilişkileri.]"],
         ["GUIDANCE", "5. BAŞLANGIÇ PLANLAMA REHBERİ (Initial Planning Guidance)", 2, "[Komutanın ilk planlama rehberi: öncelikler, kısıtlar, dikkat edilecek hususlar.]"],
-        ["TIMELINE", "6. ZAMAN ÇİZELGESİ (Timeline)", 1, "[OPORD brifing saati, hazırlık ve hareket saatleri, provalar.]"],
-        ["PREP", "7. HAZIRLIK (Preparation)", 1, "[Birliklerin hemen başlaması gereken hazırlıklar.]"]
+        ["TIMELINE", "6. İLK ZAMAN ÇİZELGESİ (Initial Timeline)", 1, "[Planlama, hazırlık ve icra için ilk zaman çizelgesi; OPORD brifing saati.]"],
+        ["MOVE", "7. BAŞLATILACAK HAREKETLER (Movements)", 1, "[Hemen başlaması gereken hareketler.]"],
+        ["COLLAB", "8. ORTAK PLANLAMA OTURUMLARI (Collaborative Planning)", 1, "[Komutanın istediği ortak planlama oturumları: zaman, yer, katılımcılar.]"],
+        ["PREP", "9. HAZIRLIK TALİMATLARI (PCC, PCI, Prova)", 1, "[Muharebe öncesi kontroller (PCC), muharebe öncesi denetimler (PCI) ve prova rehberi.]"],
+        ["CCIR", "10. İLK BİLGİ İHTİYAÇLARI (CCIR: PIR, FFIR)", 3, "[İlk öncelikli istihbarat ihtiyaçları (PIR) ve dost kuvvet bilgi ihtiyaçları (FFIR).]"],
+        ["COLLECT", "11. İLK BİLGİ TOPLAMA GÖREVLERİ (Reconnaissance and Surveillance)", 2, "[Hemen başlayacak keşif ve gözetleme görevleri.]"]
     ]
 };
 

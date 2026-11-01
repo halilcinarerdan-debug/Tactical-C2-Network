@@ -4,13 +4,14 @@
 
     Saha raporu formlarını denetler. Veri, sabit uzunlukta METİN dizisidir:
       SALUTE (6):  [Size, Activity, konum anahtarı ("OWN" | "M<işaret id>"), Unit, Time (boş = şimdi), Equipment]
-      SITREP (6):  [faaliyet, düşman, personel, lojistik, niyet, notlar]
-      LACE   (8):  [Liquids durumu, not, Ammunition durumu, not, Casualties durumu, not, Equipment durumu, not]
-                   durum: GREEN | AMBER | RED | BLACK
+      SITREP (6):  [faaliyet ve ilerleme, düşman durumu, düşman KIA, güvenlik duruşu, ikmal talebi / kritik eksik, notlar]
+      LACE   (8):  [Liquid durumu, not, Ammunition durumu, not, Casualties durumu, not, Equipment durumu, not]
+                   durum: GREEN | AMBER | RED | BLACK | UNKNOWN
 
-    DOKTRİN DAYANAĞI: JP 1-02 yalnızca SALUTE'un açılımını verir (size, activity, location, unit, time, equipment) ve SITREP'i
-    "bir raporlayan birliğin bölgesindeki durumu veren rapor" diye tanımlar. LACE JP 1-02'de YOKTUR (liquids, ammunition, casualties,
-    equipment: standart küçük birlik durum raporudur, alanlar genel bilgidir; bkz. docs/DOKTRIN_NOTLARI_RAPORLAR.md).
+    DOKTRİN DAYANAĞI: ATP 3-21.8 (Piyade Tüfek Takımı ve Manga): 1-26 SALUTE spot raporu, tim/manga liderinin takım lideriyle
+    durum raporu (konum ve ilerleme, düşman durumu, düşman KIA, güvenlik duruşu) ve mühimmat/kayıp/teçhizat durumu; 8-13 ve 7-116 LACE
+    (liquid, ammunition, casualties, equipment); 2-80 durum renkleri. JP 1-02: SALUTE açılımı, SITREP tanımı.
+    bkz. docs/DOKTRIN_NOTLARI_RAPORLAR.md
 
     Parametreler:
         0: tür <STRING>  "SALUTE" | "SITREP" | "LACE"
@@ -52,7 +53,7 @@ switch (_type) do {
         {
             private _status = _data select (_x * 2);
             private _note = _data select (_x * 2 + 1);
-            if !(_status in ["GREEN", "AMBER", "RED", "BLACK"]) then {_errors pushBack format ["LACE: %1 durumu seçilmedi.", ["Liquids", "Ammunition", "Casualties", "Equipment"] select _x]};
+            if !(_status in ["GREEN", "AMBER", "RED", "BLACK", "UNKNOWN"]) then {_errors pushBack format ["LACE: %1 durumu seçilmedi.", ["Liquid", "Ammunition", "Casualties", "Equipment"] select _x]};
             if (count _note > 80) then {_errors pushBack "LACE: not en çok 80 karakter."};
         } forEach [0, 1, 2, 3];
     };

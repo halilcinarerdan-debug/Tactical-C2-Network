@@ -4,7 +4,7 @@
                   - uzak istemciden: remoteExecCall ["TC2_fnc_rptSend", 2]
                   - host / tek oyunculuda: rptUiSend doğrudan çağırır
 
-    Saha raporu gönderir: SALUTE (düşman gözlemi), SITREP (durum), LACE (Liquids, Ammunition, Casualties, Equipment).
+    Saha raporu gönderir: SALUTE (düşman gözlemi), SITREP (durum), LACE (Liquid, Ammunition, Casualties, Equipment).
     Sunucu doğrulamaları: gönderen, oturum (telsiz ağı şart), YAZMA yetkisi (mod VIEW değil ve seviye >= 2: er tabletle yazamaz,
     Kırmızı kart (Level 1) masa başında yazamaz), form (rptValidate; metinler temizlenir), SALUTE konumu (kendi konumu ya da görebildiği işaret),
     gönderim aralığı (3 sn). LACE'e sistemin doğruladığı sayılar eklenir (rptLaceInfo). Rapor, aynı ağdaki (tip + kanal + menzil) Level 2+ oturumlara gider.

@@ -2,8 +2,8 @@
     Fonksiyon: TC2_fnc_rptLines
     Çalışma yeri: Her makine (saf fonksiyon)
 
-    Raporu okunur satırlara çevirir. LACE durum renkleri (GREEN / AMBER / RED / BLACK) birliğin SOP'una göre yüzde eşiği taşır;
-    tipik kullanım: yeşil %80-100, amber %60-79, kırmızı %40-59, siyah %40 altı (doğrulanmamış genel bilgi).
+    Raporu okunur satırlara çevirir. LACE durum renkleri ATP 3-21.8 2-80'e göredir: yeşil tam operasyonel (yüzde 85 ve üstü),
+    amber büyük ölçüde (70-84), kırmızı sınırlı (50-69), siyah operasyonel değil (50 altı), bilinmiyor.
 
     Parametreler:
         0: tür <STRING>
@@ -24,6 +24,7 @@ private _statusName = {
         case "AMBER": {"AMBER"};
         case "RED":   {"KIRMIZI"};
         case "BLACK": {"SİYAH"};
+        case "UNKNOWN": {"BİLİNMİYOR"};
         default {_this};
     }
 };
@@ -45,18 +46,18 @@ switch (_type) do {
     case "SITREP": {
         _lines = [
             ["KONUM", _grid],
-            ["FAALİYET", _data select 0],
-            ["DÜŞMAN", _data select 1],
-            ["PERSONEL", _data select 2],
-            ["LOJİSTİK", _data select 3],
-            ["NİYET", _data select 4],
+            ["FAALİYET / İLERLEME", _data select 0],
+            ["DÜŞMAN DURUMU", _data select 1],
+            ["DÜŞMAN KIA", _data select 2],
+            ["GÜVENLİK DURUŞU", _data select 3],
+            ["İKMAL / KRİTİK EKSİK", _data select 4],
             ["NOTLAR", _data select 5]
         ] select {!((_x select 1) isEqualTo "")};
     };
     case "LACE": {
         {
             _lines pushBack [
-                ["L  LIQUIDS (su)", "A  AMMUNITION (mühimmat)", "C  CASUALTIES (kayıp)", "E  EQUIPMENT (teçhizat)"] select _x,
+                ["L  LIQUID (su, yakıt)", "A  AMMUNITION (mühimmat)", "C  CASUALTIES (kayıp)", "E  EQUIPMENT (teçhizat)"] select _x,
                 format ["%1%2", (_data select (_x * 2)) call _statusName, ["", "  -  " + (_data select (_x * 2 + 1))] select !((_data select (_x * 2 + 1)) isEqualTo "")]
             ];
         } forEach [0, 1, 2, 3];
