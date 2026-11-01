@@ -11,7 +11,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | # | Aşama | Durum |
 |---|-------|-------|
 | 1 | Fiziksel terminal + OPSEC (kimlik kartıyla erişim) | ✅ hazır (test bekliyor) |
-| 2 | Terminal arayüzü (RscDisplay, yeşil/siyah, sekmeli) | ⏳ |
+| 2 | Terminal arayüzü (yeşil/siyah, sekmeli; UAV sekmesi yer tutucu) | ✅ hazır (test bekliyor) |
 | 3 | ACRE2 sinyal entegrasyonu (menzil/telsiz kontrolü) | ⏳ |
 | 4 | Ortak harekat resmi (COP) + harita işaretleme | ⏳ |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC) | ⏳ |
@@ -38,7 +38,7 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_terminalInitActions.sqf       ACE eylemi (TC2_Terminal_F sınıfına)
         fn_terminalCreate.sqf            [SUNUCU] çalışma zamanında terminal yarat
         fn_terminalGetId.sqf             terminal kimliği
-        fn_terminalOpen.sqf              [İSTEMCİ] onay sonrası: Aşama 2'de arayüzü açacak yer
+        fn_terminalOpen.sqf              [İSTEMCİ] onay sonrası terminal arayüzünü açar (uiOpen)
         fn_accessGetCardClasses.sqf      kart ayarını çöz (Item_ ön eki toleransı)
         fn_accessHasCard.sqf             birimde kart var mı (saf fonksiyon)
         fn_accessCheck.sqf               [SUNUCU] erişim kararı (saf fonksiyon)
@@ -46,9 +46,17 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_accessRequest.sqf             [İSTEMCİ] talebi başlat (ön kontrol + ilerleme çubuğu)
         fn_accessServerHandle.sqf        [SUNUCU] göndereni doğrula, karar ver, kayıt tut, yanıtla
         fn_accessResult.sqf              [İSTEMCİ] sunucu kararını uygula
+    ui/                                  2. aşama (terminal penceresi)
+        fn_uiOpen.sqf                    pencereyi kurar (ctrlCreate), olayları bağlar
+        fn_uiSelectTab.sqf               sekme vurgusu + içerik
+        fn_uiTabText.sqf                 sekme metinleri (sonraki aşamalar buraya dolar)
+        fn_uiWatch.sqf                   saniyede 1: oturum geçerli mi (yalnızca pencere açıkken)
+        fn_uiOnUnload.sqf                temizlik + TC2_terminalClosed olayı
 docs/
     DOKTRIN_NOTLARI.md                   doktrinden çıkan kurallar (9-Line, Type 1/2/3, BOT/BOC, roller)
     TEST_ASAMA1.md                       tek başına test: editör, hosted MP, yerel dedicated
+    TEST_ASAMA2.md                       arayüz testi
+    UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
 
 ## Mikero ile derleme
@@ -80,6 +88,17 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
 
+## Aşama 2 – Terminal arayüzü
+
+Ekranın ortasında %70 boyutunda yeşil/siyah pencere; sekmeler: **ANA, HARİTA, CAS, İSTİHBARAT, LOJİSTİK, UAV**.
+Yalnızca ANA gerçek veri gösterir; diğerleri sonraki aşamalarda dolar (`fn_uiTabText.sqf`).
+Kapanma: **KAPAT**, **ESC**, ya da otomatik (kart çekildi, 5 m'den uzaklaşıldı, ölüm/bilinç kaybı).
+
+- **Performans:** kare başına UI kodu yok. Sekme değişimi düğme olayıyla; oturum kontrolü saniyede 1 kez (CBA PFH, yalnızca pencere açıkken, kapanınca kendini kaldırır).
+- **Kurulum:** config'te yalnızca boş diyalog (`TC2_TerminalDialog`, idd 92000); kontroller `ctrlCreate` ile scriptte kurulur.
+- **Olaylar (yerel CBA):** `TC2_terminalOpened [terminal, birim]`, `TC2_terminalClosed [terminal]`; sonraki aşamalar buna bağlanır.
+- **UAV:** bkz. [`docs/UAV_ENTEGRASYON.md`](docs/UAV_ENTEGRASYON.md). Test: [`docs/TEST_ASAMA2.md`](docs/TEST_ASAMA2.md).
+
 ## Aşama 1 – Fiziksel terminal + OPSEC
 
 ### Nasıl çalışır
@@ -90,7 +109,7 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 3. **Kimlik kartı:** envanterde (üniforma/yelek/çanta) ya da atanmış eşyalarda kart yoksa anında
    *"ERİŞİM REDDEDİLDİ: Kimlik kartı (CAC) bulunamadı."* hatası verilir. Kart varsa 2 sn'lik *"Kimlik doğrulanıyor..."* çubuğu çalışır.
 4. **Sunucu kararı:** çubuk bitince talep sunucuya gider; sunucu kartı, mesafeyi (≤ 5 m), canlılığı ve bilinci **kendi verisiyle** yeniden denetler.
-   Onayda *"ERİŞİM ONAYLANDI"* gösterilir. (Aşama 2'de burada terminal arayüzü açılacak.)
+   Onayda *"ERİŞİM ONAYLANDI"* gösterilir. Ardından terminal arayüzü açılır (Aşama 2).
 
 ### Kimlik kartı sınıfı hakkında önemli not (`Item_CAC_Card`)
 

@@ -99,6 +99,20 @@ class CfgWeapons
     };
 };
 
+// ----------------------------------------------------------------------------
+//  2. Asama: Terminal penceresi. Bos diyalog; kontroller scriptte (ctrlCreate, fn_uiOpen) kurulur.
+//  enableSimulation = 1: pencere acikken oyun (MP) akmaya devam eder.
+//  idd araligi 92000-92999 TC2'ye ayrilmistir.
+// ----------------------------------------------------------------------------
+class TC2_TerminalDialog
+{
+    idd = 92000;
+    movingEnable = 0;
+    enableSimulation = 1;
+    class controlsBackground {};
+    class controls {};
+};
+
 class CfgFunctions
 {
     class TC2
@@ -110,6 +124,9 @@ class CfgFunctions
 
         // 1. Asama: Fiziksel terminal + OPSEC (erisim kontrolu)
         #include "terminal\CfgFunctions.hpp"
+
+        // 2. Asama: Terminal arayuzu
+        #include "ui\CfgFunctions.hpp"
     };
 };
 
