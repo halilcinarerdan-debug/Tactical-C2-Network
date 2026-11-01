@@ -48,4 +48,5 @@ private _tab = missionNamespace getVariable ["TC2_ui_tab", 0];
 if (_tick % 5 == 0) then {
     if (_tab == 1) then {call TC2_fnc_copUiRequest};
     if (_tab == 2) then {call TC2_fnc_casUiRequest};
+    if (_tab in [3, 4]) then {call TC2_fnc_artyUiRequest};
 };

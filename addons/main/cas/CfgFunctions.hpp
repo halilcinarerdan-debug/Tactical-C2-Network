@@ -22,10 +22,11 @@ class cas
     class casAbort {};
 
     // Zeus / Eden modulu: JTAC ata-kaldir
+    class hasRole {};
     class isJtac {};
-    class moduleJtac {};
-    class jtacSet {};
-    class jtacOnResult {};
+    class moduleRole {};
+    class roleSet {};
+    class roleOnResult {};
 
     // Istemci - ortak
     class casOnData {};

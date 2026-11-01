@@ -8,4 +8,7 @@ class ui
     class uiWatch {};
     class uiOnUnload {};
     class uiReleaseFocus {};
+    class uiMakeControl {};
+    class uiBuildRows {};
+    class uiFillCombo {};
 };

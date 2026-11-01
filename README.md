@@ -15,6 +15,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 3 | ACRE2 veri ağı + basit mesajlaşma (telsiz/kanal/menzil kontrolü, PING/PONG) | ✅ hazır (test bekliyor) |
 | 4 | Ortak harekat resmi (COP): terminal haritası, düşman işareti, ACE MicroDAGR | ✅ hazır (test bekliyor) |
 | 5 | Dijital 9-Line CAS talebi (Type 1/2/3, BOT/BOC, zorunlu geri okuma, abort) | ✅ hazır (test bekliyor) |
+| 5B | Topçu: gözlemci CFF + oyuncu FDC operatörü (ATP 3-09.30), AI/oyuncu bataryası | ✅ hazır (test bekliyor) |
 | 6 | Sınıflandırılmış belgeler (OPORD/INTSUM) + lojistik, Level 1/2/3 | ⏳ |
 
 ## Depo yapısı
@@ -71,7 +72,16 @@ addons/main/                             -> tc2_main.pbo   (prefix: z\tc2\addons
         fn_copSyncUnit / copPush         [SUNUCU] liderlerin MicroDAGR özetini eşzamanla
         fn_copDagrSync.sqf               [İSTEMCİ] işaretleri DAGR waypoint'i olarak yaz
         fn_copUi*.sqf                    [İSTEMCİ] HARİTA sekmesi: kurulum, çizim, tıklama, durum
-    cas/                                 5. aşama (dijital 9-Line CAS)
+    arty/                                5B. aşama (topçu: CFF / FDC)
+        fn_artyValidate / artyLines      CFF doğrulaması (ATP 3-09.30) ve üç aktarım gösterimi (saf)
+        fn_artyCorrect / artyResolvePos  düzeltme (deviation/range/HOB) ve GRID / POLAR / SHIFT çözümü
+        fn_artySendCff / artyPoll        [SUNUCU] CFF gönder (danger close 600 m denetimi), sekme verisi
+        fn_artyFdcAction                 [SUNUCU] FDC: ACCEPT (MTO, menzil, mühimmat), REJECT, SHOT/SPLASH/COMPLETE, CHECK
+        fn_artyObsAction                 [SUNUCU] gözlemci: CORRECT / REPEAT / FIRE / CHECK / EOM
+        fn_artyExecute / GunFired / Complete  [SUNUCU] atış (AI: commandArtilleryFire; oyuncu: ateş emri), SHOT/SPLASH/ROUNDS COMPLETE
+        fn_artyBatteries / artyIsGun     [SUNUCU] topçu araçlarını otomatik bul, batarya olarak grupla
+        fn_artyUi* / artyObsBuild / artyFdcBuild  [İSTEMCİ] TOPÇU ve FDC sekmeleri
+    cas/                                 5. aşama (dijital 9-Line CAS) + roller (hasRole, Zeus modülleri)
         fn_casValidate.sqf               doktrin doğrulaması (19 alanlı form; sunucu karar verir, istemci ön kontrol)
         fn_casLines / casGrid            9 satırı okunur biçimde yaz; 10 haneli grid (ACE)
         fn_casCompare.sqf                zorunlu geri okuma karşılaştırması (satır 4, 6, kısıtlar)
@@ -88,6 +98,8 @@ docs/
     TEST_ASAMA3.md                       ağ/mesajlaşma testi (tek kişilik, simüle eş)
     TEST_ASAMA4.md                       COP / işaret / MicroDAGR testi
     TEST_ASAMA5.md                       9-Line CAS testi (tek kişilik)
+    TEST_ASAMA5B.md                      topçu CFF / FDC testi (tek kişilik)
+    DOKTRIN_NOTLARI_TOPCU.md             ATP 3-09.30 özeti (call for fire, düzeltme, danger close)
     UAV_ENTEGRASYON.md                   UAV terminali entegrasyonu: seçenekler ve öneri (karar bekliyor)
 ```
 
@@ -120,10 +132,30 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
 
+## Aşama 5B – Topçu (CFF / FDC)
+
+**TOPÇU** sekmesi gözlemcinin (FO/JFO; JTAC de olabilir) call for fire formu ve görev denetimi; **FDC** sekmesi FDC operatörünün ekranıdır. Sahadan **Saha Cihazı** ile de kullanılır.
+Doktrin: ATP 3-09.30 ([`docs/DOKTRIN_NOTLARI_TOPCU.md`](docs/DOKTRIN_NOTLARI_TOPCU.md)).
+
+| Konu | Kural |
+|------|-------|
+| Roller | **Gözlemci** (`TC2_observer`, rol açıklaması FO/JFO/FIST/OBSERVER, sınıf listesi) ve **FDC** (`TC2_fdc`, rol açıklaması FDC/FDO, sınıf listesi); Zeus'ta **Gözlemci Ata / Kaldır** ve **FDC Operatörü Ata / Kaldır** modülleri. |
+| CFF | Altı eleman, üç aktarım (gözlemci kimliği + uyarı emri / konum / tanım + angajman + kontrol). Görev: ADJUST FIRE, FIRE FOR EFFECT, SUPPRESS, IMMEDIATE SUPPRESSION / SMOKE. Konum: **GRID** (HARİTA işareti), **POLAR**, **SHIFT** (işaret ya da önceki hedef no). Doğrulama sunucuda. |
+| FDC | **Oyuncu** operatör: CFF'i kuyrukta görür, batarya seçer, MTO ile KABUL eder ya da REDDEDER (CFF bir istektir). Menzil (`inRangeOfArtillery`) ve mühimmat denetlenir; hedef numarası verilir. |
+| Komutlar | MTO, SHOT, SPLASH (yüksek açı / hava gözlemcisi), ROUNDS COMPLETE, AT MY COMMAND (IS READY → FIRE), CHECK FIRING, END OF MISSION (+ RECORD AS TARGET). |
+| Düzeltme | Gözlemci düzeltmeyi kendisi gözleyip gönderir: DIRECTION, LEFT/RIGHT, ADD/DROP, UP/DOWN, ADJUST/FFE, REPEAT. Sunucu OT hattına göre nişan noktasını hesaplar. |
+| DANGER CLOSE | hedef dostlara **600 m** içindeyse bildirilmeden CFF kabul edilmez; danger close'ta menzil düzeltmesi en çok 100 m (creeping). |
+| Toplar | topçu araçları **otomatik** bulunur (artillery computer / StaticMortar / CBA sınıf listesi); aynı mürettebat grubu = bir batarya. **AI mürettebat** CBA'dan BLUFOR / OPFOR / INDFOR için açılıp kapatılır (`commandArtilleryFire`); **oyuncu mürettebata** ateş emri bildirimi gider, FDC SHOT / SPLASH / COMPLETE'i elle girer. |
+
+**Sınırlar:** mermi düşüşünü sistem gözlemlemez (gözlemci kendisi gözler); AI topları sunucuda yerel olmalıdır; HOB / tapa tipi ve yeni mühimmat seçenekleri (laser grid, kayıt atışı, TOT, aydınlatma koordinasyonu, sheaf) bu sürümde YOK
+(temel set). Yüksek açı/alçak açı yalnızca bilgi olarak taşınır; atış, aracın kendi silahına bağlıdır. ACE'in Mk6 havan tabloları AI atışını etkilemez; oyuncu mürettebat kendi tablolarını kullanır.
+
+Test: [`docs/TEST_ASAMA5B.md`](docs/TEST_ASAMA5B.md).
+
 ## Saha Cihazı (laptop olmadan)
 
 Sahadaki birlikler (JTAC, gözlemci) formları ve mesajları **laptop olmadan** kullanır: ACE self menüsü ⇒ **TC2 Saha Cihazı** ⇒ terminalle **aynı pencere**
-(ANA mesajlaşma, HARİTA, CAS 9-Line; topçu CFF aynı pencereye eklenecek). Başlık `TC2 SAHA CİHAZI | SAHA <çağrı adı>`.
+(ANA mesajlaşma, HARİTA, CAS 9-Line, TOPÇU CFF, FDC). Başlık `TC2 SAHA CİHAZI | SAHA <çağrı adı>`.
 
 | Konu | Kural |
 |------|-------|

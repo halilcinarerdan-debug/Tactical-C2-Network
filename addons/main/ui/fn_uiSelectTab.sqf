@@ -15,6 +15,9 @@ params [["_index", 0, [0]]];
 private _display = findDisplay 92000;
 if (isNull _display) exitWith {};
 
+// Sekme numarası, TOPÇU/FDC görünürlüğü hesaplanmadan ÖNCE kaydedilir.
+missionNamespace setVariable ["TC2_ui_tab", _index];
+
 {
     private _button = _display displayCtrl (92010 + _forEachIndex);
     _button ctrlSetBackgroundColor (if (_forEachIndex == _index) then {[0.1, 0.45, 0.15, 1]} else {[0.02, 0.1, 0.03, 1]});
@@ -45,6 +48,13 @@ if (_index == 2) then {
     missionNamespace setVariable ["TC2_cas_statusText", ""];
     call TC2_fnc_casUiRequest;
     call TC2_fnc_casUiUpdate;
+};
+
+// TOPÇU (3) ve FDC (4) sekmeleri: görünürlük artyUiUpdate'te; seçilince veriyi hemen iste.
+call TC2_fnc_artyUiUpdate;
+if (_index in [3, 4]) then {
+    missionNamespace setVariable ["TC2_arty_statusText", ""];
+    call TC2_fnc_artyUiRequest;
 };
 
 private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];

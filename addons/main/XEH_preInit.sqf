@@ -17,3 +17,6 @@ call TC2_fnc_copInitSettings;
 
 // 5. Dijital 9-Line CAS
 call TC2_fnc_casInitSettings;
+
+// 5B. Topcu (CFF / FDC)
+call TC2_fnc_artyInitSettings;

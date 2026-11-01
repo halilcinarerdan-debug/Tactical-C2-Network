@@ -15,7 +15,7 @@ class CfgPatches
         author = "TC2";
         url = "";
         // units[]: Zeus (curator) bu listeden addon'u aktive eder.
-        units[] = {"TC2_Terminal_F", "TC2_Module_Jtac"};
+        units[] = {"TC2_Terminal_F", "TC2_Module_Jtac", "TC2_Module_Observer", "TC2_Module_Fdc"};
         weapons[] = {"TC2_CAC_Card"};
         requiredVersion = 0.1;
         // A3_Structures_F_Items_Electronics: Land_Laptop_unfolded_F bu yamada tanimli;
@@ -77,20 +77,33 @@ class CfgVehicles
     class Module_F;
 
     // JTAC Ata / Kaldir. ZEUS: birimin uzerine koy (acip kapa). EDEN: birimlere sync et (atar).
-    // isGlobal = 1: fonksiyon her makinede cagrilir, "local _logic" ile yalnizca biri calisir (bkz. fn_moduleJtac).
+    // isGlobal = 1: fonksiyon her makinede cagrilir, "local _logic" ile yalnizca biri calisir (bkz. fn_moduleRole).
     class TC2_Module_Jtac: Module_F
     {
         scope = 2;
         scopeCurator = 2;
         displayName = "JTAC Ata / Kaldir";
         category = "TC2_ModuleCategory";
-        function = "TC2_fnc_moduleJtac";
+        function = "TC2_fnc_moduleRole";
+        tc2_role = "JTAC";
         functionPriority = 1;
         isGlobal = 1;
         isTriggerActivated = 0;
         isDisposable = 1;
         curatorCanAttach = 1;
         author = "TC2";
+    };
+
+    class TC2_Module_Observer: TC2_Module_Jtac
+    {
+        displayName = "Gozlemci (FO/JFO) Ata / Kaldir";
+        tc2_role = "OBSERVER";
+    };
+
+    class TC2_Module_Fdc: TC2_Module_Jtac
+    {
+        displayName = "FDC Operatoru Ata / Kaldir";
+        tc2_role = "FDC";
     };
 
     class TC2_Terminal_F: Land_Laptop_unfolded_F
@@ -178,6 +191,9 @@ class CfgFunctions
 
         // 5. Asama: dijital 9-Line CAS
         #include "cas\CfgFunctions.hpp"
+
+        // 5B. Asama: topcu (CFF / FDC)
+        #include "arty\CfgFunctions.hpp"
     };
 };
 
@@ -311,12 +327,54 @@ class CfgRemoteExec
         };
 
         // JTAC atama (Zeus modulu): istek sunucuya, sonuc Zeus istemcisine.
-        class TC2_fnc_jtacSet
+        // 5B. Asama (topcu). Sunucuya giden: artyPoll, artySendCff, artyFdcAction, artyObsAction. Istemciye giden: artyOnData, artyOnEvent, artyOnAck, artyOnGunOrder.
+        class TC2_fnc_artyPoll
         {
             allowedTargets = 2;
             jip = 0;
         };
-        class TC2_fnc_jtacOnResult
+        class TC2_fnc_artySendCff
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_artyFdcAction
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_artyObsAction
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_artyOnData
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_artyOnEvent
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_artyOnAck
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+        class TC2_fnc_artyOnGunOrder
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        class TC2_fnc_roleSet
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_roleOnResult
         {
             allowedTargets = 0;
             jip = 0;

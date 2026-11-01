@@ -15,6 +15,24 @@
 ] call CBA_settings_fnc_init;
 
 [
+    "TC2_arty_observerClasses",
+    "EDITBOX",
+    ["Gözlemci (FO/JFO) sınıfları (classname)", "Bu sınıftaki askerler topçu gözlemcisi sayılır. ; veya , ile ayrılır. Zeus modülüyle verilen/alınan yetki bu listeyi geçersiz kılar. Eden rol açıklamasında FO, JFO, FIST veya OBSERVER yazanlar da gözlemci sayılır."],
+    ["Tactical C2 Network", "Topçu (CFF / FDC)"],
+    "",
+    true
+] call CBA_settings_fnc_init;
+
+[
+    "TC2_arty_fdcClasses",
+    "EDITBOX",
+    ["FDC operatörü sınıfları (classname)", "Bu sınıftaki askerler FDC operatörü sayılır. Zeus modülüyle verilen/alınan yetki bu listeyi geçersiz kılar. Eden rol açıklamasında FDC veya FDO yazanlar da FDC sayılır."],
+    ["Tactical C2 Network", "Topçu (CFF / FDC)"],
+    "",
+    true
+] call CBA_settings_fnc_init;
+
+[
     "TC2_cas_allowSelf",
     "CHECKBOX",
     ["TEST: 9-Line'ı kendine gönderebil", "Yalnızca TEST içindir. Açıksa JTAC, 9-Line'ı kendi kendine 'pilot' olarak gönderebilir (tek başına test). Gerçek oyunda KAPALI olmalı."],
