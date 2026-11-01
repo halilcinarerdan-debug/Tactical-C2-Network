@@ -5,7 +5,8 @@ Tek başına test için iki yardımcı var: **simüle pilot** (`TC2_fnc_debugCas
 
 ## Kurallar (özet)
 
-- **Gönderen:** yalnızca JTAC. Sistem JTAC'ı objedeki `TC2_jtac` değişkeniyle tanır. Eden'de birimin init alanına: `this setVariable ["TC2_jtac", true, true];`
+- **Gönderen:** yalnızca JTAC. Sistem JTAC'ı şu yollarla tanır (öncelik sırasıyla): (1) **Zeus modülü** "JTAC Ata / Kaldır" ya da Eden'de birimin init alanı `this setVariable ["TC2_jtac", true, true];`
+  (`false` yazılırsa sınıf/rol JTAC olsa bile kaldırır); (2) Eden **rol açıklamasında** `JTAC` veya `FAC` geçmesi; (3) CBA ayarındaki **JTAC sınıf listesi** (varsayılan vanilla Recon JTAC).
 - **Alıcı:** JTAC'la **aynı telsiz tipi + kanal + menzilde** ve **hava aracında** olan mürettebat (Plane = sabit kanat, diğerleri = döner kanat).
 - **Form (tek ekran):** KONTROL TÜRÜ (Type 1/2/3), BOT/BOC (Type 1 ⇒ yalnız BOT), 1 IP/BP, 2 HEADING (+offset), 3 DISTANCE (sabit kanat nm / döner kanat m),
   4 ELEVATION (ft MSL), 5 HEDEF TANIMI, 6 KONUM (HARİTA sekmesindeki işaretten; yükseklik otomatik dolar), 7 İŞARET (+lazer kodu), 8 DOST (m + yön), 9 EGRESS,
@@ -15,11 +16,26 @@ Tek başına test için iki yardımcı var: **simüle pilot** (`TC2_fnc_debugCas
 - **Zorunlu geri okuma:** satır 4, satır 6 ve verilmiş tüm kısıtlar. Sunucu karşılaştırır; JTAC ve pilot renkli sonucu (TAMAM / HATA + doğru değer) görür. Yanlışsa tekrar okunur.
 - **İPTAL:** JTAC her zaman iptal edebilir (doktrin). Pilot bilgilendirilir.
 
+## Z. JTAC atama (Zeus modülü ve roller)
+
+**Z1. Zeus.** Eden'de **Systems → Multiplayer → Game Master** modülü ekle (Owner: `#adminLogged`), hosted/dedicated'de `#login` ile admin ol, **Y** ile Zeus'u aç.
+Modüller sekmesinde **Tactical C2 Network → JTAC Ata / Kaldır**'ı bir askerin **üzerine** koy. Beklenen: `<ad>: JTAC olarak ATANDI.`; modül kendini siler.
+Aynı askere tekrar koy ⇒ `JTAC yetkisi KALDIRILDI.` Sunucu RPT: `[TC2][JTAC] ATANDI/KALDIRILDI | birim=…`. Modülü boş yere (birimin üzerinde değil) koyarsan `Modülü bir birimin ÜZERİNE koyun.`
+Not: Zeus yalnızca düzenleyebildiği (editable) birimlere ekleyebilir.
+
+**Z2. Yetki kontrolü.** O askerle terminale gir ⇒ CAS sekmesi artık `JTAC YETKİSİ GEREKLİ` demez; Zeus olmayan biri bu atamayı yapamaz (sunucu RPT: `[TC2][JTAC] RED`).
+
+**Z3. Rol açıklaması.** Eden'de birimin **Attributes → Role Description** alanına `JTAC` yaz (ya da `Takim JTAC`, `FAC`) ⇒ oyun başında modül gerekmeden JTAC sayılır.
+
+**Z4. Sınıf.** Vanilla `B_recon_JTAC_F` (Recon JTAC) askeri ⇒ varsayılan olarak JTAC. Mod sınıfları CBA ayarından (`JTAC sınıfları`) eklenir.
+
+**Z5. Açık kaldırma.** Sınıfça JTAC olan askere Zeus modülünü koy ⇒ `KALDIRILDI` (açık `false`, sınıfı geçersiz kılar).
+
 ## A. JTAC yetkisi ve form
 
 **A1. Yetkisiz.** Terminalde **CAS** sekmesi ⇒ kırmızı/sarı durum: `JTAC YETKİSİ GEREKLİ`.
 
-**A2. Yetki ver** (Local Exec): `player setVariable ["TC2_jtac", true, true];` ⇒ sekmeyi yeniden aç. Alıcı listesi `— ağda hava aracı yok —` görünür (henüz pilot yok).
+**A2. Yetki ver:** Zeus modülüyle (Z1) ya da hızlıca Local Exec: `player setVariable ["TC2_jtac", true, true];` ⇒ sekmeyi yeniden aç. Alıcı listesi `— ağda hava aracı yok —` görünür (henüz pilot yok).
 
 **A3. Hedef işareti.** HARİTA sekmesinde `DÜŞMAN PİYADE` ile bir işaret koy (Aşama 4).
 

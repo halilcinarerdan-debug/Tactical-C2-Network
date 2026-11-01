@@ -5,7 +5,7 @@
                   - host / tek oyunculuda: casUiSend doğrudan çağırır
 
     9-Line CAS talebini pilota iletir. Sunucu doğrulamaları (hepsi zorunlu):
-      1. gönderen (remoteExecutedOwner), 2. oturum (kart, 5 m, telsiz envanterde), 3. JTAC yetkisi (`TC2_jtac`),
+      1. gönderen (remoteExecutedOwner), 2. oturum (kart, 5 m, telsiz envanterde), 3. JTAC yetkisi (TC2_fnc_isJtac: Zeus/Eden ataması, rol açıklaması, sınıf),
       4. alıcı gerçekten JTAC'ın ağında, menzilde ve hava aracında (casTargets),
       5. form doktrine uygun (casValidate; platforma göre nm/m), 6. gönderim aralığı (3 sn).
     Her JTAC'ın tek etkin talebi vardır; yenisi eskisini iptal eder (eski pilota bildirilir).
@@ -35,7 +35,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
     [_unit, "TC2_fnc_casOnAck", [_code, []]] call TC2_fnc_netToUnit;
 };
 
-if !(_unit getVariable ["TC2_jtac", false]) exitWith {
+if !([_unit] call TC2_fnc_isJtac) exitWith {
     diag_log format ["[TC2][CAS] RED NOT_JTAC birim=%1", name _unit];
     [_unit, "TC2_fnc_casOnAck", ["NOT_JTAC", []]] call TC2_fnc_netToUnit;
 };

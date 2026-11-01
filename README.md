@@ -127,7 +127,8 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 | Konu | Kural |
 |------|-------|
-| Yetki | yalnızca JTAC: objede `TC2_jtac = true` (Eden init: `this setVariable ["TC2_jtac", true, true];`). Sunucu kontrol eder. |
+| Yetki | yalnızca JTAC; sunucu `TC2_fnc_isJtac` ile karar verir. JTAC sayılma yolları (öncelik sırasıyla): **(1) açık atama**: **Zeus modülü** "JTAC Ata / Kaldır" (birimin üzerine koy, aç/kapa) ya da Eden modülü/`this setVariable ["TC2_jtac", true, true];` — `false` sınıf/rol JTAC olsa bile yetkiyi kaldırır; **(2) Eden rol açıklamasında** `JTAC` veya `FAC`; **(3) sınıf listesi** (CBA ayarı, varsayılan vanilla Recon JTAC). ACE'in kendi bir JTAC/pilot rolü yoktur. |
+| Pilot | ayrı rol gerekmez: JTAC'ın ağında, menzilde ve **hava aracında** oturan herkes alıcı olabilir (sabit kanat = Plane, diğerleri = döner kanat). |
 | Alıcı | JTAC ile aynı telsiz tipi + kanal + menzilde ve hava aracında (Plane = sabit kanat, diğerleri = döner kanat). Gönderim, Aşama 3 ağ kontrolünden geçer ("BAĞLANTI YOK"). |
 | Doktrin doğrulaması | **sunucuda**: Type 1 ⇒ yalnız BOT; heading 0-359; mesafe sabit kanatta nm (0.1), döner kanatta m (100 m katı); lazerde 4 haneli kod; dostlar m + kardinal yön; danger close komutan baş harfleriyle; serbest metin temizlenir. |
 | Hedef konumu | HARİTA sekmesindeki düşman işaretlerinden seçilir; yükseklik (ft MSL) otomatik; konum 10 haneli grid, datum "ARMA grid". |

@@ -21,6 +21,12 @@ class cas
     class casReadback {};
     class casAbort {};
 
+    // Zeus / Eden modulu: JTAC ata-kaldir
+    class isJtac {};
+    class moduleJtac {};
+    class jtacSet {};
+    class jtacOnResult {};
+
     // Istemci - ortak
     class casOnData {};
     class casOnAck {};

@@ -5,7 +5,7 @@
                   - host / tek oyunculuda: casUiRequest doğrudan çağırır
 
     CAS sekmesinin verisi: bu birim JTAC mi, alıcı olabilecek mürettebat listesi ve bu JTAC'ın en son talebinin durumu.
-    Oturum doğrulanır (erişim + telsiz). JTAC yetkisi, objede `TC2_jtac` değişkeni (true) ile belirlenir.
+    Oturum doğrulanır (erişim + telsiz). JTAC yetkisi TC2_fnc_isJtac ile belirlenir (Zeus/Eden ataması, rol açıklaması, sınıf).
 
     Parametreler:
         0: birim <OBJECT>
@@ -31,7 +31,7 @@ if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
 
 [-1] call TC2_fnc_casReqIndex;
 
-private _isJtac = _unit getVariable ["TC2_jtac", false];
+private _isJtac = [_unit] call TC2_fnc_isJtac;
 private _targets = [_unit, _entry select 4, _entry select 5] call TC2_fnc_casTargets;
 
 private _mine = [];

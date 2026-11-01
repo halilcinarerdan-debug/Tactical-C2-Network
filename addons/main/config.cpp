@@ -15,7 +15,7 @@ class CfgPatches
         author = "TC2";
         url = "";
         // units[]: Zeus (curator) bu listeden addon'u aktive eder.
-        units[] = {"TC2_Terminal_F"};
+        units[] = {"TC2_Terminal_F", "TC2_Module_Jtac"};
         weapons[] = {"TC2_CAC_Card"};
         requiredVersion = 0.1;
         // A3_Structures_F_Items_Electronics: Land_Laptop_unfolded_F bu yamada tanimli;
@@ -26,7 +26,8 @@ class CfgPatches
             "ace_main",
             "ace_common",
             "ace_interact_menu",
-            "A3_Structures_F_Items_Electronics"
+            "A3_Structures_F_Items_Electronics",
+            "A3_Modules_F"
         };
         version = 0.1;
         versionStr = "0.1.0";
@@ -59,9 +60,38 @@ class CfgEditorSubcategories
 //  Kendi sinifi olmasi: Eden/Zeus'ta bulunur, ACE eylemi YALNIZCA bu sinifa baglanir
 //  (dekor laptoplar etkilenmez) ve JIP icin ekstra senkronizasyon gerekmez.
 // ----------------------------------------------------------------------------
+// Zeus / Eden modul kategorisi (side = 7: moduller)
+class CfgFactionClasses
+{
+    class TC2_ModuleCategory
+    {
+        displayName = "Tactical C2 Network";
+        priority = 2;
+        side = 7;
+    };
+};
+
 class CfgVehicles
 {
     class Land_Laptop_unfolded_F;
+    class Module_F;
+
+    // JTAC Ata / Kaldir. ZEUS: birimin uzerine koy (acip kapa). EDEN: birimlere sync et (atar).
+    // isGlobal = 1: fonksiyon her makinede cagrilir, "local _logic" ile yalnizca biri calisir (bkz. fn_moduleJtac).
+    class TC2_Module_Jtac: Module_F
+    {
+        scope = 2;
+        scopeCurator = 2;
+        displayName = "JTAC Ata / Kaldir";
+        category = "TC2_ModuleCategory";
+        function = "TC2_fnc_moduleJtac";
+        functionPriority = 1;
+        isGlobal = 1;
+        isTriggerActivated = 0;
+        isDisposable = 1;
+        curatorCanAttach = 1;
+        author = "TC2";
+    };
 
     class TC2_Terminal_F: Land_Laptop_unfolded_F
     {
@@ -275,6 +305,18 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_casOnResult
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // JTAC atama (Zeus modulu): istek sunucuya, sonuc Zeus istemcisine.
+        class TC2_fnc_jtacSet
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_jtacOnResult
         {
             allowedTargets = 0;
             jip = 0;
