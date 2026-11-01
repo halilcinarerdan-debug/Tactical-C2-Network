@@ -100,6 +100,9 @@ diag_log format ["[TC2][CAS] GONDERILDI id=%1 | type=%2 %3 | jtac=%4 | alici=%5 
 
 [_unit, "TC2_fnc_casOnAck", ["SENT", [_id, _pilotLabel]]] call TC2_fnc_netToUnit;
 
+// Üs bilgisi: ağdaki terminaller / saha cihazları bu 9-Line'ın gönderildiğini günlüklerinde görür.
+[_jtacNet, format ["CAS #%1  JTAC %2  alıcı %3  TYPE %4 %5", _id, _jtacCallsign, _pilotCallsign, _data select 0, _data select 1]] call TC2_fnc_netInfo;
+
 if (_sim) then {
     // Simüle pilot: 3 sn sonra geri okur (doğru ya da bilerek yanlış).
     [{

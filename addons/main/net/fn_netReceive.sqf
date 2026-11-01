@@ -6,6 +6,7 @@
       MSG  -> günlüğe yazar + bildirim
       PING -> günlüğe yazar + otomatik PONG ile yanıtlar
       PONG -> günlüğe yazar (kimden, kaç metre)
+      INFO -> üs bilgisi: günlüğe düşer (bildirim yok); sahadan gönderilen formları üs terminali de görür
     PONG'a yanıt verilmez (döngü olmaz).
 
     Parametreler:
@@ -30,6 +31,9 @@ switch (_type) do {
     case "PING": {
         [format ["PING alındı: %1 (%2 m)", _from, _distance], "#1f9930"] call TC2_fnc_netLog;
         ["PONG", "", _fromNetId] call TC2_fnc_netSend;
+    };
+    case "INFO": {
+        [_text, "#7fb0ff"] call TC2_fnc_netLog;
     };
     case "PONG": {
         [format ["PONG: %1 (%2 m)", _from, _distance], "#40ff59"] call TC2_fnc_netLog;

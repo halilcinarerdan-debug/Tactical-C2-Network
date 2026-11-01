@@ -37,6 +37,33 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
 ] call CBA_settings_fnc_init;
 
 [
+    "TC2_field_enabled",
+    "CHECKBOX",
+    ["Saha cihazı aktif", "Açıksa telsizi olan birlikler ACE self menüsünden 'TC2 Saha Cihazı'nı açıp (laptop olmadan) formları ve mesajları kullanabilir. Rol kontrolleri (JTAC / gözlemci) ve telsiz ağı kuralları aynen geçerlidir."],
+    _category,
+    true,
+    true
+] call CBA_settings_fnc_init;
+
+[
+    "TC2_field_requireCard",
+    "CHECKBOX",
+    ["Saha cihazı da kimlik kartı istesin", "Kapalı (varsayılan): saha cihazı kart istemez, yalnızca telsiz ağı ve rol gerekir. Açıksa terminaldeki gibi kimlik kartı da gerekir."],
+    _category,
+    false,
+    true
+] call CBA_settings_fnc_init;
+
+[
+    "TC2_field_deviceItem",
+    "EDITBOX",
+    ["Saha cihazı eşyası (classname)", "Doluysa saha cihazını açmak için bu eşya envanterde olmalı (örn. bir tablet / MicroDAGR sınıfı). BOŞ = ek eşya gerekmez."],
+    _category,
+    "",
+    true
+] call CBA_settings_fnc_init;
+
+[
     "TC2_access_authTime",
     "SLIDER",
     ["Kimlik doğrulama süresi (sn)", "Kartı okutma ilerleme çubuğunun süresi. 0 = anında."],

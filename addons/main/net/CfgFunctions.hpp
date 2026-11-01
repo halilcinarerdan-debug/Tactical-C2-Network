@@ -9,6 +9,7 @@ class net
     class netRangeOf {};
     class netSanitize {};
     class netToUnit {};
+    class netInfo {};
 
     // Istemci
     class netGetRadioState {};

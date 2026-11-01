@@ -33,6 +33,8 @@ _request set [8, _results];
 
 diag_log format ["[TC2][CAS] GERI OKUMA id=%1 | %2 | pilot=%3 | yanlislar=%4", _id, _newState, _request select 13, (_results select {!(_x select 2)}) apply {_x select 0}];
 
+[_request select 1, format ["CAS #%1  geri okuma %2", _id, ["YANLIŞ", "DOĞRU"] select _allOk]] call TC2_fnc_netInfo;
+
 [_request select 2, "TC2_fnc_casOnResult", [_id, _newState, _results]] call TC2_fnc_netToUnit;
 if (!(_request select 14) && {!isNull (_request select 4)}) then {
     [_request select 4, "TC2_fnc_casOnResult", [_id, _newState, _results]] call TC2_fnc_netToUnit;

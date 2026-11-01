@@ -120,6 +120,18 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 **Sunucu ve tüm oyuncular aynı sürümü yüklemelidir.** Erişim kararı sunucuda verildiği için sunucuda `@TC2` yoksa terminal
 "SUNUCU YANIT VERMEDİ" zaman aşımı mesajı verir. `@TC2`, CBA ve ACE'den sonra gelmelidir. `@TAC` (a3ace3ex) ile birlikte kullanılabilir.
 
+## Saha Cihazı (laptop olmadan)
+
+Sahadaki birlikler (JTAC, gözlemci) formları ve mesajları **laptop olmadan** kullanır: ACE self menüsü ⇒ **TC2 Saha Cihazı** ⇒ terminalle **aynı pencere**
+(ANA mesajlaşma, HARİTA, CAS 9-Line; topçu CFF aynı pencereye eklenecek). Başlık `TC2 SAHA CİHAZI | SAHA <çağrı adı>`.
+
+| Konu | Kural |
+|------|-------|
+| Erişim | Terminalde olduğu gibi sunucu karar verir; farkı: **mesafe ve kimlik kartı aranmaz** (varsayılan). Yine geçerli: canlı/bilinçli, **aktif telsiz ve ağ kuralları**, rol (JTAC / gözlemci). |
+| Sıkılaştırma (CBA) | `Saha cihazı aktif`, `Saha cihazı da kimlik kartı istesin`, `Saha cihazı eşyası` (doluysa envanterde olmalı). |
+| Üs görünürlüğü | Sahadan gönderilen formlar (9-Line gönderildi, geri okuma sonucu, iptal) aynı ağdaki **terminal ve saha cihazı günlüklerine** `CAS #id …` bilgi satırı olarak düşer. |
+| Teknik | Saha modunda "terminal" olarak birimin kendisi verilir (`accessCheck`: `_terminal isEqualTo _unit`); diğer tüm katmanlar (ağ, COP, CAS) değişmeden çalışır. |
+
 ## Aşama 5 – Dijital 9-Line CAS
 
 **CAS** sekmesi tek ekranlı 9-Line formudur (JP 3-09.3, Figure V-14 sırası). JTAC doldurur, ağdaki pilota gönderir; pilot ACE self menüsünden

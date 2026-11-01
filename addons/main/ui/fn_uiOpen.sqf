@@ -70,7 +70,12 @@ if (!isNull findDisplay 92000) exitWith {};
     _header ctrlSetPosition [_left, _top, _w - _closeW, _headerH];
     _header ctrlSetBackgroundColor [0, 0.2, 0.05, 1];
     _header ctrlSetTextColor _green;
-    _header ctrlSetText format ["  TC2 KOMUTA TERMİNALİ   |   %1   |   %2", [_terminal] call TC2_fnc_terminalGetId, name _player];
+    _header ctrlSetText format [
+        "  %1   |   %2   |   %3",
+        ["TC2 KOMUTA TERMİNALİ", "TC2 SAHA CİHAZI"] select (_terminal isKindOf "CAManBase"),
+        [_terminal] call TC2_fnc_terminalGetId,
+        name _player
+    ];
     _header ctrlCommit 0;
 
     // Kapat düğmesi

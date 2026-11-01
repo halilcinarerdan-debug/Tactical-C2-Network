@@ -40,3 +40,23 @@ private _accessAction = [
 ] call ace_interact_menu_fnc_createAction;
 
 ["TC2_Terminal_F", 0, ["ACE_MainActions"], _accessAction] call ace_interact_menu_fnc_addActionToClass;
+
+// SAHA CİHAZI: laptop olmadan, ACE self menüsünden aynı pencereyi açar (terminal = birimin kendisi).
+// Ağ/rol kuralları aynı: telsiz, JTAC / gözlemci yetkisi sunucuda denetlenir. Koşul her karede çalışır -> yalnızca ucuz kontroller.
+private _fieldAction = [
+    "TC2_field_device",
+    "TC2 Saha Cihazı",
+    "\a3\ui_f\data\igui\cfg\simpletasks\types\radio_ca.paa",
+    {
+        params ["_target", "_player"];
+        [_player, _player] call TC2_fnc_accessRequest;
+    },
+    {
+        params ["_target", "_player"];
+        (missionNamespace getVariable ["TC2_field_enabled", true])
+        && {(missionNamespace getVariable ["TC2_access_pendingId", -1]) < 0}
+        && {isNull (findDisplay 92000)}
+    }
+] call ace_interact_menu_fnc_createAction;
+
+["CAManBase", 1, ["ACE_SelfActions"], _fieldAction, true] call ace_interact_menu_fnc_addActionToClass;

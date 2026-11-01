@@ -34,7 +34,11 @@ if (isNull _terminal || {isNull _player}) exitWith {};
 if ((missionNamespace getVariable ["TC2_access_pendingId", -1]) >= 0) exitWith {};
 
 // 1) Hızlı ön kontrol (yetki kararı DEĞİL)
-if !([_player] call TC2_fnc_accessHasCard) exitWith {
+// (Saha cihazı modunda terminal = birimin kendisi; kart yalnızca TC2_field_requireCard açıksa gerekir.)
+private _fieldMode = _terminal isEqualTo _player;
+private _needsCard = !_fieldMode || {missionNamespace getVariable ["TC2_field_requireCard", false]};
+
+if (_needsCard && {!([_player] call TC2_fnc_accessHasCard)}) exitWith {
     [["NO_CARD"] call TC2_fnc_accessReasonText, "error"] call TC2_fnc_notify;
 };
 
@@ -81,7 +85,7 @@ if (_authTime <= 0) then {
         [_terminal, _player, _reqId],
         _onFinish,
         _onFail,
-        "Kimlik doğrulanıyor...",
+        ["Kimlik doğrulanıyor...", "Saha cihazı bağlanıyor..."] select _fieldMode,
         {
             // Her karede çalışır: terminal hâlâ yakın mı?
             params ["_args"];

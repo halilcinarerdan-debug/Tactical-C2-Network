@@ -83,6 +83,14 @@ A ve B'yi tekrarla (simüle pilot Server Exec ile). Sunucu RPT'sinde `[TC2][CAS]
 [(allUnits select {!isPlayer _x}) select 0, objNull, [], [], ""] remoteExecCall ["TC2_fnc_casSend", 2];
 ```
 
+## F. Saha cihazı (laptop olmadan)
+
+1. Terminale **gitmeden**, ACE self menü ⇒ **TC2 Saha Cihazı** ⇒ ilerleme çubuğu (*Saha cihazı bağlanıyor...*) ⇒ pencere açılır. Başlık: `TC2 SAHA CİHAZI | SAHA <çağrı adı> | <adın>`.
+2. Kartın olmasa bile açılmalı (varsayılan). CBA ayarı `Saha cihazı da kimlik kartı istesin` AÇIK ve kart YOK ⇒ `ERİŞİM REDDEDİLDİ: Kimlik kartı`.
+3. CAS sekmesinden Bölüm A'daki gibi 9-Line gönder ⇒ aynı şekilde çalışır.
+4. Üs görünürlüğü: ikinci bir oturum (terminal) açıkken ANA günlüğünde mavi `CAS #1  JTAC … alıcı … TYPE 2 BOT` ve `CAS #1  geri okuma DOĞRU` satırları görünür.
+5. Pencere açıkken ölürsen/bayılırsan pencere kapanır (terminalle aynı).
+
 ## Beklenen sonuç özeti
 
 | Test | Beklenen |

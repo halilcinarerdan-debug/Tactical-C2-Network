@@ -48,4 +48,6 @@ if (!(_request select 14) && {!isNull (_request select 4)}) then {
     [_request select 4, "TC2_fnc_casOnResult", [_id, "ABORTED", _request select 8]] call TC2_fnc_netToUnit;
 };
 
+[netId _unit, format ["CAS #%1  İPTAL EDİLDİ (JTAC)", _id]] call TC2_fnc_netInfo;
+
 [_unit, "TC2_fnc_casOnAck", ["ABORTED", []]] call TC2_fnc_netToUnit;

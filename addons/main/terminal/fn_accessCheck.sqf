@@ -7,7 +7,7 @@
 
         1. parametreler geçerli mi                  -> BAD_PARAMS
         2. terminal sistemi açık mı (CBA ayarı)     -> DISABLED
-        3. obje gerçekten TC2 terminali mi          -> NOT_TERMINAL
+        3. obje gerçekten TC2 terminali mi          -> NOT_TERMINAL   (SAHA CİHAZI modunda bu adım yerine: FIELD_DISABLED)
         4. birim hayatta mı                         -> DEAD
         5. birim bilinçli mi (ACE/vanilla)          -> UNCONSCIOUS
         6. birim terminale yeterince yakın mı       -> TOO_FAR
@@ -31,11 +31,27 @@ if (isNull _terminal || {isNull _unit}) exitWith {[false, "BAD_PARAMS"]};
 
 if !(missionNamespace getVariable ["TC2_terminal_enabled", true]) exitWith {[false, "DISABLED"]};
 
-if !(_terminal isKindOf "TC2_Terminal_F") exitWith {[false, "NOT_TERMINAL"]};
+// SAHA CİHAZI modu: "terminal" olarak birimin KENDİSİ verilir (laptop gerekmez). Saha cihazında mesafe ve
+// (varsayılan olarak) kart kontrolü yoktur; telsiz ağı ve rol kontrolleri (JTAC / gözlemci) diğer katmanlarda sürer.
+// İsteğe bağlı sıkılaştırma (CBA): saha cihazı eşyası, kimlik kartı.
+private _fieldMode = _terminal isEqualTo _unit;
+
+if (_fieldMode && {!(missionNamespace getVariable ["TC2_field_enabled", true])}) exitWith {[false, "FIELD_DISABLED"]};
+if (!_fieldMode && {!(_terminal isKindOf "TC2_Terminal_F")}) exitWith {[false, "NOT_TERMINAL"]};
 
 if !(alive _unit) exitWith {[false, "DEAD"]};
 
 if ((_unit getVariable ["ACE_isUnconscious", false]) || {lifeState _unit == "INCAPACITATED"}) exitWith {[false, "UNCONSCIOUS"]};
+
+if (_fieldMode) exitWith {
+    private _device = missionNamespace getVariable ["TC2_field_deviceItem", ""];
+    private _owned = (items _unit + assignedItems _unit) apply {toLower _x};
+
+    if (!(_device isEqualTo "") && {!((toLower _device) in _owned)}) exitWith {[false, "NO_DEVICE"]};
+    if ((missionNamespace getVariable ["TC2_field_requireCard", false]) && {!([_unit] call TC2_fnc_accessHasCard)}) exitWith {[false, "NO_CARD"]};
+
+    [true, "OK"]
+};
 
 if ((_unit distance _terminal) > _maxDistance) exitWith {[false, "TOO_FAR"]};
 
