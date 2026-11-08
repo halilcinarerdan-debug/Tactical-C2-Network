@@ -73,13 +73,24 @@ private _onFinish = {
 };
 
 private _onFail = {
+    // ACE ilerleme çubuğu hata kodu: 1 çubuk kapandı (başka pencere), 2 birim değişti / öldü, 3 mesafe, 4 ACE etkileşim koşulu (ör. harita açık, Zeus)
+    params ["", "", "", ["_errorCode", -1]];
     missionNamespace setVariable ["TC2_access_pendingId", -1];
-    ["Kimlik doğrulama iptal edildi.", "info"] call TC2_fnc_notify;
+    diag_log format ["[TC2][ACCESS] istemci: ilerleme cubugu iptal | kod=%1", _errorCode];
+    [format ["Kimlik doğrulama iptal edildi (kod %1: %2).", _errorCode, switch (_errorCode) do {
+        case 1: {"başka bir pencere çubuğu kapattı"};
+        case 2: {"birim değişti / öldü"};
+        case 3: {"cihaz uzaklaştı"};
+        case 4: {"ACE etkileşim koşulu (harita açık / Zeus / bayılma)"};
+        default {"bilinmiyor"};
+    }], "info"] call TC2_fnc_notify;
 };
 
 private _authTime = missionNamespace getVariable ["TC2_access_authTime", 2];
 
-if (_authTime <= 0) then {
+// Araç / helikopter içinde ilerleme çubuğu ATLANIR: ACE çubuğu araç içindeyken ve diğer ACE etkileşim koşullarında beklenmedik şekilde iptal olabiliyor.
+// Yetki kararı zaten sunucudadır; çubuk yalnızca görsel bir bekleme süresidir.
+if (_authTime <= 0 || {!isNull objectParent _player}) then {
     [[_terminal, _player, _reqId]] call _onFinish;
 } else {
     [
