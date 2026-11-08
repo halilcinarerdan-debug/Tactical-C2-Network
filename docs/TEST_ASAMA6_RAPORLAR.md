@@ -114,6 +114,10 @@ Terminal ve pilot penceresi oyunun eşit genişlikli **EtelkaMonospacePro** yaz�
 Kontrol edin: (1) tüm sekmelerde yazılar okunaklı mı, (2) **Türkçe karakterler** (İ ı ş ğ ç ö ü) kare/boşluk çıkmadan görünüyor mu, (3) düğme/etiketler taşıyor mu (eşit genişlikli yazı daha geniştir; taşan yeri bildirin, boyut küçültülür).
 Karakterlerde sorun olursa ayarı kapatın; eski yazı tipine döner.
 
+## M. Araç / helikopter içinde saha cihazı
+
+Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE self menüsü (Sol Windows) ⇒ **TC2 Saha Cihazı** ⇒ "Saha cihazı bağlanıyor..." çubuğu tamamlanır ⇒ pencere açılır (ESC ya da KAPAT ile kapanır). Eskiden çubuk araç içinde hemen iptal oluyordu ("Kimlik doğrulama iptal edildi"). Hava aracı mürettebatı tablet taşımadan da açabilir; yer araçlarında tablet şartı sürer. Pencere modal olduğu için açıkken uçuş/sürüş tuşları pencereye gider; sürerken değil yolcu iken ya da sakin uçuşta kullanın.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

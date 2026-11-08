@@ -13,6 +13,8 @@
       6. accessResult  <------------------     5. sonucu istemciye gönder
          onay -> terminalOpen, ret -> hata mesajı
 
+    Araç / helikopter içinde de çalışır: ilerleme çubuğuna ACE "araç içinde değil" koşulu muafiyeti verilir (aksi halde çubuk hemen iptal olurdu).
+
     Ön kontrol yetki değildir, yalnızca kolaylıktır. Asıl karar adım 4'te, sunucuda verilir.
 
     Talep numarası (reqId): aynı anda tek talep (TC2_access_pendingId). Yanıt eşleşmezse (eski talep /
@@ -91,6 +93,9 @@ if (_authTime <= 0) then {
             params ["_args"];
             _args params ["_terminal", "_player"];
             !isNull _terminal && {(_player distance _terminal) < 4}
-        }
+        },
+        // ACE ilerleme çubuğu, varsayılan olarak araç içindeyken (isNotInside) hemen iptal olur. Saha cihazı araç / helikopter içinde de
+        // kullanılabilmeli; bu yüzden "araç içinde değil" koşulu ve benzer duruş koşulları bu çubuk için yok sayılır.
+        ["isNotInside", "isNotSitting", "isNotSwimming", "isNotOnLadder", "isNotRefueling"]
     ] call ace_common_fnc_progressBar;
 };
