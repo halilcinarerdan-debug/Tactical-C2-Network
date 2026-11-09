@@ -138,16 +138,18 @@ def tablet_tex():
     for (dx, wd, yy, hh) in [(0.0, 0.05, -0.0495, 0.0105), (0.062, 0.026, -0.048, 0.009), (0.098, 0.04, -0.048, 0.009)]:
         o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, hh, (0.045, 0.055, 0.035))
         o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, 0.0012, (0.5, 0.56, 0.45, 0.3))
+    # ARKA ZEMİN: parçalar arasındaki piksel dikişlerinde ve ekran kenarında oyun arka planı (beyaz/parlak) görünmesin
+    o.rect("_left - 0.04", "_top - 0.03", "_w + 0.08", "_h + 0.06", (0.02, 0.02, 0.02))
     cs, csv = "0.082", "0.082 * _ratio"
     x0, y0 = "_left - 0.058", "_top - 0.042"
     o.pic(TEXDIR + "tab_tl_ca.paa", x0, y0, cs, csv)
     o.pic(TEXDIR + "tab_tr_ca.paa", "_left + _w + 0.058 - 0.082", y0, cs, csv)
     o.pic(TEXDIR + "tab_bl_ca.paa", x0, "_top + _h + 0.042 - 0.082 * _ratio", cs, csv)
     o.pic(TEXDIR + "tab_br_ca.paa", "_left + _w + 0.058 - 0.082", "_top + _h + 0.042 - 0.082 * _ratio", cs, csv)
-    o.pic(TEXDIR + "tab_top_ca.paa", "_left - 0.058 + 0.082", y0, "_w + 0.116 - 0.164", 0.042)
-    o.pic(TEXDIR + "tab_bottom_ca.paa", "_left - 0.058 + 0.082", "_top + _h", "_w + 0.116 - 0.164", 0.042)
-    o.pic(TEXDIR + "tab_left_ca.paa", x0, "_top - 0.042 + 0.082 * _ratio", 0.058, "_h + 0.084 - 0.164 * _ratio")
-    o.pic(TEXDIR + "tab_right_ca.paa", "_left + _w", "_top - 0.042 + 0.082 * _ratio", 0.058, "_h + 0.084 - 0.164 * _ratio")
+    o.pic(TEXDIR + "tab_top_ca.paa", "_left - 0.058 + 0.0805", y0, "_w + 0.116 - 0.161", 0.042)
+    o.pic(TEXDIR + "tab_bottom_ca.paa", "_left - 0.058 + 0.0805", "_top + _h", "_w + 0.116 - 0.161", 0.042)
+    o.pic(TEXDIR + "tab_left_ca.paa", x0, "_top - 0.042 + 0.0805 * _ratio", 0.058, "_h + 0.084 - 0.161 * _ratio")
+    o.pic(TEXDIR + "tab_right_ca.paa", "_left + _w", "_top - 0.042 + 0.0805 * _ratio", 0.058, "_h + 0.084 - 0.161 * _ratio")
     # tutma nervurleri (ust bant)
     for k in range(5):
         y = "_top - 0.0385 + %s" % S(k * 0.0042)
@@ -238,7 +240,7 @@ ratio = (H / W) * (PXW / PXH)
 def ev(e, env):
     return float(e) if not isinstance(e, str) else eval(e, {}, env)
 
-def render(o, mode, out):
+def render(o, mode, out, mask_prefix=None):
     img = Image.new("RGB", (PXW, PXH))
     d = ImageDraw.Draw(img, "RGBA")
     for yy in range(PXH):
@@ -279,7 +281,6 @@ def render(o, mode, out):
             x, y, s = [ev(v, env) for v in op[1:4]]
             d.ellipse([x * sx, y * sy, (x + s) * sx, (y + s * ratio) * sy], fill=col(op[4]))
         elif k == "pic":
-            import os
             name = op[1].split("\\")[-1].replace(".paa", ".png")
             x, y, pw_, ph_ = [ev(v, env) for v in op[2:6]]
             im = Image.open(os.path.join(TEXPNG, name)).convert("RGBA").resize((max(1, int(round(pw_ * sx))), max(1, int(round(ph_ * sy)))), Image.LANCZOS)
@@ -318,21 +319,27 @@ def render(o, mode, out):
     d.text(((mx + 0.01) * sx, (my + mh - 0.034) * sy), "  0245 0571   YUK 12 m   842 m   047° / 0835 mil", fill=col((0.7, 1, 0.75)), font=f_small)
     rect(left, top + h - 0.04, w, 0.04, (0, 0.12, 0.03))
     d.text(((left + 0.01) * sx, (top + h - 0.03) * sy), "ESC = kapat", fill=col((0.12, 0.6, 0.2)), font=f)
-    # ekran kose maskeleri
-    cc = (0.015, 0.015, 0.015) if field else (0.01, 0.03, 0.015)
-    r = 0.014; rv = r * ratio; n = 5; sh = rv / n
-    for kk in range(n):
-        t = (n - kk - 0.5) / n; inset = r * (1 - math.sqrt(1 - t * t))
-        for (px, py, pw) in [(left, top + kk * sh, inset), (left + w - inset, top + kk * sh, inset), (left, top + h - (kk + 1) * sh, inset), (left + w - inset, top + h - (kk + 1) * sh, inset)]:
-            rect(px, py, pw, sh + 0.0012, cc)
+    # ekran kose maskeleri: dokulu modda gercek kenar yumusatmali .png maskeler, yedekte seritler
+    r = 0.014; rv = r * ratio
+    if mask_prefix:
+        for kk, (px, py) in {"tl": (left, top), "tr": (left + w - r, top), "bl": (left, top + h - rv), "br": (left + w - r, top + h - rv)}.items():
+            im = Image.open(os.path.join(TEXPNG, "%s_scr_%s_ca.png" % (mask_prefix, kk))).convert("RGBA").resize((max(1, int(round(r * sx))), max(1, int(round(rv * sy)))), Image.LANCZOS)
+            img.paste(im, (int(round(px * sx)), int(round(py * sy))), im)
+    else:
+        cc = (0.015, 0.015, 0.015) if field else (0.01, 0.03, 0.015)
+        n = 5; sh = rv / n
+        for kk in range(n):
+            t = (n - kk - 0.5) / n; inset = r * (1 - math.sqrt(1 - t * t))
+            for (px, py, pw) in [(left, top + kk * sh, inset), (left + w - inset, top + kk * sh, inset), (left, top + h - (kk + 1) * sh, inset), (left + w - inset, top + h - (kk + 1) * sh, inset)]:
+                rect(px, py, pw, sh + 0.0012, cc)
     img.save(out)
 
 if __name__ == "__main__":
     t, dsk = tablet(), desk()
     tt = tablet_tex()
-    render(tt, "FIELD", "tablet_cercevesi_onizleme.png")
+    render(tt, "FIELD", "tablet_cercevesi_onizleme.png", "tab")
     render(t, "FIELD", "tablet_cercevesi_prosedurel_onizleme.png")
-    render(dsk, "DESK", "pc_cercevesi_onizleme.png")
+    render(dsk, "DESK", "pc_cercevesi_onizleme.png", "desk")
     open("frame_field.sqf.txt", "w").write(sqf(t))
     open("frame_field_tex.sqf.txt", "w").write(sqf(tt))
     open("frame_desk.sqf.txt", "w").write(sqf(dsk))

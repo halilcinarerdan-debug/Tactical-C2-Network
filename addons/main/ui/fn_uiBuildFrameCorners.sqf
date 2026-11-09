@@ -2,7 +2,7 @@
     Fonksiyon: TC2_fnc_uiBuildFrameCorners
     Çalışma yeri: İstemci (uiOpen çağırır, TÜM içerik kurulduktan sonra: kontroller sırayla üst üste çizilir)
 
-    Ekranın dört köşesini çerçeve renginde ince şeritlerle kaplar; böylece ekran içeriği de yuvarlak köşeli görünür
+    Ekranın dört köşesini çerçeve renginde kaplar (gerçek kenar yumuşatmalı .paa maskeler; yedek: ince şeritler); böylece ekran içeriği de yuvarlak köşeli görünür
     (uiBuildFrame yalnızca çerçevenin dışını yuvarlar). Yarıçap küçüktür (0.014); köşedeki birkaç piksel içerik kapanır.
     Köşe renkleri uiBuildFrame'deki ekran kenarıyla aynıdır (masa başı: koyu yeşilimsi girinti, saha: siyah kenar).
     IDC: 93900-93999
@@ -17,29 +17,50 @@ if (isNull _display) exitWith {};
 (missionNamespace getVariable ["TC2_ui_frame", []]) params [["_mode", ""], ["_left", 0], ["_top", 0], ["_w", 0], ["_h", 0]];
 if (_mode isEqualTo "") exitWith {};
 
-private _color = if (_mode isEqualTo "DESK") then {[0.01, 0.03, 0.015, 1]} else {[0.015, 0.015, 0.015, 1]};
 private _ratio = (safeZoneH / safeZoneW) * (getResolution select 4);
 private _r = 0.014;
 private _rv = _r * _ratio;
-private _steps = 5;
-private _stripH = _rv / _steps;
 private _idc = 93900;
 
-for "_k" from 0 to (_steps - 1) do {
-    // üst: şerit k'nın dışta kalan (maskelenecek) yatay payı = girinti
-    private _t = (_steps - _k - 0.5) / _steps;
-    private _inset = _r * (1 - sqrt (1 - _t * _t));
+// Gerçek kenar yumuşatmalı maske dokuları varsa (CBA TC2_ui_frameTex + dosyalar): 4 küçük .paa parça; yoksa ince şeritlerle yedek.
+private _prefix = ["desk", "tab"] select (_mode isEqualTo "FIELD");
+private _useTex = (missionNamespace getVariable ["TC2_ui_frameTex", true]) && {fileExists format ["\z\tc2\addons\main\data\%1_scr_tl_ca.paa", _prefix]};
+
+if (_useTex) then {
     {
-        _x params ["_px", "_py", "_pw"];
-        private _control = _display ctrlCreate ["RscText", _idc];
+        _x params ["_name", "_px", "_py"];
+        private _control = _display ctrlCreate ["RscPicture", _idc];
         _idc = _idc + 1;
-        _control ctrlSetPosition [_px, _py, _pw, _stripH + 0.0012];
-        _control ctrlSetBackgroundColor _color;
+        _control ctrlSetText format ["\z\tc2\addons\main\data\%1_scr_%2_ca.paa", _prefix, _name];
+        _control ctrlSetPosition [_px, _py, _r, _rv];
         _control ctrlCommit 0;
     } forEach [
-        [_left, _top + _k * _stripH, _inset],
-        [_left + _w - _inset, _top + _k * _stripH, _inset],
-        [_left, _top + _h - (_k + 1) * _stripH, _inset],
-        [_left + _w - _inset, _top + _h - (_k + 1) * _stripH, _inset]
+        ["tl", _left, _top],
+        ["tr", _left + _w - _r, _top],
+        ["bl", _left, _top + _h - _rv],
+        ["br", _left + _w - _r, _top + _h - _rv]
     ];
+} else {
+    private _color = if (_mode isEqualTo "DESK") then {[0.01, 0.03, 0.015, 1]} else {[0.015, 0.015, 0.015, 1]};
+    private _steps = 5;
+    private _stripH = _rv / _steps;
+
+    for "_k" from 0 to (_steps - 1) do {
+        // şerit k'nın dışta kalan (maskelenecek) yatay payı = girinti
+        private _t = (_steps - _k - 0.5) / _steps;
+        private _inset = _r * (1 - sqrt (1 - _t * _t));
+        {
+            _x params ["_px", "_py", "_pw"];
+            private _control = _display ctrlCreate ["RscText", _idc];
+            _idc = _idc + 1;
+            _control ctrlSetPosition [_px, _py, _pw, _stripH + 0.0012];
+            _control ctrlSetBackgroundColor _color;
+            _control ctrlCommit 0;
+        } forEach [
+            [_left, _top + _k * _stripH, _inset],
+            [_left + _w - _inset, _top + _k * _stripH, _inset],
+            [_left, _top + _h - (_k + 1) * _stripH, _inset],
+            [_left + _w - _inset, _top + _h - (_k + 1) * _stripH, _inset]
+        ];
+    };
 };

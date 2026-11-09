@@ -57,9 +57,9 @@ def noise(s):
     return n / (n.std() + 1e-6)
 grain = noise(0.9) * 0.6 + noise(1.8) * 0.4 + noise(5.0) * 0.12
 H_feat = blur(bump, 2.5) * 6.0 + blur(lip * (1 - bez), 1.6) * 4.0 - blur(bez, 2.0) * 5.0
-hmap = grain * 0.35 + H_feat
+hmap = grain * 0.16 + H_feat
 gy, gx = np.gradient(hmap)
-shade = 0.7 + (-gx * 0.5 - gy * 0.7) * 0.5
+shade = 0.74 + (-gx * 0.5 - gy * 0.7) * 0.42
 shade = np.clip(shade, 0.25, 1.45)
 
 def col(c): return np.array(c, np.float32).reshape(1, 1, 3)
@@ -70,29 +70,29 @@ alb = alb * (1 - lipm) + col((0.15, 0.18, 0.12)) * lipm
 bezm = bez[..., None]
 alb = alb * (1 - bezm) + col((0.012, 0.012, 0.012)) * bezm
 # cok yumusak renk degisimi (tek olcek, dusuk genlik)
-mott = noise(26.0)
-alb = alb * (1 + 0.07 * mott[..., None])
+mott = noise(40.0)
+alb = alb * (1 + 0.022 * mott[..., None])
 img = alb * shade[..., None]
 
 # toz: yalnizca YUKARI bakan yuzeylerde ince, duzgun film (isik alan kabartmalarda hafif acilma) + alta dogru hafif koyulasma
 up = np.clip(-gy * 0.9, 0, 1)
-img += (up * 0.5)[..., None] * col((0.5, 0.45, 0.34)) * 0.22
-img += 0.022 * col((0.6, 0.54, 0.42))
+img += (up * 0.5)[..., None] * col((0.5, 0.45, 0.34)) * 0.12
+img += 0.012 * col((0.6, 0.54, 0.42))
 yy = np.linspace(0, 1, PH, dtype=np.float32).reshape(-1, 1)
-img *= (1 - 0.14 * (yy ** 2))[..., None]
+img *= (1 - 0.08 * (yy ** 2))[..., None]
 # ortam golgelemesi: kabartma diplerinde hafif kir
 ao = np.clip(blur(hmap, 5) - hmap, 0, None)
-img *= (1 - np.clip(ao * 0.06, 0, 0.25))[..., None]
+img *= (1 - np.clip(ao * 0.035, 0, 0.15))[..., None]
 # kenar asinmasi: YALNIZ kose koruyucularin dis kenarinda, yumusak
 dist = blur(case, 2.5)
 rim = np.clip((0.9 - dist) / 0.4, 0, 1) * case * bump
 wn = noise(3.0)
 wear = np.clip(rim * (0.5 + 0.5 * wn), 0, 1)
-img = img * (1 - 0.3 * wear[..., None]) + col((0.4, 0.44, 0.35)) * 0.3 * wear[..., None]
+img = img * (1 - 0.18 * wear[..., None]) + col((0.4, 0.44, 0.35)) * 0.18 * wear[..., None]
 # birkac ince, silik cizik (yalnizca kose koruyucu bolgelerinde)
 sc = Image.new("L", (PW, PH), 0)
 d = ImageDraw.Draw(sc)
-for i in range(14):
+for i in range(6):
     cx_, cy_ = (rng.integers(0, int(bs)) if rng.random() < 0.5 else rng.integers(PW - int(bs), PW)), (rng.integers(0, int(bsv)) if rng.random() < 0.5 else rng.integers(PH - int(bsv), PH))
     L = int(rng.choice([18, 30, 46]) * SS / 1.6)
     if rng.random() < 0.5:
@@ -100,7 +100,7 @@ for i in range(14):
     else:
         d.line([cx_, cy_, cx_ + int(rng.integers(-1, 2)), cy_ + L], fill=int(rng.choice([40, 70])), width=1)
 scn = blur(np.asarray(sc, np.float32) / 255.0, 0.6)
-img = img + scn[..., None] * col((0.5, 0.53, 0.46)) * 0.5
+img = img + scn[..., None] * col((0.5, 0.53, 0.46)) * 0.3
 
 img = np.clip(img, 0, 1)
 alpha = np.where(screen > 0, 0, case)   # ekran bolgesi seffaf (icerik zaten ustunde)
@@ -124,3 +124,20 @@ pieces = {
 for k, (im, size) in pieces.items():
     im.resize(size, Image.LANCZOS).save(os.path.join(OUT, "tab_%s_ca.png" % k))
 print("pieces", {k: v[0].size for k, v in pieces.items()})
+
+
+# ---- ekran kose maskeleri (kare kare basamak yerine gercek kenar yumusatmali) ----
+def scr_mask(corner, color, n=64, ss=4):
+    big = n * ss
+    yy, xx = np.mgrid[0:big, 0:big].astype(np.float32)
+    cx = big if corner in ("tl", "bl") else 0
+    cy = big if corner in ("tl", "tr") else 0
+    dist = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+    a = (dist > big).astype(np.float32)                       # yaricap = parca boyutu
+    a = a.reshape(n, ss, n, ss).mean(axis=(1, 3))
+    rgb = np.ones((n, n, 3), np.float32) * np.array(color, np.float32)
+    return Image.fromarray((np.dstack([rgb, a]) * 255 + 0.5).astype(np.uint8), "RGBA")
+for k in ("tl", "tr", "bl", "br"):
+    scr_mask(k, (0.015, 0.015, 0.015)).save(os.path.join(OUT, "tab_scr_%s_ca.png" % k))
+    scr_mask(k, (0.01, 0.03, 0.015)).save(os.path.join(OUT, "desk_scr_%s_ca.png" % k))
+print("maskeler tamam")
