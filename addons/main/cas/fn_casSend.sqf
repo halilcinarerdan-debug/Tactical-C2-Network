@@ -67,6 +67,31 @@ if !(_validation select 0) exitWith {
     [_unit, "TC2_fnc_casOnAck", ["INVALID", _validation select 1]] call TC2_fnc_netToUnit;
 };
 
+// Ateş destek koordinasyon ölçüleri (NFA / RFA) ve dost yakınlığı (danger close): hedef konumuna göre SUNUCU denetler.
+private _targetPos = _data select 8;
+private _zone = [_targetPos] call TC2_fnc_fscmCheck;
+if ((_zone select 0) isEqualTo "NFA") exitWith {
+    diag_log format ["[TC2][CAS] RED NFA hedef=%1 alan=%2 jtac=%3", _targetPos, _zone select 1, name _unit];
+    [_unit, "TC2_fnc_casOnAck", ["NFA", []]] call TC2_fnc_netToUnit;
+};
+
+private _near = [_targetPos, side (group _unit)] call TC2_fnc_artyNearestFriendly;
+private _closeLimit = missionNamespace getVariable ["TC2_cas_dangerClose", 600];
+private _warnings = [];
+private _rejected = false;
+if ((_near select 0) <= _closeLimit) then {
+    // Sistem, hedefe yakın dost buldu: JTAC danger close'u komutan baş harfleriyle (satır 17) bildirmeli.
+    if ((_data select 17) isEqualTo "") then {
+        [_unit, "TC2_fnc_casOnAck", ["DANGER_CLOSE", [round (_near select 0), _near select 1]]] call TC2_fnc_netToUnit;
+        _rejected = true;
+    } else {
+        _warnings pushBack format ["DANGER CLOSE: dost %1 %2 m", _near select 1, round (_near select 0)];
+    };
+};
+if (_rejected) exitWith {};
+if ((_zone select 0) isEqualTo "RFA") then {_warnings pushBack ("RFA: " + (_zone select 1))};
+private _warning = _warnings joinString "  ";
+
 _entry set [8, _now];
 
 // Bu JTAC'ın eski etkin talebini iptal et (tek etkin talep kuralı).
@@ -101,7 +126,7 @@ diag_log format ["[TC2][CAS] GONDERILDI id=%1 | type=%2 %3 | jtac=%4 | alici=%5 
 [_unit, "TC2_fnc_casOnAck", ["SENT", [_id, _pilotLabel]]] call TC2_fnc_netToUnit;
 
 // Üs bilgisi: ağdaki terminaller / saha cihazları bu 9-Line'ın gönderildiğini günlüklerinde görür.
-[_jtacNet, format ["CAS #%1  JTAC %2  alıcı %3  TYPE %4 %5", _id, _jtacCallsign, _pilotCallsign, _data select 0, _data select 1]] call TC2_fnc_netInfo;
+[_jtacNet, format ["CAS #%1  JTAC %2  alıcı %3  TYPE %4 %5%6", _id, _jtacCallsign, _pilotCallsign, _data select 0, _data select 1, ["", "  | " + _warning] select !(_warning isEqualTo "")]] call TC2_fnc_netInfo;
 
 if (_sim) then {
     // Simüle pilot: 3 sn sonra geri okur (doğru ya da bilerek yanlış).
@@ -120,5 +145,5 @@ if (_sim) then {
         ]] call TC2_fnc_casApplyReadback;
     }, [_id], 3] call CBA_fnc_waitAndExecute;
 } else {
-    [_pilotUnit, "TC2_fnc_casOnIncoming", [_id, _jtacCallsign, _pilotCallsign, _data, _platform, "SENT", []]] call TC2_fnc_netToUnit;
+    [_pilotUnit, "TC2_fnc_casOnIncoming", [_id, _jtacCallsign, _pilotCallsign, _data, _platform, "SENT", [], _warning]] call TC2_fnc_netToUnit;
 };

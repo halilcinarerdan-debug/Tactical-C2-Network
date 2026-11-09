@@ -33,6 +33,15 @@
 ] call CBA_settings_fnc_init;
 
 [
+    "TC2_cas_dangerClose",
+    "SLIDER",
+    ["CAS danger close mesafesi (m)", "Hedefin bu mesafe içinde dost birim varsa (sistem COP verisinden hesaplar) 9-Line satır 17'ye komutan baş harfleri yazılmadıkça CAS talebi reddedilir; yazılmışsa pilota uyarı gider. Topçu için sabit 600 m (ATP 3-09.30)."],
+    ["Tactical C2 Network", "Joint Fires (9-Line CAS)"],
+    [100, 1000, 600, 0],
+    true
+] call CBA_settings_fnc_init;
+
+[
     "TC2_cas_allowSelf",
     "CHECKBOX",
     ["TEST: 9-Line'ı kendine gönderebil", "Yalnızca TEST içindir. Açıksa JTAC, 9-Line'ı kendi kendine 'pilot' olarak gönderebilir (tek başına test). Gerçek oyunda KAPALI olmalı."],

@@ -23,6 +23,7 @@ private _text = switch (_code) do {
     case "EOM":          {"Görev sona erdi."};
     case "INVALID":      {format ["FORM GEÇERSİZ (%1 hata): %2", count _extra, _first]};
     case "NOT_OBSERVER": {"Gözlemci (FO/JFO) yetkiniz yok."};
+    case "NFA":          {"Hedef ATEŞ YASAK ALANI (NFA) içinde: CFF reddedildi."};
     case "NOT_FDC":      {"FDC operatörü yetkiniz yok."};
     case "NO_FDC":       {"Alıcı FDC ağda/menzilde değil."};
     case "NO_POS":       {"Hedef konumu çözülemedi (bilinen nokta yok/görünmüyor)."};

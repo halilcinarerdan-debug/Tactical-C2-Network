@@ -41,6 +41,7 @@ if (!(_state isEqualTo _lastState) || {(diag_tickTime - _lastReport) > 5}) then 
 
 call TC2_fnc_netUiUpdate;
 call TC2_fnc_uiStatusText;
+call TC2_fnc_uiNightDim;
 
 // HARİTA sekmesi açıksa veriyi 5 sn'de bir yenile (Aşama 4).
 private _tick = (missionNamespace getVariable ["TC2_ui_tick", 0]) + 1;

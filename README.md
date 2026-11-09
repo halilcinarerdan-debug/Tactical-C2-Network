@@ -20,7 +20,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 6b | **Raporlar** (SALUTE / SITREP / LACE) + WARNO; kart seviyeleri (Kırmızı/Mavi/Altın), CO/S2/S4 rolleri, saha tableti, izleme modu, haritada LACE | ✅ hazır (test bekliyor) |
 | 6b+ | **9-Line MEDEVAC** (CASEVAC): 9 satır form, helikopter mürettebatına talep, kabul + ETA, iptal | ✅ hazır (test bekliyor) |
 | 6c | INTSUM + lojistik talepleri (S4) | ⏳ |
-| 7 | **Askeri teknoloji uyum katmanı** (lazer işaretleme, helikopter pilot yardımcısı, ... ) | 📝 plan: [`docs/ENTEGRASYON_KATMANI.md`](docs/ENTEGRASYON_KATMANI.md) |
+| 7 | **Askeri teknoloji uyum katmanı (sade)**: CAS/CFF/MEDEVAC noktaları haritada (pilot yardımcısı), CAS danger close, NFA/RFA alanları, gece modu | ✅ hazır (test bekliyor): [`docs/ENTEGRASYON_KATMANI.md`](docs/ENTEGRASYON_KATMANI.md) |
 
 ## Depo yapısı
 

@@ -33,7 +33,23 @@ private _font = ["PuristaMedium", "EtelkaMonospacePro"] select (missionNamespace
     };
 } forEach (missionNamespace getVariable ["TC2_cop_gameMarkers", []]);
 
-(missionNamespace getVariable ["TC2_cop_data", [[], [], []]]) params ["_friends", "_markers", ["_unverified", []]];
+(missionNamespace getVariable ["TC2_cop_data", [[], [], []]]) params ["_friends", "_markers", ["_unverified", []], ["_ops", []]];
+
+// Aktif operasyon noktaları (CAS hedefi / CFF hedefi / MEDEVAC alım yeri): oyunun askeri ve NATO simgeleriyle
+{
+    _x params ["_kind", "_id", "_pos", "_label"];
+    private _icon = switch (_kind) do {
+        case "CAS": {"\A3\ui_f\data\map\markers\military\destroy_CA.paa"};
+        case "CFF": {"\A3\ui_f\data\map\markers\military\objective_CA.paa"};
+        default {"\A3\ui_f\data\map\markers\nato\b_med.paa"};
+    };
+    private _color = switch (_kind) do {
+        case "CAS": {[1, 0.5, 0.1, 1]};
+        case "CFF": {[1, 0.85, 0.2, 1]};
+        default {[0.3, 1, 0.5, 1]};
+    };
+    _map drawIcon [_icon, _color, _pos, 24, 24, 0, _label, 1, 0.045, _font, "right"];
+} forEach _ops;
 
 // Ok mesafesi: ekranda yaklaşık 0.035 birim (harita ölçeğinden metreye çevrilir; kare başına tek hesap).
 private _arrowReach = (_map ctrlMapScreenToWorld [0.5, 0.5]) distance2D (_map ctrlMapScreenToWorld [0.535, 0.5]);

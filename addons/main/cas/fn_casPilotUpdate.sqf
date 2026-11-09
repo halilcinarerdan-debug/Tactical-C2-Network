@@ -15,12 +15,14 @@ if (isNull _display) exitWith {};
 private _incoming = missionNamespace getVariable ["TC2_cas_incoming", []];
 if (_incoming isEqualTo []) exitWith {};
 
-_incoming params ["_id", "_jtac", "_pilot", "_data", "_platform", "_state", "_results"];
+_incoming params ["_id", "_jtac", "_pilot", "_data", "_platform", "_state", "_results", ["_warning", ""]];
 
 (_display displayCtrl 92102) ctrlSetText format ["  CAS 9-LINE  #%1  |  %2", _id, _jtac select [0, 26 min count _jtac]];
 
 private _dim = "#1f9930";
-private _text = format ["<t color='#ffffff'>%1, bu %2, TYPE %3 kontrol, %4.</t><br/><br/>", _pilot, _jtac, _data select 0, _data select 1];
+private _text = format ["<t color='#ffffff'>%1, bu %2, TYPE %3 kontrol, %4.</t><br/>", _pilot, _jtac, _data select 0, _data select 1];
+if !(_warning isEqualTo "") then {_text = _text + format ["<t color='#ff6a33'>%1</t><br/>", _warning]};
+_text = _text + "<br/>";
 
 {
     _x params ["_label", "_value"];

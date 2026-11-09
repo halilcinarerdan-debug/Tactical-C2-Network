@@ -134,6 +134,13 @@ Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE se
 * Üretim: `tools/gen_desk_textures.py`.
 * **Önizleme:** `docs/onizleme/` (oyun görüntüsü değil; `gen_frame.py` önizlemeyi ve SQF gövdesini üretir).
 
+## O. Uyum katmanı (sade)
+
+1. **Haritada operasyon noktaları:** CAS 9-Line gönderin (JTAC ⇒ simüle pilot, bkz. Aşama 5 testi) ⇒ HARİTA'da hedef konumunda turuncu simge `CAS #1  LASER 1688`/`LAZER 1688`; CFF gönderin ⇒ sarı `CFF #n`; MEDEVAC gönderin ⇒ yeşil `MEDEVAC #n`. Talep iptal / bitince (CAS `ABORTED`, CFF `EOM`/`CANCELLED`, MEDEVAC iptal) kalkar. Level 1 ve izleme modunda görünmez. Helikopterde saha cihazını açın: aynı noktalar görünür (pilot yardımcısı).
+2. **CAS danger close:** hedefi, yakınınızdaki bir dost oyuncuya/lidere ≤ 600 m koyun, satır 17'yi boş bırakın ⇒ *"DANGER CLOSE: hedefe dost N m (...). Satır 17'ye komutan baş harflerini yazın."* (talep reddedilir). Baş harfleri yazın ⇒ gönderilir, pilota kırmızı bildirim `DANGER CLOSE: dost ...`. Eşik: CBA `Joint Fires ▸ CAS danger close mesafesi`. **Not:** önceki CAS testlerinde hedef sizin yakınınızdaysa artık bu kuralı görürsünüz; uzağa koyun ya da baş harf girin.
+3. **NFA / RFA:** Eden'de (ya da Zeus ile) bir **dikdörtgen/elips alan işareti** oluşturun, adı `TC2_NFA_1` (yasak) ya da `TC2_RFA_1` (kısıtlı). HARİTA'da KATMAN açıkken görünür. NFA içine CAS ⇒ *"Hedef ATEŞ YASAK ALANI (NFA) içinde: talep reddedildi."*, CFF ⇒ *"...CFF reddedildi."*; RPT'de `[TC2][CAS]/[TC2][TOPCU] RED NFA`. RFA içine ⇒ gönderilir, ağ günlüğünde `RFA` uyarısı.
+4. **Gece modu:** geceye alın (`skipTime`) ya da NVG takın, terminali açın ⇒ ekran kısılır; gündüz normal. CBA `Arayüz ▸ gece modu` ile kapatılır.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

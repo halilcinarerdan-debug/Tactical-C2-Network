@@ -71,6 +71,13 @@ if (_position isEqualTo []) exitWith {
     [_unit, "TC2_fnc_artyOnAck", ["NO_POS", []]] call TC2_fnc_netToUnit;
 };
 
+// Ateş yasak alanı (NFA) denetimi; kısıtlı ateş alanı (RFA) yalnızca uyarı verir.
+private _zone = [_position] call TC2_fnc_fscmCheck;
+if ((_zone select 0) isEqualTo "NFA") exitWith {
+    diag_log format ["[TC2][TOPCU] RED NFA hedef=%1 alan=%2 gozlemci=%3", _position, _zone select 1, name _unit];
+    [_unit, "TC2_fnc_artyOnAck", ["NFA", []]] call TC2_fnc_netToUnit;
+};
+
 // DANGER CLOSE denetimi (600 m)
 private _near = [_position, side (group _unit)] call TC2_fnc_artyNearestFriendly;
 if ((_near select 0) <= 600 && {!(_data select 8)}) exitWith {
@@ -119,4 +126,4 @@ private _typeText = switch (_data select 0) do {
 
 [_unit, "TC2_fnc_artyOnAck", ["SENT", [_id, _fdcLabel]]] call TC2_fnc_netToUnit;
 
-[_observerNet, format ["TOPÇU #%1  gözlemci %2  FDC %3  %4", _id, _observerCallsign, _fdcLabel, _typeText]] call TC2_fnc_netInfo;
+[_observerNet, format ["TOPÇU #%1  gözlemci %2  FDC %3  %4%5", _id, _observerCallsign, _fdcLabel, _typeText, ["", "  | UYARI: hedef RFA içinde (" + (_zone select 1) + ")"] select ((_zone select 0) isEqualTo "RFA")]] call TC2_fnc_netInfo;

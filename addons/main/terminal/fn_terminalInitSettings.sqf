@@ -98,3 +98,12 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
     true,
     false
 ] call CBA_settings_fnc_init;
+
+[
+    "TC2_ui_nightDim",
+    "CHECKBOX",
+    ["Arayüz: gece modu (otomatik kısma)", "Açıksa gece ya da gece görüş (NVG / termal) açıkken terminal ekranı otomatik kısılır; gündüz normal parlaklıktır."],
+    ["Tactical C2 Network", "Arayüz"],
+    true,
+    false
+] call CBA_settings_fnc_init;

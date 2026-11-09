@@ -9,13 +9,14 @@
         1: dostlar <ARRAY>   [[konum ASL, etiket, lider mi, lace, bakış yönü]]  (önbelleğe lace özet durumu eklenir)
         2: işaretler <ARRAY> [[id, tür, konum ASL, koyan, yaş sn]]
         3: doğrulanmamış SALUTE <ARRAY> [[rapor id, konum ASL, yaş sn, çağrı adı]]  (Level 2+)
+        4: aktif operasyon noktaları <ARRAY> [[tür "CAS"|"CFF"|"MED", id, konum ASL, etiket, yaş sn]]  (Level 2+)
 
     Dönüş: yok
 */
 
 if (!hasInterface) exitWith {};
 
-params [["_code", "", [""]], ["_friends", [], [[]]], ["_markers", [], [[]]], ["_unverified", [], [[]]]];
+params [["_code", "", [""]], ["_friends", [], [[]]], ["_markers", [], [[]]], ["_unverified", [], [[]]], ["_ops", [], [[]]]];
 
 // Dostlara LACE özet durumu eklenir (5. öğe); çizim her karede yeniden hesaplamasın diye burada bir kez.
 _friends = _friends apply {
@@ -23,7 +24,7 @@ _friends = _friends apply {
     [_pos, _label, _leader, _lace, [_lace] call TC2_fnc_rptLaceStatus, _heading]
 };
 
-missionNamespace setVariable ["TC2_cop_data", [_friends, _markers, _unverified]];
+missionNamespace setVariable ["TC2_cop_data", [_friends, _markers, _unverified, _ops]];
 
 // Oyun işaretleri yalnızca harita görünürken hazırlanır (diğer sekmeler de copRequest çağırır).
 if ((missionNamespace getVariable ["TC2_ui_tab", 0]) == 1) then {call TC2_fnc_copGameMarkers};

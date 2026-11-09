@@ -9,6 +9,7 @@ class ui
     class uiOnUnload {};
     class uiBuildFrame {};
     class uiBuildFrameCorners {};
+    class uiNightDim {};
     class uiStatusText {};
     class uiReleaseFocus {};
     class uiTrackFocus {};

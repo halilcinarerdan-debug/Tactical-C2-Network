@@ -262,6 +262,13 @@ if (!isNull findDisplay 92000) exitWith {};
     [0] call TC2_fnc_uiSelectTab;
     call TC2_fnc_uiStatusText;
 
+    // Gece modu örtüsü (şeffaf başlar; uiNightDim gece / NVG'de kısar). Köşe maskelerinin altında kalır.
+    private _dim = _display ctrlCreate ["RscText", 92090];
+    _dim ctrlSetPosition [_left, _top, _w, _h];
+    _dim ctrlSetBackgroundColor [0, 0, 0, 0];
+    _dim ctrlCommit 0;
+    call TC2_fnc_uiNightDim;
+
     // Ekran köşelerini çerçeve renginde kapla (en son: üst üste çizim sırası).
     call TC2_fnc_uiBuildFrameCorners;
 
