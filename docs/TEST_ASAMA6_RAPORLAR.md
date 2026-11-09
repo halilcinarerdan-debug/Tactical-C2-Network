@@ -118,12 +118,13 @@ Karakterlerde sorun olursa ayarı kapatın; eski yazı tipine döner.
 
 Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE self menüsü (Sol Windows) ⇒ **TC2 Saha Cihazı** ⇒ "Saha cihazı bağlanıyor..." çubuğu tamamlanır ⇒ pencere açılır (ESC ya da KAPAT ile kapanır). Eskiden çubuk araç içinde hemen iptal oluyordu ("Kimlik doğrulama iptal edildi"). Hava aracı mürettebatı tablet taşımadan da açabilir; yer araçlarında tablet şartı sürer. Pencere modal olduğu için açıkken uçuş/sürüş tuşları pencereye gider; sürerken değil yolcu iken ya da sakin uçuşta kullanın.
 
-## N. Çerçeve (gerçekçi)
+## N. Çerçeve (gerçekçi, çizgi film değil)
 
-* **Saha cihazı:** Samsung Galaxy Tab Active5 Tactical Edition'ı andıran sağlam 8" taktik tablet: koyu yeşil mat kılıf, köşe koruyucular, çıkıntılı iç kenar, siyah ekran çerçevesi, üst kenarda üç tuş (Active / güç / ses), solda ön kamera ve sensör, altta altın pogo noktaları ve küçük "TC2 TACTICAL" yazısı. Marka logosu yok. Not: tabletin gerçek ölçülerini ve düğme düzenini doğrulayamadım; ayrıntılar benim yorumumdur (kaynakta yalnızca koyu yeşil renk, 8", MIL-STD-810H, IP68 doğrulandı).
-* **Masa başı:** ince çerçeveli antrasit monitör (üst kenarda parlama, LED, güç tuşu), boyun + taban, önünde klavye (3 sıra tuş + boşluk çubuğu) ve fare.
-* **Önizleme görselleri:** `docs/onizleme/` (tablet, masa başı, köşe yakın çekim). Bunlar oyun ekran görüntüsü DEĞİL; aynı geometrinin Python portudur (`render.py`, 1920x1080 / 16:9 varsayımı, yazı tipi ve harita sahte). Gerçek oyun görüntüsü için kendi ekran görüntünüzü gönderin.
-* Toplam çerçeve kontrolü yaklaşık 110-140 adet (statik şekil, kare başına iş yok). Çerçeve ekran dışına taşarsa ya da oran bozuksa ekran görüntüsüyle bildirin.
+Referans: oyundaki gerçek cihazlar (ITC tipi sağlam saha bilgisayarı, Thales telsizi, uçak MFD'si): mat renkler, kazınmış etiketler, vidalar, ince kenar ışığı.
+* **Saha cihazı (ITC tipi):** mat zeytin gövde, dört siyah köşe koruyucu, kenar ışığı ve gölgesi, vidalar, solda 3 LED ve 3 tuş (PWR / BRT / LOCK), üstte ön kamera + "TC2 FIELD SYSTEMS" yazısı + havalandırma yuvaları, altta entegre klavye (3 sıra). Marka logosu yok.
+* **Masa başı:** mat antrasit monitör, ince üst ışık ve alt gölge, köşe vidaları, çenede "TC2" yazısı + 6 tuş (MENU / SRC / - / + / AUTO / PWR) + LED, boyun ve taban, önünde klavye ve fare.
+* **Önizleme görselleri:** `docs/onizleme/`. Oyun ekran görüntüsü DEĞİLDİR; çerçeve düzeninin Python taklidi (`gen_frame.py`: **tek kaynak**, hem SQF gövdesini hem önizlemeyi üretir; `uiBuildFrame.sqf` gövdesi üretilmiştir, elle değiştirmeyin). 1920x1080 / 16:9 varsayımı, yazı tipi ve harita sahte.
+* Çerçeve kontrol sayısı yaklaşık 100-160 (statik; kare başına iş yok). Çerçeve ekran dışına taşarsa, kısa kalırsa ya da renkler çok koyu/açık görünürse ekran görüntüsüyle bildirin.
 
 ## Bilinen sınırlar
 

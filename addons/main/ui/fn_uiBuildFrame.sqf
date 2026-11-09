@@ -3,12 +3,15 @@
     Çalışma yeri: İstemci (uiOpen çağırır, ekran alanı kurulmadan ÖNCE)
 
     Cihaz çerçevesini çizer; yalnızca görünüm (düz renkli şekiller, kare başına iş yok). Çerçeve ekran alanının DIŞINDA kalır.
+    BU DOSYANIN GÖVDESİ ÜRETİLMİŞTİR: kaynak docs/onizleme/gen_frame.py (aynı betik önizleme görsellerini de üretir). Elle değiştirmeyin;
+    düzeni gen_frame.py'de değiştirip yeniden üretin.
     Yuvarlak köşe = orta dikdörtgen + üstte/altta çeyrek daire yayını izleyen ince şeritler (doku yok, kare piksel oranı korunur).
     Ekranın kendi köşeleri uiBuildFrameCorners ile (içerik kurulduktan SONRA) kaplanır.
-      DESK  masa başı bilgisayar: ince çerçeveli monitör (üst parlama, LED, güç tuşu), boyun + taban, önünde klavye ve fare
-      FIELD saha cihazı: sağlam 8" taktik tablet (Samsung Galaxy Tab Active5 Tactical Edition'ı andırır): koyu yeşil kılıf, köşe koruyucular, çıkıntılı iç kenar,
-            üst tuşlar, ön kamera, altta pogo noktaları. Marka logosu yoktur.
-    IDC: 93000-93199
+      DESK  masa başı bilgisayar: mat antrasit monitör (kenar ışığı, vida, çene tuşları: MENU / SRC / - / + / AUTO / PWR, LED), boyun + taban,
+            önünde klavye ve fare
+      FIELD saha cihazı: ITC tipi sağlam saha bilgisayarı: mat zeytin gövde, siyah köşe koruyucular, vidalar, solda LED'ler ve 3 tuş (PWR / BRT / LOCK),
+            üstte kamera, yazı ve havalandırma yuvaları, altta entegre klavye. Marka logosu yoktur.
+    IDC: 93000-93399 (köşe maskeleri uiBuildFrameCorners: 93400+)
 
     Parametreler:
         0: pencere <DISPLAY>   1: mod <STRING> "DESK" | "FIELD"   2: sol   3: üst   4: genişlik   5: yükseklik   (ekran alanı)
@@ -63,92 +66,187 @@ private _dot = {
     _control ctrlCommit 0;
     _control
 };
+// küçük yazı (kazınmış etiket gibi): sabit metin, ortalanmaz
+private _label = {
+    params ["_x", "_y", "_rw", "_rh", "_text", "_size", "_color"];
+    private _control = _display ctrlCreate ["RscText", _idc];
+    _idc = _idc + 1;
+    _control ctrlSetPosition [_x, _y, _rw, _rh];
+    _control ctrlSetText _text;
+    _control ctrlSetTextColor _color;
+    _control ctrlSetFontHeight _size;
+    _control ctrlCommit 0;
+    _control
+};
 
 missionNamespace setVariable ["TC2_ui_frame", [_mode, _left, _top, _w, _h]];
 
 private _cx = _left + _w / 2;
 
 if (_mode isEqualTo "DESK") then {
-    // MASA BAŞI BİLGİSAYAR: ince çerçeveli monitör + boyun + taban, önünde klavye ve fare.
-    private _side = 0.018;
-    private _chin = 0.045;
-    private _bodyTop = _top - _side;
-    private _bodyH = _h + _side + _chin;
-    private _bodyBottom = _top + _h + _chin;
-
-    // ayak (monitörün arkasında kalacak şekilde önce): boyun + taban
-    [_cx - 0.032, _bodyBottom - 0.004, 0.064, 0.034, [0.15, 0.15, 0.16, 1]] call _rect;
-    [_cx - 0.012, _bodyBottom + 0.004, 0.024, 0.026, [0.1, 0.1, 0.11, 1]] call _rect;
-    [_cx - 0.13, _bodyBottom + 0.028, 0.26, 0.016, 0.008, [0.11, 0.11, 0.12, 1]] call _round;
-
-    // klavye gövdesi + tuş sıraları (3 sıra x 14 tuş + boşluk çubuğu), sağında fare
-    private _kbTop = _bodyBottom + 0.052;
-    private _kbW = 0.42;
-    private _kbLeft = _cx - _kbW / 2;
-    [_kbLeft, _kbTop, _kbW, 0.054, 0.008, [0.09, 0.09, 0.1, 1]] call _round;
-    private _keyW = (_kbW - 0.016) / 14;
-    for "_row" from 0 to 2 do {
-        for "_col" from 0 to 13 do {
-            [_kbLeft + 0.008 + _col * _keyW + 0.0012, _kbTop + 0.006 + _row * 0.0125, _keyW - 0.0024, 0.0105, [0.2, 0.2, 0.22, 1]] call _rect;
-        };
-    };
-    [_kbLeft + 0.06, _kbTop + 0.0435, _kbW - 0.12, 0.0085, [0.2, 0.2, 0.22, 1]] call _rect;
-    [_kbLeft + _kbW + 0.022, _kbTop + 0.006, 0.026, 0.044, 0.011, [0.1, 0.1, 0.11, 1]] call _round;
-    [_kbLeft + _kbW + 0.0345, _kbTop + 0.006, 0.0012, 0.017, [0.03, 0.03, 0.03, 1]] call _rect;
-
-    // monitör gövdesi: koyu antrasit çerçeve, üst kenarda ince parlama, ekran girintisi
-    [_left - _side, _bodyTop, _w + 2 * _side, _bodyH, 0.016, [0.075, 0.075, 0.085, 1]] call _round;
-    [_left - _side + 0.016, _bodyTop + 0.001, _w + 2 * _side - 0.032, 0.0014, [0.22, 0.22, 0.25, 1]] call _rect;
+    [_cx - 0.032, _top + _h + 0.054, 0.064, 0.034, [0.14, 0.14, 0.15, 1]] call _rect;
+    [_cx - 0.012, _top + _h + 0.062, 0.024, 0.026, [0.09, 0.09, 0.1, 1]] call _rect;
+    [_cx - 0.13, _top + _h + 0.082, 0.26, 0.016, 0.008, [0.11, 0.11, 0.12, 1]] call _round;
+    [_cx - 0.21, _top + _h + 0.11, 0.42, 0.054, 0.008, [0.07, 0.07, 0.08, 1]] call _round;
+    [_cx - 0.202 + 0.0012, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.03006, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.05891, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.08777, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.11663, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.14549, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.17434, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.2032, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.23206, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.26091, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.28977, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.31863, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.34749, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.37634, _top + _h + 0.116, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.0012, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.03006, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.05891, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.08777, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.11663, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.14549, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.17434, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.2032, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.23206, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.26091, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.28977, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.31863, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.34749, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.37634, _top + _h + 0.1285, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.0012, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.03006, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.05891, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.08777, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.11663, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.14549, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.17434, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.2032, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.23206, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.26091, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.28977, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.31863, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.34749, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.202 + 0.37634, _top + _h + 0.141, 0.02646, 0.0105, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx - 0.15, _top + _h + 0.1535, 0.3, 0.0085, [0.16, 0.16, 0.18, 1]] call _rect;
+    [_cx + 0.232, _top + _h + 0.116, 0.026, 0.044, 0.011, [0.1, 0.1, 0.11, 1]] call _round;
+    [_cx + 0.2445, _top + _h + 0.116, 0.0012, 0.017, [0.03, 0.03, 0.03, 1]] call _rect;
+    [_left - 0.022, _top - 0.022, _w + 0.044, _h + 0.08, 0.01, [0.085, 0.085, 0.09, 1]] call _round;
+    [_left - 0.012, _top - 0.0208, _w + 0.024, 0.0014, [0.25, 0.25, 0.28, 1]] call _rect;
+    [_left - 0.012, _top + _h + 0.0555, _w + 0.024, 0.0014, [0.04, 0.04, 0.045, 1]] call _rect;
     [_left - 0.006, _top - 0.006, _w + 0.012, _h + 0.012, [0.01, 0.03, 0.015, 1]] call _rect;
-
-    // çene: yazı, güç LED'i ve güç tuşu
-    private _label = [_cx - 0.06, _top + _h + 0.012, 0.12, 0.026, [0, 0, 0, 0]] call _rect;
-    _label ctrlSetText "TC2";
-    _label ctrlSetTextColor [0.4, 0.4, 0.44, 1];
-    _label ctrlSetFontHeight 0.022;
-    [_left + _w - 0.052, _top + _h + 0.017, 0.03, 0.014, 0.005, [0.16, 0.16, 0.18, 1]] call _round;
-    [_left + _w - 0.094, _top + _h + 0.0205, 0.009, [0.2, 0.9, 0.3, 1]] call _dot;
-    // web kamerası (üst çerçeve)
-    [_cx - 0.005, _top - 0.0125, 0.01, [0.2, 0.2, 0.24, 1]] call _dot;
+    [_cx - 0.005, _top - 0.0165, 0.01, [0.18, 0.18, 0.22, 1]] call _dot;
+    [_left + 0.01, _top + _h + 0.0185, 0.1, 0.026, "TC2", 0.02, [0.45, 0.45, 0.5, 1]] call _label;
+    [_left + _w - 0.29, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.29, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.29, _top + _h + 0.0235, 0.034, 0.014, "MENU", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.246, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.246, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.246, _top + _h + 0.0235, 0.034, 0.014, "SRC", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.202, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.202, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.202, _top + _h + 0.0235, 0.034, 0.014, "-", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.158, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.158, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.158, _top + _h + 0.0235, 0.034, 0.014, "+", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.114, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.114, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.114, _top + _h + 0.0235, 0.034, 0.014, "AUTO", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.07, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
+    [_left + _w - 0.07, _top + _h + 0.022, 0.034, 0.0012, [0.28, 0.28, 0.3, 1]] call _rect;
+    [_left + _w - 0.07, _top + _h + 0.0235, 0.034, 0.014, "PWR", 0.011, [0.62, 0.62, 0.66, 1]] call _label;
+    [_left + _w - 0.02, _top + _h + 0.0265, 0.008, [0.2, 0.85, 0.3, 1]] call _dot;
+    [_left - 0.0155, _top - 0.0155, 0.007, [0.2, 0.2, 0.22, 1]] call _dot;
+    [_left + _w + 0.0085, _top - 0.0155, 0.007, [0.2, 0.2, 0.22, 1]] call _dot;
+    [_left - 0.0155, _top + _h + 0.0455, 0.007, [0.2, 0.2, 0.22, 1]] call _dot;
+    [_left + _w + 0.0085, _top + _h + 0.0455, 0.007, [0.2, 0.2, 0.22, 1]] call _dot;
 } else {
-    // SAHA CİHAZI: sağlam 8" taktik tablet (Samsung Galaxy Tab Active5 Tactical Edition'ı andıran koyu yeşil kılıf, kalın çerçeve, köşe koruyucular,
-    // üst kenarda tuşlar, altta pogo temas noktaları, solda ön kamera). Yatay kullanım.
-    private _side = 0.058;
-    private _vert = 0.042;
-    private _case = [0.16, 0.19, 0.13, 1];
-    private _dark = [0.09, 0.11, 0.07, 1];
-    private _bumperW = 0.082;
-    private _bumperH = _bumperW * _ratio;
-
-    // üst kenar tuşları (kılıfın arkasından taşar): Active tuşu (geniş), güç, ses
-    [_left + _w * 0.58, _top - _vert - 0.0075, 0.05, 0.0105, [0.06, 0.07, 0.05, 1]] call _rect;
-    [_left + _w * 0.58 + 0.062, _top - _vert - 0.006, 0.026, 0.009, [0.06, 0.07, 0.05, 1]] call _rect;
-    [_left + _w * 0.58 + 0.098, _top - _vert - 0.006, 0.04, 0.009, [0.06, 0.07, 0.05, 1]] call _rect;
-
-    // kılıf (koyu yeşil, mat kauçuk) + köşe koruyucular + çıkıntılı iç kenar + siyah ekran çerçevesi
-    [_left - _side, _top - _vert, _w + 2 * _side, _h + 2 * _vert, 0.036, _case] call _round;
-    [_left - _side, _top - _vert, _bumperW, _bumperH, 0.036, _dark] call _round;
-    [_left + _w + _side - _bumperW, _top - _vert, _bumperW, _bumperH, 0.036, _dark] call _round;
-    [_left - _side, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.036, _dark] call _round;
-    [_left + _w + _side - _bumperW, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.036, _dark] call _round;
-    [_left - 0.03, _top - 0.024, _w + 0.06, _h + 0.048, 0.02, [0.12, 0.145, 0.095, 1]] call _round;
-    [_left - 0.018, _top - 0.0155, _w + 0.036, _h + 0.031, 0.012, [0.02, 0.02, 0.02, 1]] call _round;
-    // kılıf üst kenarında ince parlama
-    [_left - _side + 0.036, _top - _vert + 0.0015, _w + 2 * _side - 0.072, 0.0015, [0.3, 0.35, 0.25, 1]] call _rect;
-
-    // sol çerçeve: ön kamera + sensör; sağ çerçeve: iki sensör
-    [_left - 0.0335, _top + _h * 0.5 - 0.007, 0.014, [0.04, 0.04, 0.05, 1]] call _dot;
-    [_left - 0.0335 + 0.003, _top + _h * 0.5 - 0.007 + 0.003 * _ratio, 0.008, [0.12, 0.14, 0.2, 1]] call _dot;
-    [_left - 0.0305, _top + _h * 0.5 - 0.036, 0.006, [0.1, 0.1, 0.1, 1]] call _dot;
-    [_left + _w + 0.0225, _top + _h * 0.5 - 0.012, 0.007, [0.08, 0.08, 0.08, 1]] call _dot;
-    [_left + _w + 0.0225, _top + _h * 0.5 + 0.012, 0.007, [0.08, 0.08, 0.08, 1]] call _dot;
-
-    // alt kenar: pogo temas noktaları (altın) ve yazı
-    for "_k" from 0 to 3 do {
-        [_left + _w * 0.5 - 0.027 + _k * 0.018, _top + _h + 0.0235, 0.0065, [0.8, 0.65, 0.25, 1]] call _dot;
-    };
-    private _tag = [_left + 0.02, _top + _h + 0.0185, 0.12, 0.022, [0, 0, 0, 0]] call _rect;
-    _tag ctrlSetText "TC2 TACTICAL";
-    _tag ctrlSetTextColor [0.42, 0.5, 0.36, 1];
-    _tag ctrlSetFontHeight 0.016;
+    [_left - 0.085, _top - 0.05, _w + 0.135, _h + 0.15, 0.014, [0.235, 0.265, 0.19, 1]] call _round;
+    [_left - 0.071, _top - 0.0488, _w + 0.107, 0.0015, [0.36, 0.4, 0.29, 1]] call _rect;
+    [_left - 0.071, _top + _h + 0.097, _w + 0.107, 0.0015, [0.11, 0.12, 0.085, 1]] call _rect;
+    [_left - 0.091, _top - 0.056, 0.07, 0.07 * _ratio, 0.02, [0.04, 0.04, 0.045, 1]] call _round;
+    [_left + _w - 0.014, _top - 0.056, 0.07, 0.07 * _ratio, 0.02, [0.04, 0.04, 0.045, 1]] call _round;
+    [_left - 0.091, _top + _h + 0.106 - 0.07 * _ratio, 0.07, 0.07 * _ratio, 0.02, [0.04, 0.04, 0.045, 1]] call _round;
+    [_left + _w - 0.014, _top + _h + 0.106 - 0.07 * _ratio, 0.07, 0.07 * _ratio, 0.02, [0.04, 0.04, 0.045, 1]] call _round;
+    [_left - 0.016, _top - 0.016, _w + 0.032, _h + 0.032, 0.008, [0.012, 0.012, 0.012, 1]] call _round;
+    [_left - 0.034, _top - 0.036, 0.008, [0.34, 0.35, 0.3, 1]] call _dot;
+    [_left - 0.034 + 0.002, _top - 0.036 + 0.0033, 0.004, 0.0012, [0.1, 0.1, 0.09, 1]] call _rect;
+    [_left + _w + 0.024, _top - 0.036, 0.008, [0.34, 0.35, 0.3, 1]] call _dot;
+    [_left + _w + 0.024 + 0.002, _top - 0.036 + 0.0033, 0.004, 0.0012, [0.1, 0.1, 0.09, 1]] call _rect;
+    [_left - 0.034, _top + _h + 0.082, 0.008, [0.34, 0.35, 0.3, 1]] call _dot;
+    [_left - 0.034 + 0.002, _top + _h + 0.082 + 0.0033, 0.004, 0.0012, [0.1, 0.1, 0.09, 1]] call _rect;
+    [_left + _w + 0.024, _top + _h + 0.082, 0.008, [0.34, 0.35, 0.3, 1]] call _dot;
+    [_left + _w + 0.024 + 0.002, _top + _h + 0.082 + 0.0033, 0.004, 0.0012, [0.1, 0.1, 0.09, 1]] call _rect;
+    [_left - 0.058, _top + 0.02, 0.007, [0.2, 0.8, 0.3, 1]] call _dot;
+    [_left - 0.058, _top + 0.042, 0.007, [0.5, 0.35, 0.07, 1]] call _dot;
+    [_left - 0.058, _top + 0.064, 0.007, [0.38, 0.07, 0.05, 1]] call _dot;
+    [_left - 0.07, _top + 0.12, 0.04, 0.028, [0.095, 0.105, 0.085, 1]] call _rect;
+    [_left - 0.07, _top + 0.12, 0.04, 0.0014, [0.22, 0.23, 0.19, 1]] call _rect;
+    [_left - 0.07, _top + 0.12 + 0.0055, 0.04, 0.02, "PWR", 0.012, [0.6, 0.62, 0.55, 1]] call _label;
+    [_left - 0.07, _top + 0.17, 0.04, 0.028, [0.095, 0.105, 0.085, 1]] call _rect;
+    [_left - 0.07, _top + 0.17, 0.04, 0.0014, [0.22, 0.23, 0.19, 1]] call _rect;
+    [_left - 0.07, _top + 0.17 + 0.0055, 0.04, 0.02, "BRT", 0.012, [0.6, 0.62, 0.55, 1]] call _label;
+    [_left - 0.07, _top + 0.22, 0.04, 0.028, [0.095, 0.105, 0.085, 1]] call _rect;
+    [_left - 0.07, _top + 0.22, 0.04, 0.0014, [0.22, 0.23, 0.19, 1]] call _rect;
+    [_left - 0.07, _top + 0.22 + 0.0055, 0.04, 0.02, "LOCK", 0.012, [0.6, 0.62, 0.55, 1]] call _label;
+    [_cx - 0.003, _top - 0.031, 0.006, [0.1, 0.12, 0.18, 1]] call _dot;
+    [_cx - 0.1, _top - 0.047, 0.2, 0.022, "TC2 FIELD SYSTEMS", 0.017, [0.5, 0.55, 0.42, 1]] call _label;
+    [_left + _w * 0.72 + 0, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.012, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.024, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.036, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.048, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.06, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.072, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.084, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.096, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + _w * 0.72 + 0.108, _top - 0.04, 0.007, 0.0025, [0.1, 0.11, 0.08, 1]] call _rect;
+    [_left + 0.02, _top + _h + 0.026, _w - 0.04, 0.072, 0.006, [0.055, 0.06, 0.05, 1]] call _round;
+    [_left + 0.028 + 0 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 1 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 2 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 3 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 4 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 5 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 6 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 7 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 8 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 9 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 10 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 11 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 12 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 13 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 14 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.032, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 0 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 1 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 2 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 3 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 4 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 5 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 6 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 7 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 8 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 9 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 10 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 11 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 12 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 13 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 14 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.052, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 0 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 1 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 2 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 3 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 4 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 5 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 6 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 7 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 8 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 9 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 10 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 11 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 12 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 13 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
+    [_left + 0.028 + 14 * ((_w - 0.096) / 15) + 0.0012, _top + _h + 0.072, ((_w - 0.096) / 15) - 0.0024, 0.0165, [0.15, 0.16, 0.13, 1]] call _rect;
 };
