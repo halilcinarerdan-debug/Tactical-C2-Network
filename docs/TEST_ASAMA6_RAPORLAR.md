@@ -118,15 +118,16 @@ Karakterlerde sorun olursa ayarı kapatın; eski yazı tipine döner.
 
 Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE self menüsü (Sol Windows) ⇒ **TC2 Saha Cihazı** ⇒ "Saha cihazı bağlanıyor..." çubuğu tamamlanır ⇒ pencere açılır (ESC ya da KAPAT ile kapanır). Eskiden çubuk araç içinde hemen iptal oluyordu ("Kimlik doğrulama iptal edildi"). Hava aracı mürettebatı tablet taşımadan da açabilir; yer araçlarında tablet şartı sürer. Pencere modal olduğu için açıkken uçuş/sürüş tuşları pencereye gider; sürerken değil yolcu iken ya da sakin uçuşta kullanın.
 
-## N. Çerçeve (gerçekçi, tozlu doku)
+## N. Çerçeve (gerçek doku)
 
-Referans: oyundaki Thales telsizi dokusu (mat, taneli kauçuk; kabartma ışık/gölge; vidalı yükseltilmiş ekran kenarı; çizik ve aşınma).
-* **Saha cihazı:** Samsung Galaxy Tab Active5 Tactical Edition'ı andıran sağlam tablet: koyu yeşil mat kauçuk kılıf, siyah köşe koruyucular, vidalı yükseltilmiş ekran kenarı (sol ve sağda 3'er vida), üst tuşlar, üst bantta tutma nervürleri, solda ön kamera, altta altın pogo noktaları, kabartma "TC2 TACTICAL" yazısı.
-  **Toz ve aşınma:** taneli (stipple) benekler, bulutlanma, çizikler, kenarda boya çıkması, alt kısımda kir koyulaşması. Doku tohumludur: her açılışta aynı görünür.
-* **Masa başı:** mat antrasit monitör (kenar ışığı, vidalar, çene tuşları, LED), boyun + taban, klavye ve fare.
-* **Önizleme:** `docs/onizleme/` (oyun görüntüsü DEĞİL; `gen_frame.py` tek kaynaktır ve SQF gövdesini de üretir).
-* **Maliyet:** saha cihazı çerçevesi yaklaşık 390, masa başı yaklaşık 105 statik kontrol; açılışta tek seferlik (kare başına iş yok). Pencere açılışında hafif bir takılma görürseniz bildirin: benek sayısı azaltılır.
-* Gerçek doku (.paa) kullanılmadı: .paa üretip oyunda doğrulayamam; yine de istenirse denenebilir.
+**Saha cihazı artık GERÇEK DOKULU:** Samsung Tab Active5 tarzı sağlam tablet; kasa 8 parçalı `.paa` doku (4 köşe + 4 kenar; `addons/main/data/tab_*_ca.paa`). Doku, yükseklik haritası + ışıkla üretilen ince, düzgün kauçuk tanesi, kabartmalı ekran kenarı, siyah köşe koruyucular (kenarlarında silik aşınma), çok hafif toz filmi ve birkaç silik çizik içerir. Önceki "benek" çözümü dağınık/yapmacık görünüyordu; bu sürümde rastgele benek yok, doku tek parça ve tutarlı.
+* Üretim: `tools/gen_textures.py` (doku), `tools/png2paa.py` (PNG → DXT5 `.paa`, kendi yazıcım; geri okuma ile doğrulanır). Kaynak PNG'ler: `tools/textures/`.
+* **Kenarlar gerilir:** 9-dilim mantığı (köşeler sabit boy, kenarlar yalnızca uzun eksende gerilir); farklı ekran oranlarında çerçeve kalınlığı sabit kalır.
+* Küçük ayrıntılar (üst tuşlar, vidalar, kamera/sensörler, pogo noktaları, nervürler, yazı) doku üstünde kontrol olarak durur. Kontrol sayısı ~390'dan ~55'e indi (daha hızlı açılış).
+* **YEDEK:** CBA `Arayüz ▸ gerçek dokulu saha cihazı çerçevesi` kapalıysa ya da dokular PBO'da yoksa (`fileExists`) kodla çizilen önceki çerçeve kullanılır.
+* **DİKKAT (doğrulanmadı):** `.paa` dosyalarını kendi yazıcımla ürettim ve oyunda deneyemedim. Çerçeve **beyaz / boş / kırık** görünürse CBA ayarını kapatın ve RPT'deki doku hatası satırını gönderin. Ayrıca derleme aracınızın (pboProject / HEMTT) `addons/main/data/*.paa` dosyalarını PBO'ya kattığından emin olun.
+* **Masa başı monitör** hâlâ kodla çizilir (doku yok).
+* **Önizleme:** `docs/onizleme/` (oyun görüntüsü değil; `gen_frame.py` önizlemeyi ve SQF gövdesini üretir).
 
 ## Bilinen sınırlar
 

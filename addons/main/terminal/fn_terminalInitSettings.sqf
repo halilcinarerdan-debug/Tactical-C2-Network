@@ -89,3 +89,12 @@ private _category = ["Tactical C2 Network", "Terminal ve Erişim (OPSEC)"];
     true,
     false
 ] call CBA_settings_fnc_init;
+
+[
+    "TC2_ui_frameTex",
+    "CHECKBOX",
+    ["Arayüz: gerçek dokulu saha cihazı çerçevesi", "Açıksa saha cihazı çerçevesi addon içindeki .paa dokularla çizilir (gerçekçi, az kontrol). Kapalıysa ya da dokular bulunamazsa kodla çizilen yedek çerçeve kullanılır. Çerçeve beyaz/boş görünüyorsa kapatın. Değişiklik pencere bir sonraki açılışında etkili olur."],
+    ["Tactical C2 Network", "Arayüz"],
+    true,
+    false
+] call CBA_settings_fnc_init;

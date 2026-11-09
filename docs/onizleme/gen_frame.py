@@ -1,6 +1,6 @@
 # TC2 cerceve: TEK KAYNAK. Bu betik hem SQF kodunu (uiBuildFrame govdesi) hem de onizleme gorsellerini uretir.
 # Ifadeler hem Python hem SQF'te gecerlidir (_left, _top, _w, _h, _cx, _ratio degiskenleri, + - * / ve sayilar).
-import math, sys, re
+import math, sys, re, os
 from PIL import Image, ImageDraw, ImageFont
 
 class Ops:
@@ -9,6 +9,7 @@ class Ops:
     def rr(self, x, y, w, h, r, c): self.ops.append(("rr", x, y, w, h, r, c))
     def dot(self, x, y, s, c): self.ops.append(("dot", x, y, s, c))
     def text(self, x, y, w, h, t, size, c): self.ops.append(("text", x, y, w, h, t, size, c))
+    def pic(self, path, x, y, w, h): self.ops.append(("pic", path, x, y, w, h))
 
 def S(v):  # sayi/ifade -> metin
     return v if isinstance(v, str) else ("%.5f" % v).rstrip("0").rstrip(".")
@@ -129,6 +130,47 @@ def tablet():
     o.text("_left + 0.04", "_top + _h + 0.0188", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.42, 0.48, 0.36))
     return o
 
+TEXDIR = "\\z\\tc2\\addons\\main\\data\\"
+def tablet_tex():
+    """GERCEK DOKULU saha cihazi: 8 parcali (4 kose + 4 kenar) .paa kasa; kucuk ayrintilar (tuslar, vidalar, sensorler, pogo, yazi) kontrol olarak ustte."""
+    o = Ops()
+    # ust tuslar (kasanin arkasindan tasar)
+    for (dx, wd, yy, hh) in [(0.0, 0.05, -0.0495, 0.0105), (0.062, 0.026, -0.048, 0.009), (0.098, 0.04, -0.048, 0.009)]:
+        o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, hh, (0.045, 0.055, 0.035))
+        o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, 0.0012, (0.5, 0.56, 0.45, 0.3))
+    cs, csv = "0.082", "0.082 * _ratio"
+    x0, y0 = "_left - 0.058", "_top - 0.042"
+    o.pic(TEXDIR + "tab_tl_ca.paa", x0, y0, cs, csv)
+    o.pic(TEXDIR + "tab_tr_ca.paa", "_left + _w + 0.058 - 0.082", y0, cs, csv)
+    o.pic(TEXDIR + "tab_bl_ca.paa", x0, "_top + _h + 0.042 - 0.082 * _ratio", cs, csv)
+    o.pic(TEXDIR + "tab_br_ca.paa", "_left + _w + 0.058 - 0.082", "_top + _h + 0.042 - 0.082 * _ratio", cs, csv)
+    o.pic(TEXDIR + "tab_top_ca.paa", "_left - 0.058 + 0.082", y0, "_w + 0.116 - 0.164", 0.042)
+    o.pic(TEXDIR + "tab_bottom_ca.paa", "_left - 0.058 + 0.082", "_top + _h", "_w + 0.116 - 0.164", 0.042)
+    o.pic(TEXDIR + "tab_left_ca.paa", x0, "_top - 0.042 + 0.082 * _ratio", 0.058, "_h + 0.084 - 0.164 * _ratio")
+    o.pic(TEXDIR + "tab_right_ca.paa", "_left + _w", "_top - 0.042 + 0.082 * _ratio", 0.058, "_h + 0.084 - 0.164 * _ratio")
+    # tutma nervurleri (ust bant)
+    for k in range(5):
+        y = "_top - 0.0385 + %s" % S(k * 0.0042)
+        o.rect("_left + _w * 0.1", y, "_w * 0.28", 0.0017, (0.01, 0.015, 0.008, 0.6))
+        o.rect("_left + _w * 0.1", y + " + 0.0017", "_w * 0.28", 0.0009, (0.5, 0.56, 0.45, 0.16))
+    # ekran kenari vidalari
+    for xx in ["_left - 0.0245", "_left + _w + 0.0165"]:
+        for k in range(3):
+            y = "_top + _h * %s" % S(0.18 + k * 0.32)
+            o.dot(xx, y, 0.0078, (0.03, 0.035, 0.025))
+            o.dot(xx + " + 0.0006", y + " + 0.0005", 0.0066, (0.34, 0.37, 0.3))
+            o.rect(xx + " + 0.0018", y + " + 0.0034", 0.0042, 0.0011, (0.06, 0.06, 0.05))
+    o.dot("_left - 0.0335", "_top + _h * 0.5 - 0.007", 0.014, (0.03, 0.03, 0.035))
+    o.dot("_left - 0.0305", "_top + _h * 0.5 - 0.004", 0.008, (0.1, 0.12, 0.18))
+    o.dot("_left - 0.0305", "_top + _h * 0.5 - 0.036", 0.006, (0.08, 0.08, 0.08))
+    o.dot("_left + _w + 0.0225", "_top + _h * 0.5 - 0.012", 0.007, (0.06, 0.06, 0.06))
+    o.dot("_left + _w + 0.0225", "_top + _h * 0.5 + 0.012", 0.007, (0.06, 0.06, 0.06))
+    for k in range(4):
+        o.dot("_left + _w * 0.5 - 0.027 + %s" % S(k * 0.018), "_top + _h + 0.0225", 0.0065, (0.55, 0.45, 0.18))
+    o.text("_left + 0.0405", "_top + _h + 0.0195", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.02, 0.03, 0.015))
+    o.text("_left + 0.04", "_top + _h + 0.0188", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.42, 0.48, 0.36))
+    return o
+
 def desk():
     o = Ops()
     body = (0.085, 0.085, 0.09)
@@ -181,9 +223,13 @@ def sqf(o):
         elif k == "text":
             _, x, y, w, h, t, size, c = op
             out.append('    [%s, %s, %s, %s, "%s", %s, %s] call _label;' % (S(x), S(y), S(w), S(h), t, S(size), C(c)))
+        elif k == "pic":
+            _, path, x, y, w, h = op
+            out.append('    ["%s", %s, %s, %s, %s] call _pic;' % (path, S(x), S(y), S(w), S(h)))
     return "\n".join(out)
 
 # ---------------- Onizleme ----------------
+TEXPNG = os.environ.get('TC2_TEXPNG', 'tex_png')
 W, H = 1.5, 0.9
 PXW, PXH = 1920, 1080
 sx, sy = PXW / W, PXH / H
@@ -232,6 +278,12 @@ def render(o, mode, out):
         elif k == "dot":
             x, y, s = [ev(v, env) for v in op[1:4]]
             d.ellipse([x * sx, y * sy, (x + s) * sx, (y + s * ratio) * sy], fill=col(op[4]))
+        elif k == "pic":
+            import os
+            name = op[1].split("\\")[-1].replace(".paa", ".png")
+            x, y, pw_, ph_ = [ev(v, env) for v in op[2:6]]
+            im = Image.open(os.path.join(TEXPNG, name)).convert("RGBA").resize((max(1, int(round(pw_ * sx))), max(1, int(round(ph_ * sy)))), Image.LANCZOS)
+            img.paste(im, (int(round(x * sx)), int(round(y * sy))), im)
         elif k == "text":
             x, y = ev(op[1], env), ev(op[2], env)
             ww = ev(op[3], env)
@@ -277,8 +329,11 @@ def render(o, mode, out):
 
 if __name__ == "__main__":
     t, dsk = tablet(), desk()
-    render(t, "FIELD", "tablet_cercevesi_onizleme.png")
+    tt = tablet_tex()
+    render(tt, "FIELD", "tablet_cercevesi_onizleme.png")
+    render(t, "FIELD", "tablet_cercevesi_prosedurel_onizleme.png")
     render(dsk, "DESK", "pc_cercevesi_onizleme.png")
     open("frame_field.sqf.txt", "w").write(sqf(t))
+    open("frame_field_tex.sqf.txt", "w").write(sqf(tt))
     open("frame_desk.sqf.txt", "w").write(sqf(dsk))
-    print("tablet ops", len(t.ops), "desk ops", len(dsk.ops))
+    print("tablet ops", len(t.ops), "tablet_tex ops", len(tt.ops), "desk ops", len(dsk.ops))
