@@ -100,15 +100,15 @@ private _useTex = (missionNamespace getVariable ["TC2_ui_frameTex", true]) && {f
 
 if (_mode isEqualTo "DESK") then {
     if (_useTexDesk) then {
-            ["\z\tc2\addons\main\data\desk_stand_ca.paa", _cx - 0.13, _top + _h + 0.054, 0.26, 0.044] call _pic;
+        ["\z\tc2\addons\main\data\desk_stand_ca.paa", _cx - 0.13, _top + _h + 0.054, 0.26, 0.044] call _pic;
         ["\z\tc2\addons\main\data\desk_keyboard_ca.paa", _cx - 0.21, _top + _h + 0.11, 0.42, 0.054] call _pic;
         ["\z\tc2\addons\main\data\desk_mouse_ca.paa", _cx + 0.232, _top + _h + 0.116, 0.026, 0.044] call _pic;
         [_left - 0.012, _top - 0.012, _w + 0.024, _h + 0.024, [0.012, 0.025, 0.015, 1]] call _rect;
         [_left - 0.02, _top + _h - 0.002, _w + 0.04, 0.058, [0.06, 0.06, 0.068, 1]] call _rect;
-        ["\z\tc2\addons\main\data\desk_top_ca.paa", _left - 0.022, _top - 0.022, _w + 0.044, 0.022] call _pic;
-        ["\z\tc2\addons\main\data\desk_bottom_ca.paa", _left - 0.022, _top + _h, _w + 0.044, 0.058] call _pic;
-        ["\z\tc2\addons\main\data\desk_left_ca.paa", _left - 0.022, _top - 0.0015, 0.022, _h + 0.003] call _pic;
-        ["\z\tc2\addons\main\data\desk_right_ca.paa", _left + _w, _top - 0.0015, 0.022, _h + 0.003] call _pic;
+        ["\z\tc2\addons\main\data\desk_top_ca.paa", _left - 0.022, _top - 0.022, _w + 0.044, 0.026] call _pic;
+        ["\z\tc2\addons\main\data\desk_bottom_ca.paa", _left - 0.022, _top + _h - 0.004, _w + 0.044, 0.062] call _pic;
+        ["\z\tc2\addons\main\data\desk_left_ca.paa", _left - 0.022, _top - 0.0015, 0.026, _h + 0.003] call _pic;
+        ["\z\tc2\addons\main\data\desk_right_ca.paa", _left + _w - 0.004, _top - 0.0015, 0.026, _h + 0.003] call _pic;
         [_cx - 0.005, _top - 0.0165, 0.01, [0.18, 0.18, 0.22, 1]] call _dot;
         [_left + 0.01, _top + _h + 0.0185, 0.1, 0.026, "TC2", 0.02, [0.45, 0.45, 0.5, 1]] call _label;
         [_left + _w - 0.29, _top + _h + 0.022, 0.034, 0.016, [0.14, 0.14, 0.155, 1]] call _rect;
@@ -227,10 +227,10 @@ if (_mode isEqualTo "DESK") then {
         ["\z\tc2\addons\main\data\tab_tr_ca.paa", _left + _w + 0.058 - 0.082, _top - 0.042, 0.082, 0.082 * _ratio] call _pic;
         ["\z\tc2\addons\main\data\tab_bl_ca.paa", _left - 0.058, _top + _h + 0.042 - 0.082 * _ratio, 0.082, 0.082 * _ratio] call _pic;
         ["\z\tc2\addons\main\data\tab_br_ca.paa", _left + _w + 0.058 - 0.082, _top + _h + 0.042 - 0.082 * _ratio, 0.082, 0.082 * _ratio] call _pic;
-        ["\z\tc2\addons\main\data\tab_top_ca.paa", _left - 0.058 + 0.0805, _top - 0.042, _w + 0.116 - 0.161, 0.042] call _pic;
-        ["\z\tc2\addons\main\data\tab_bottom_ca.paa", _left - 0.058 + 0.0805, _top + _h, _w + 0.116 - 0.161, 0.042] call _pic;
-        ["\z\tc2\addons\main\data\tab_left_ca.paa", _left - 0.058, _top - 0.042 + 0.0805 * _ratio, 0.058, _h + 0.084 - 0.161 * _ratio] call _pic;
-        ["\z\tc2\addons\main\data\tab_right_ca.paa", _left + _w, _top - 0.042 + 0.0805 * _ratio, 0.058, _h + 0.084 - 0.161 * _ratio] call _pic;
+        ["\z\tc2\addons\main\data\tab_top_ca.paa", _left - 0.058 + 0.0805, _top - 0.042, _w + 0.116 - 0.161, 0.046] call _pic;
+        ["\z\tc2\addons\main\data\tab_bottom_ca.paa", _left - 0.058 + 0.0805, _top + _h - 0.004, _w + 0.116 - 0.161, 0.046] call _pic;
+        ["\z\tc2\addons\main\data\tab_left_ca.paa", _left - 0.058, _top - 0.042 + 0.0805 * _ratio, 0.062, _h + 0.084 - 0.161 * _ratio] call _pic;
+        ["\z\tc2\addons\main\data\tab_right_ca.paa", _left + _w - 0.004, _top - 0.042 + 0.0805 * _ratio, 0.062, _h + 0.084 - 0.161 * _ratio] call _pic;
         [_left + _w * 0.1, _top - 0.0385 + 0, _w * 0.28, 0.0017, [0.01, 0.015, 0.008, 0.6]] call _rect;
         [_left + _w * 0.1, _top - 0.0385 + 0 + 0.0017, _w * 0.28, 0.0009, [0.5, 0.56, 0.45, 0.16]] call _rect;
         [_left + _w * 0.1, _top - 0.0385 + 0.0042, _w * 0.28, 0.0017, [0.01, 0.015, 0.008, 0.6]] call _rect;

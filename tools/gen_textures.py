@@ -49,7 +49,9 @@ for (bx, by) in [(0, 0), (PW - bs, 0), (0, PH - bsv), (PW - bs, PH - bsv)]:
     bump = np.maximum(bump, rrect_mask(bx, by, bs, bsv, 0.036 * sx))
 bump *= case
 screen = np.zeros((PH, PW), np.float32)
-screen[int(uy(0)):int(uy(h)), int(ux(0)):int(ux(w))] = 1.0
+MG = 0.004
+mx_, my_ = int(round(MG * sx)), int(round(MG * sy))
+screen[int(uy(0)) + my_:int(uy(h)) - my_, int(ux(0)) + mx_:int(ux(w)) - mx_] = 1.0
 
 # --- yukseklik haritasi (piksel olcegi): ince, duzgun kaucuk tanesi + kabartma ---
 def noise(s):
@@ -59,7 +61,7 @@ grain = noise(0.9) * 0.6 + noise(1.8) * 0.4 + noise(5.0) * 0.12
 H_feat = blur(bump, 2.5) * 6.0 + blur(lip * (1 - bez), 1.6) * 4.0 - blur(bez, 2.0) * 5.0
 hmap = grain * 0.16 + H_feat
 gy, gx = np.gradient(hmap)
-shade = 0.74 + (-gx * 0.5 - gy * 0.7) * 0.42
+shade = 0.74 + (-gx * 0.5 - gy * 0.7) * 0.5     # kabartma +%18
 shade = np.clip(shade, 0.25, 1.45)
 
 def col(c): return np.array(c, np.float32).reshape(1, 1, 3)
@@ -110,7 +112,7 @@ ref.save(os.path.join(OUT, "tab_reference.png"))
 
 # ---- dilimleme ----
 cs_px, csv_px = int(round(bs)), int(round(bsv))
-bandL, bandT = int(round(0.058 * sx)), int(round(0.042 * sy))
+bandL, bandT = int(round((0.058 + MG) * sx)), int(round((0.042 + MG) * sy))
 pieces = {
     "tl": (ref.crop((0, 0, cs_px, csv_px)), (256, 256)),
     "tr": (ref.crop((PW - cs_px, 0, PW, csv_px)), (256, 256)),

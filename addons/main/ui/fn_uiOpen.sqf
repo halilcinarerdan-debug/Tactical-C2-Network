@@ -74,7 +74,7 @@ if (!isNull findDisplay 92000) exitWith {};
     // Arka plan
     private _background = _display ctrlCreate ["RscText", 92001];
     _background ctrlSetPosition [_left, _top, _w, _h];
-    _background ctrlSetBackgroundColor [0, 0.04, 0, 0.95];
+    _background ctrlSetBackgroundColor [0, 0.04, 0, 1];   // tam opak: arkadaki oyun sahnesi (açık gökyüzü) kenarlarda sızmasın
     _background ctrlCommit 0;
 
     // Başlık

@@ -33,7 +33,7 @@ class Scene:
         n = blur(self.rng.standard_normal((self.PH, self.PW)).astype(np.float32), s)
         return n / (n.std() + 1e-6)
 
-def finish(sc, albedo, hmap, alpha, grain_amp, light=(0.5, 0.7), base=0.74, gain=0.42, dust=0.01, extra=None):
+def finish(sc, albedo, hmap, alpha, grain_amp, light=(0.5, 0.7), base=0.74, gain=0.5, dust=0.01, extra=None):
     gy, gx = np.gradient(hmap)
     shade = np.clip(base + (-gx * light[0] - gy * light[1]) * gain, 0.3, 1.5)
     img = albedo * shade[..., None]
@@ -59,7 +59,9 @@ ux = lambda v: (v - X0) * sx
 uy = lambda v: (v - Y0) * sy
 body = sc.rr(0, 0, PW, PH, 0.01 * sx)
 recess = sc.rr(ux(-0.006), uy(-0.006), (w + 0.012) * sx, (h + 0.012) * sy, 0.003 * sx)
-screen = np.zeros((PH, PW), np.float32); screen[int(uy(0)):int(uy(h)), int(ux(0)):int(ux(w))] = 1
+MG = 0.004
+mx_, my_ = int(round(MG * sx)), int(round(MG * sy))
+screen = np.zeros((PH, PW), np.float32); screen[int(uy(0)) + my_:int(uy(h)) - my_, int(ux(0)) + mx_:int(ux(w)) - mx_] = 1
 grain = sc.noise(0.8) * 0.6 + sc.noise(1.7) * 0.35
 hmap = grain * 0.10 + blur(body, 2.2) * 5.0 - blur(recess, 1.6) * 4.0
 alb = col((0.125, 0.125, 0.135)) * np.ones((PH, PW, 1), np.float32)
@@ -68,11 +70,11 @@ alb = alb * (1 + 0.02 * sc.noise(40.0)[..., None])
 yy = np.linspace(0, 1, PH, dtype=np.float32).reshape(-1, 1)
 im = finish(sc, alb, hmap, np.where(screen > 0, 0, body), 0.1, dust=0.008,
             extra=lambda img: img * (1 - 0.07 * (yy ** 2))[..., None])
-bandT, bandB, bandL = int(round(0.022 * sy)), int(round(0.058 * sy)), int(round(0.022 * sx))
+bandT, bandB, bandL = int(round((0.022 + MG) * sy)), int(round((0.058 + MG) * sy)), int(round((0.022 + MG) * sx))
 save(im.crop((0, 0, PW, bandT)), "desk_top_ca.png", (2048, 32))
 save(im.crop((0, PH - bandB, PW, PH)), "desk_bottom_ca.png", (2048, 64))
-save(im.crop((0, bandT, bandL, PH - bandB)), "desk_left_ca.png", (32, 512))
-save(im.crop((PW - bandL, bandT, PW, PH - bandB)), "desk_right_ca.png", (32, 512))
+save(im.crop((0, int(round(0.022 * sy)), bandL, PH - int(round(0.058 * sy)))), "desk_left_ca.png", (32, 512))
+save(im.crop((PW - bandL, int(round(0.022 * sy)), PW, PH - int(round(0.058 * sy)))), "desk_right_ca.png", (32, 512))
 im.save(os.path.join(OUT, "desk_monitor_reference.png"))
 
 # ================= AYAK (boyun + taban) =================
