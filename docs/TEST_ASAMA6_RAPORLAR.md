@@ -122,6 +122,7 @@ Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE se
 
 * **Saha cihazı:** Samsung Galaxy Tab Active5 Tactical Edition'ı andıran sağlam 8" taktik tablet: koyu yeşil mat kılıf, köşe koruyucular, çıkıntılı iç kenar, siyah ekran çerçevesi, üst kenarda üç tuş (Active / güç / ses), solda ön kamera ve sensör, altta altın pogo noktaları ve küçük "TC2 TACTICAL" yazısı. Marka logosu yok. Not: tabletin gerçek ölçülerini ve düğme düzenini doğrulayamadım; ayrıntılar benim yorumumdur (kaynakta yalnızca koyu yeşil renk, 8", MIL-STD-810H, IP68 doğrulandı).
 * **Masa başı:** ince çerçeveli antrasit monitör (üst kenarda parlama, LED, güç tuşu), boyun + taban, önünde klavye (3 sıra tuş + boşluk çubuğu) ve fare.
+* **Önizleme görselleri:** `docs/onizleme/` (tablet, masa başı, köşe yakın çekim). Bunlar oyun ekran görüntüsü DEĞİL; aynı geometrinin Python portudur (`render.py`, 1920x1080 / 16:9 varsayımı, yazı tipi ve harita sahte). Gerçek oyun görüntüsü için kendi ekran görüntünüzü gönderin.
 * Toplam çerçeve kontrolü yaklaşık 110-140 adet (statik şekil, kare başına iş yok). Çerçeve ekran dışına taşarsa ya da oran bozuksa ekran görüntüsüyle bildirin.
 
 ## Bilinen sınırlar

@@ -31,11 +31,12 @@ private _rect = {
     _control
 };
 // Daire dokusu KULLANILMAZ (dot_CA kenarlarında boşluk var, köşeler içe çökük görünüyordu). Köşe = ince yatay şeritler (çeyrek daire yayı).
-// Şerit k'nın yatay girintisi: r * (1 - sqrt(1 - ((n - k - 0.5) / n)^2)); şeritler 1 piksel kadar çakıştırılır, dikiş kalmaz.
-private _steps = 6;
+// Şerit sayısı yarıçapa göre uyarlanır. Şerit k'nın yatay girintisi: r * (1 - sqrt(1 - ((n - k - 0.5) / n)^2)); şeritler 1 piksel kadar çakıştırılır, dikiş kalmaz.
 private _strips = {
     params ["_x", "_y", "_rw", "_rh", "_r", "_color", "_flip"];
     private _rv = _r * _ratio;
+    // şerit sayısı yarıçapa göre: her ~4 piksel için bir şerit (3 ile 12 arası); büyük köşe pürüzsüz, küçük köşe az kontrol
+    private _steps = (3 max (round (_r * ((getResolution select 2) / safeZoneW) / 4))) min 12;
     private _stripH = _rv / _steps;
     for "_k" from 0 to (_steps - 1) do {
         private _t = (_steps - _k - 0.5) / _steps;
@@ -116,7 +117,7 @@ if (_mode isEqualTo "DESK") then {
     private _vert = 0.042;
     private _case = [0.16, 0.19, 0.13, 1];
     private _dark = [0.09, 0.11, 0.07, 1];
-    private _bumperW = 0.056;
+    private _bumperW = 0.082;
     private _bumperH = _bumperW * _ratio;
 
     // üst kenar tuşları (kılıfın arkasından taşar): Active tuşu (geniş), güç, ses
@@ -126,10 +127,10 @@ if (_mode isEqualTo "DESK") then {
 
     // kılıf (koyu yeşil, mat kauçuk) + köşe koruyucular + çıkıntılı iç kenar + siyah ekran çerçevesi
     [_left - _side, _top - _vert, _w + 2 * _side, _h + 2 * _vert, 0.036, _case] call _round;
-    [_left - _side, _top - _vert, _bumperW, _bumperH, 0.02, _dark] call _round;
-    [_left + _w + _side - _bumperW, _top - _vert, _bumperW, _bumperH, 0.02, _dark] call _round;
-    [_left - _side, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.02, _dark] call _round;
-    [_left + _w + _side - _bumperW, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.02, _dark] call _round;
+    [_left - _side, _top - _vert, _bumperW, _bumperH, 0.036, _dark] call _round;
+    [_left + _w + _side - _bumperW, _top - _vert, _bumperW, _bumperH, 0.036, _dark] call _round;
+    [_left - _side, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.036, _dark] call _round;
+    [_left + _w + _side - _bumperW, _top + _h + _vert - _bumperH, _bumperW, _bumperH, 0.036, _dark] call _round;
     [_left - 0.03, _top - 0.024, _w + 0.06, _h + 0.048, 0.02, [0.12, 0.145, 0.095, 1]] call _round;
     [_left - 0.018, _top - 0.0155, _w + 0.036, _h + 0.031, 0.012, [0.02, 0.02, 0.02, 1]] call _round;
     // kılıf üst kenarında ince parlama
