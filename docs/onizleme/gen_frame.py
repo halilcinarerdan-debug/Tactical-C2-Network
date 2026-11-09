@@ -173,6 +173,32 @@ def tablet_tex():
     o.text("_left + 0.04", "_top + _h + 0.0188", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.42, 0.48, 0.36))
     return o
 
+def desk_tex():
+    """GERCEK DOKULU masa basi bilgisayar: monitor (4 kenar), ayak, klavye, fare .paa; cene tuslari, LED, yazi, vidalar kontrol olarak ustte."""
+    o = Ops()
+    D = TEXDIR
+    o.pic(D + "desk_stand_ca.paa", "_cx - 0.13", "_top + _h + 0.054", 0.26, 0.044)
+    o.pic(D + "desk_keyboard_ca.paa", "_cx - 0.21", "_top + _h + 0.11", 0.42, 0.054)
+    o.pic(D + "desk_mouse_ca.paa", "_cx + 0.232", "_top + _h + 0.116", 0.026, 0.044)
+    # arka zemin (dikis / ekran kenari beyazligini onler)
+    o.rect("_left - 0.012", "_top - 0.012", "_w + 0.024", "_h + 0.024", (0.012, 0.025, 0.015))
+    o.rect("_left - 0.02", "_top + _h - 0.002", "_w + 0.04", 0.058, (0.06, 0.06, 0.068))
+    o.pic(D + "desk_top_ca.paa", "_left - 0.022", "_top - 0.022", "_w + 0.044", 0.022)
+    o.pic(D + "desk_bottom_ca.paa", "_left - 0.022", "_top + _h", "_w + 0.044", 0.058)
+    o.pic(D + "desk_left_ca.paa", "_left - 0.022", "_top - 0.0015", 0.022, "_h + 0.003")
+    o.pic(D + "desk_right_ca.paa", "_left + _w", "_top - 0.0015", 0.022, "_h + 0.003")
+    o.dot("_cx - 0.005", "_top - 0.0165", 0.01, (0.18, 0.18, 0.22))
+    o.text("_left + 0.01", "_top + _h + 0.0185", 0.1, 0.026, "TC2", 0.02, (0.45, 0.45, 0.5))
+    for k, t in enumerate(["MENU", "SRC", "-", "+", "AUTO", "PWR"]):
+        x = "_left + _w - %s" % S(0.29 - k * 0.044)
+        o.rect(x, "_top + _h + 0.022", 0.034, 0.016, (0.14, 0.14, 0.155))
+        o.rect(x, "_top + _h + 0.022", 0.034, 0.0012, (0.28, 0.28, 0.3, 0.7))
+        o.text(x, "_top + _h + 0.0235", 0.034, 0.014, t, 0.011, (0.62, 0.62, 0.66))
+    o.dot("_left + _w - 0.02", "_top + _h + 0.0265", 0.008, (0.2, 0.85, 0.3))
+    for (x, y) in [("_left - 0.0155", "_top - 0.0155"), ("_left + _w + 0.0085", "_top - 0.0155"), ("_left - 0.0155", "_top + _h + 0.0455"), ("_left + _w + 0.0085", "_top + _h + 0.0455")]:
+        o.dot(x, y, 0.007, (0.2, 0.2, 0.22))
+    return o
+
 def desk():
     o = Ops()
     body = (0.085, 0.085, 0.09)
@@ -337,10 +363,13 @@ def render(o, mode, out, mask_prefix=None):
 if __name__ == "__main__":
     t, dsk = tablet(), desk()
     tt = tablet_tex()
+    dt = desk_tex()
     render(tt, "FIELD", "tablet_cercevesi_onizleme.png", "tab")
     render(t, "FIELD", "tablet_cercevesi_prosedurel_onizleme.png")
-    render(dsk, "DESK", "pc_cercevesi_onizleme.png", "desk")
+    render(dt, "DESK", "pc_cercevesi_onizleme.png", "desk")
+    render(dsk, "DESK", "pc_cercevesi_prosedurel_onizleme.png")
     open("frame_field.sqf.txt", "w").write(sqf(t))
     open("frame_field_tex.sqf.txt", "w").write(sqf(tt))
     open("frame_desk.sqf.txt", "w").write(sqf(dsk))
+    open("frame_desk_tex.sqf.txt", "w").write(sqf(dt))
     print("tablet ops", len(t.ops), "tablet_tex ops", len(tt.ops), "desk ops", len(dsk.ops))

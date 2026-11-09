@@ -129,7 +129,8 @@ Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE se
 * Küçük ayrıntılar (üst tuşlar, vidalar, kamera/sensörler, pogo noktaları, nervürler, yazı) doku üstünde kontrol olarak durur. Kontrol sayısı ~390'dan ~55'e indi (daha hızlı açılış).
 * **YEDEK:** CBA `Arayüz ▸ gerçek dokulu saha cihazı çerçevesi` kapalıysa ya da dokular PBO'da yoksa (`fileExists`) kodla çizilen önceki çerçeve kullanılır.
 * **DİKKAT (doğrulanmadı):** `.paa` dosyalarını kendi yazıcımla ürettim ve oyunda deneyemedim. Çerçeve **beyaz / boş / kırık** görünürse CBA ayarını kapatın ve RPT'deki doku hatası satırını gönderin. Ayrıca derleme aracınızın (pboProject / HEMTT) `addons/main/data/*.paa` dosyalarını PBO'ya kattığından emin olun.
-* **Masa başı monitör** hâlâ kodla çizilir (doku yok).
+* **Masa başı bilgisayar da gerçek dokulu:** monitör gövdesi (4 kenar parçası: üst, alt/çene, sol, sağ), ayak (boyun + taban), klavye (tuşlar kabartmalı, silik tuş yazılarıyla) ve fare ayrı `.paa` (`desk_*_ca.paa`); mat antrasit plastik, ince tane, üst-sol ışıklı kabartma. Çene tuşları, LED, yazı, kamera ve vidalar kontrol olarak ustte. Kontrol sayısı ~105'ten ~40'a indi. Aynı yedek mantığı: CBA ayarı kapalı ya da dosya yoksa kodla çizilen eski monitör.
+* Üretim: `tools/gen_desk_textures.py`.
 * **Önizleme:** `docs/onizleme/` (oyun görüntüsü değil; `gen_frame.py` önizlemeyi ve SQF gövdesini üretir).
 
 ## Bilinen sınırlar
