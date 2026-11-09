@@ -118,13 +118,15 @@ Karakterlerde sorun olursa ayarı kapatın; eski yazı tipine döner.
 
 Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE self menüsü (Sol Windows) ⇒ **TC2 Saha Cihazı** ⇒ "Saha cihazı bağlanıyor..." çubuğu tamamlanır ⇒ pencere açılır (ESC ya da KAPAT ile kapanır). Eskiden çubuk araç içinde hemen iptal oluyordu ("Kimlik doğrulama iptal edildi"). Hava aracı mürettebatı tablet taşımadan da açabilir; yer araçlarında tablet şartı sürer. Pencere modal olduğu için açıkken uçuş/sürüş tuşları pencereye gider; sürerken değil yolcu iken ya da sakin uçuşta kullanın.
 
-## N. Çerçeve (gerçekçi, çizgi film değil)
+## N. Çerçeve (gerçekçi, tozlu doku)
 
-Referans: oyundaki gerçek cihazlar (ITC tipi sağlam saha bilgisayarı, Thales telsizi, uçak MFD'si): mat renkler, kazınmış etiketler, vidalar, ince kenar ışığı.
-* **Saha cihazı (ITC tipi):** mat zeytin gövde, dört siyah köşe koruyucu, kenar ışığı ve gölgesi, vidalar, solda 3 LED ve 3 tuş (PWR / BRT / LOCK), üstte ön kamera + "TC2 FIELD SYSTEMS" yazısı + havalandırma yuvaları, altta entegre klavye (3 sıra). Marka logosu yok.
-* **Masa başı:** mat antrasit monitör, ince üst ışık ve alt gölge, köşe vidaları, çenede "TC2" yazısı + 6 tuş (MENU / SRC / - / + / AUTO / PWR) + LED, boyun ve taban, önünde klavye ve fare.
-* **Önizleme görselleri:** `docs/onizleme/`. Oyun ekran görüntüsü DEĞİLDİR; çerçeve düzeninin Python taklidi (`gen_frame.py`: **tek kaynak**, hem SQF gövdesini hem önizlemeyi üretir; `uiBuildFrame.sqf` gövdesi üretilmiştir, elle değiştirmeyin). 1920x1080 / 16:9 varsayımı, yazı tipi ve harita sahte.
-* Çerçeve kontrol sayısı yaklaşık 100-160 (statik; kare başına iş yok). Çerçeve ekran dışına taşarsa, kısa kalırsa ya da renkler çok koyu/açık görünürse ekran görüntüsüyle bildirin.
+Referans: oyundaki Thales telsizi dokusu (mat, taneli kauçuk; kabartma ışık/gölge; vidalı yükseltilmiş ekran kenarı; çizik ve aşınma).
+* **Saha cihazı:** Samsung Galaxy Tab Active5 Tactical Edition'ı andıran sağlam tablet: koyu yeşil mat kauçuk kılıf, siyah köşe koruyucular, vidalı yükseltilmiş ekran kenarı (sol ve sağda 3'er vida), üst tuşlar, üst bantta tutma nervürleri, solda ön kamera, altta altın pogo noktaları, kabartma "TC2 TACTICAL" yazısı.
+  **Toz ve aşınma:** taneli (stipple) benekler, bulutlanma, çizikler, kenarda boya çıkması, alt kısımda kir koyulaşması. Doku tohumludur: her açılışta aynı görünür.
+* **Masa başı:** mat antrasit monitör (kenar ışığı, vidalar, çene tuşları, LED), boyun + taban, klavye ve fare.
+* **Önizleme:** `docs/onizleme/` (oyun görüntüsü DEĞİL; `gen_frame.py` tek kaynaktır ve SQF gövdesini de üretir).
+* **Maliyet:** saha cihazı çerçevesi yaklaşık 390, masa başı yaklaşık 105 statik kontrol; açılışta tek seferlik (kare başına iş yok). Pencere açılışında hafif bir takılma görürseniz bildirin: benek sayısı azaltılır.
+* Gerçek doku (.paa) kullanılmadı: .paa üretip oyunda doğrulayamam; yine de istenirse denenebilir.
 
 ## Bilinen sınırlar
 

@@ -52,11 +52,10 @@ if (!isNull findDisplay 92000) exitWith {};
 
     // Ekran alanı; çerçeve (uiBuildFrame) bunun dışına çizilir. Masaüstü monitörde çene + ayak, tablette kalın kılıf için pay bırakılır.
     private _w = 0.7 * safeZoneW;
-    private _h = ([0.58, 0.56] select _fieldMode) * safeZoneH;
+    private _h = ([0.58, 0.64] select _fieldMode) * safeZoneH;
     private _left = safeZoneX + (safeZoneW - _w) / 2;
     private _top = if (_fieldMode) then {
-        // saha cihazı: üstte kamera/yazı bandı (~0.05), altta entegre klavye (~0.10)
-        safeZoneY + (safeZoneH - (_h + 0.15)) / 2 + 0.05
+        safeZoneY + (safeZoneH - _h) / 2
     } else {
         // monitör çenesi + boyun + taban + klavye altta yer tutar (toplam ~0.19)
         safeZoneY + (safeZoneH - (_h + 0.19)) / 2 + 0.022

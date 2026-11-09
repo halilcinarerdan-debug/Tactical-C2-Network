@@ -13,46 +13,120 @@ class Ops:
 def S(v):  # sayi/ifade -> metin
     return v if isinstance(v, str) else ("%.5f" % v).rstrip("0").rstrip(".")
 def C(c):
-    return "[%s, %s, %s, 1]" % tuple(S(v) for v in c[:3])
+    return "[%s, %s, %s, %s]" % (S(c[0]), S(c[1]), S(c[2]), S(c[3]) if len(c) > 3 else "1")
+
+import random
+
+def dust(o, rnd, region, n):
+    """region = (xmin_expr_base, xrange_expr, ymin, yrange) : ifadeler; rastgele parcacik uretir"""
+    pass
 
 def tablet():
+    """Samsung Galaxy Tab Active5 Tactical Edition'i andiran sagam tablet; Thales telsizi tarzi MAT, TANELI (stipple) kaucuk doku:
+    kabartma (isik ust-sol, golge alt-sag), vidali yukselmis ekran kenari, tozlu benekler, cizikler, asinma."""
     o = Ops()
-    olive, edge, black, bez = (0.235, 0.265, 0.19), (0.17, 0.19, 0.135), (0.04, 0.04, 0.045), (0.012, 0.012, 0.012)
-    # govde + ust/alt kenar isigi
-    o.rr("_left - 0.085", "_top - 0.05", "_w + 0.135", "_h + 0.15", 0.014, olive)
-    o.rect("_left - 0.071", "_top - 0.0488", "_w + 0.107", 0.0015, (0.36, 0.4, 0.29))
-    o.rect("_left - 0.071", "_top + _h + 0.097", "_w + 0.107", 0.0015, (0.11, 0.12, 0.085))
-    # siyah kose koruyucular (govdeden hafif tasar)
-    bh = "0.07 * _ratio"
-    o.rr("_left - 0.091", "_top - 0.056", 0.07, bh, 0.02, black)
-    o.rr("_left + _w - 0.014", "_top - 0.056", 0.07, bh, 0.02, black)
-    o.rr("_left - 0.091", "_top + _h + 0.106 - 0.07 * _ratio", 0.07, bh, 0.02, black)
-    o.rr("_left + _w - 0.014", "_top + _h + 0.106 - 0.07 * _ratio", 0.07, bh, 0.02, black)
-    # ekran cercevesi (siyah cam)
-    o.rr("_left - 0.016", "_top - 0.016", "_w + 0.032", "_h + 0.032", 0.008, bez)
-    # vidalar
-    for (x, y) in [("_left - 0.034", "_top - 0.036"), ("_left + _w + 0.024", "_top - 0.036"), ("_left - 0.034", "_top + _h + 0.082"), ("_left + _w + 0.024", "_top + _h + 0.082")]:
-        o.dot(x, y, 0.008, (0.34, 0.35, 0.3))
-        o.rect(x + " + 0.002", y + " + 0.0033", 0.004, 0.0012, (0.1, 0.1, 0.09))
-    # sol bant: LED'ler + 3 tus
-    for k, c in enumerate([(0.2, 0.8, 0.3), (0.5, 0.35, 0.07), (0.38, 0.07, 0.05)]):
-        o.dot("_left - 0.058", "_top + %s" % S(0.02 + k * 0.022), 0.007, c)
-    for k, t in enumerate(["PWR", "BRT", "LOCK"]):
-        y = "_top + %s" % S(0.12 + k * 0.05)
-        o.rect("_left - 0.07", y, 0.04, 0.028, (0.095, 0.105, 0.085))
-        o.rect("_left - 0.07", y, 0.04, 0.0014, (0.22, 0.23, 0.19))
-        o.text("_left - 0.07", y + " + 0.0055", 0.04, 0.02, t, 0.012, (0.6, 0.62, 0.55))
-    # ust bant: kamera, yazi, havalandirma yuvalari
-    o.dot("_cx - 0.003", "_top - 0.031", 0.006, (0.1, 0.12, 0.18))
-    o.text("_cx - 0.1", "_top - 0.047", 0.2, 0.022, "TC2 FIELD SYSTEMS", 0.017, (0.5, 0.55, 0.42))
-    for k in range(10):
-        o.rect("_left + _w * 0.72 + %s" % S(k * 0.012), "_top - 0.04", 0.007, 0.0025, (0.1, 0.11, 0.08))
-    # alt: entegre klavye
-    o.rr("_left + 0.02", "_top + _h + 0.026", "_w - 0.04", 0.072, 0.006, (0.055, 0.06, 0.05))
-    kw = "((_w - 0.096) / 15)"
-    for r in range(3):
-        for c in range(15):
-            o.rect("_left + 0.028 + %d * %s + 0.0012" % (c, kw), "_top + _h + %s" % S(0.032 + r * 0.02), "%s - 0.0024" % kw, 0.0165, (0.15, 0.16, 0.13))
+    rnd = random.Random(20261109)
+    case, dark, lip, black = (0.14, 0.165, 0.115), (0.075, 0.09, 0.06), (0.105, 0.128, 0.085), (0.015, 0.015, 0.015)
+    HL, SH = (0.5, 0.56, 0.45), (0.02, 0.03, 0.015)   # kabartma isigi / golgesi (alpha ile kullanilir)
+    # ust tuslar (kilifin arkasindan tasar): Active tusu, guc, ses  (+ kabartma)
+    for (dx, wd, yy, hh) in [(0.0, 0.05, -0.0495, 0.0105), (0.062, 0.026, -0.048, 0.009), (0.098, 0.04, -0.048, 0.009)]:
+        o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, hh, (0.045, 0.055, 0.035))
+        o.rect("_left + _w * 0.58 + %s" % S(dx), "_top %s" % S(yy).replace("-", "- "), wd, 0.0012, HL + (0.3,))
+    # kilif + kose koruyucular + yukselmis ic kenar + ekran cercevesi
+    o.rr("_left - 0.058", "_top - 0.042", "_w + 0.116", "_h + 0.084", 0.036, case)
+    for (x, y) in [("_left - 0.058", "_top - 0.042"), ("_left + _w + 0.058 - 0.082", "_top - 0.042"),
+                   ("_left - 0.058", "_top + _h + 0.042 - 0.082 * _ratio"), ("_left + _w + 0.058 - 0.082", "_top + _h + 0.042 - 0.082 * _ratio")]:
+        o.rr(x, y, 0.082, "0.082 * _ratio", 0.036, dark)
+    o.rr("_left - 0.03", "_top - 0.024", "_w + 0.06", "_h + 0.048", 0.02, lip)
+    # yukselmis ic kenar kabartmasi: ust/sol acik, alt/sag koyu
+    o.rect("_left - 0.012", "_top - 0.0238", "_w + 0.024", 0.0016, HL + (0.3,))
+    o.rect("_left - 0.0298", "_top - 0.012", 0.0015, "_h + 0.024", HL + (0.22,))
+    o.rect("_left - 0.012", "_top + _h + 0.0222", "_w + 0.024", 0.0016, SH + (0.6,))
+    o.rect("_left + _w + 0.0283", "_top - 0.012", 0.0015, "_h + 0.024", SH + (0.6,))
+    o.rr("_left - 0.018", "_top - 0.0155", "_w + 0.036", "_h + 0.031", 0.012, black)
+    # ekran girintisi (ici golge ust/sol, isik alt/sag)
+    o.rect("_left - 0.0165", "_top - 0.0153", "_w + 0.033", 0.0014, (0, 0, 0, 0.9))
+    o.rect("_left - 0.0165", "_top + _h + 0.0132", "_w + 0.033", 0.0012, HL + (0.2,))
+    # kilif ust / alt kenar isigi ve golgesi
+    o.rect("_left - 0.022", "_top - 0.0405", "_w + 0.044", 0.0016, HL + (0.32,))
+    o.rect("_left - 0.022", "_top + _h + 0.0391", "_w + 0.044", 0.0016, SH + (0.9,))
+    # kose koruyucu kabartmasi (ust-sol kenarlar acik)
+    for (x, y) in [("_left - 0.052", "_top - 0.0395"), ("_left + _w + 0.0105", "_top - 0.0395")]:
+        o.rect(x, y, 0.03, 0.0013, HL + (0.2,))
+    # tutma yuvasi (ust bantta nervur / havalandirma, telsiz gibi)
+    for k in range(5):
+        y = "_top - 0.0385 + %s" % S(k * 0.0042)
+        o.rect("_left + _w * 0.1", y, "_w * 0.28", 0.0017, (0.01, 0.015, 0.008, 0.6))
+        o.rect("_left + _w * 0.1", y + " + 0.0017", "_w * 0.28", 0.0009, HL + (0.16,))
+    # ekran kenari vidalari: sol ve sag kenarda 3'er (parlak ust-sol, koyu alt-sag)
+    for xx in ["_left - 0.0245", "_left + _w + 0.0165"]:
+        for k in range(3):
+            y = "_top + _h * %s" % S(0.18 + k * 0.32)
+            o.dot(xx, y, 0.0078, (0.03, 0.035, 0.025))
+            o.dot(xx + " + 0.0006", y + " + 0.0005", 0.0066, (0.34, 0.37, 0.3))
+            o.rect(xx + " + 0.0018", y + " + 0.0034", 0.0042, 0.0011, (0.06, 0.06, 0.05))
+    # ----- TOZ / TANELI DOKU (tohumlu rastgele) -----
+    bands = [
+        ("_left - 0.056", 0.038, "_top - 0.032", "_h + 0.064"),          # sol
+        ("_left + _w + 0.018", 0.038, "_top - 0.032", "_h + 0.064"),     # sag
+        ("_left - 0.03", "_w + 0.06", "_top - 0.04", 0.022),             # ust
+        ("_left - 0.03", "_w + 0.06", "_top + _h + 0.0155", 0.024),      # alt
+    ]
+    def pos(b):
+        bx, bw, by, bh = b
+        fx, fy = rnd.random(), rnd.random()
+        px = "%s + %s * %s" % (bx, S(fx), bw if isinstance(bw, str) and False else ("(%s)" % bw if isinstance(bw, str) else S(bw)))
+        py = "%s + %s * %s" % (by, S(fy), ("(%s)" % bh if isinstance(bh, str) else S(bh)))
+        return px, py
+    # genis, cok hafif toz filmi + alt kisimda koyulasma (kir)
+    for b in bands:
+        o.rect(b[0], b[2], b[1], b[3], (0.68, 0.6, 0.45, 0.05))
+    o.rect("_left - 0.056", "_top + _h * 0.5", 0.038, "_h * 0.5 + 0.032", (0.03, 0.03, 0.02, 0.2))
+    o.rect("_left + _w + 0.018", "_top + _h * 0.45", 0.038, "_h * 0.55 + 0.032", (0.03, 0.03, 0.02, 0.2))
+    o.rect("_left - 0.03", "_top + _h + 0.0155", "_w + 0.06", 0.024, (0.03, 0.03, 0.02, 0.15))
+    # bulutlanma (mottling): orta boy, cok dusuk alfa, acik/koyu
+    for i in range(36):
+        px, py = pos(rnd.choice(bands))
+        w_, h_ = rnd.choice([0.008, 0.012, 0.018, 0.026]), rnd.choice([0.006, 0.01, 0.014])
+        c = rnd.choice([(0.02, 0.025, 0.015, 0.1), (0.02, 0.025, 0.015, 0.14), (0.5, 0.55, 0.42, 0.06), (0.62, 0.55, 0.42, 0.06)])
+        o.rect(px, py, w_, h_, c)
+    # ince benekler (stipple): koyu ve acik
+    for i in range(150):
+        px, py = pos(rnd.choice(bands))
+        w_ = rnd.choice([0.0010, 0.0014, 0.0018, 0.0024])
+        h_ = rnd.choice([0.0010, 0.0014, 0.0018])
+        if rnd.random() < 0.5:
+            c = (0.0, 0.01, 0.0, rnd.choice([0.16, 0.24, 0.32]))
+        else:
+            c = rnd.choice([(0.66, 0.6, 0.47, rnd.choice([0.07, 0.12, 0.18])), (0.45, 0.5, 0.38, rnd.choice([0.07, 0.12]))])
+        o.rect(px, py, w_, h_, c)
+    # cizikler / asinma izleri (acik, ince)
+    for i in range(14):
+        px, py = pos(rnd.choice(bands))
+        if rnd.random() < 0.55:
+            w_, h_ = rnd.choice([0.012, 0.02, 0.03, 0.045]), 0.0009
+        else:
+            w_, h_ = 0.0009, rnd.choice([0.01, 0.016, 0.026])
+        o.rect(px, py, w_, h_, (0.74, 0.76, 0.68, rnd.choice([0.1, 0.16, 0.24])))
+    # kilif kenari boya cikmasi
+    for i in range(18):
+        side = rnd.choice(["t", "b", "l", "r"])
+        f = rnd.random()
+        ln = rnd.choice([0.008, 0.016, 0.028])
+        if side == "t": o.rect("_left - 0.02 + %s * (_w + 0.04)" % S(f), "_top - 0.0412", ln, 0.0013, (0.46, 0.5, 0.39, 0.32))
+        if side == "b": o.rect("_left - 0.02 + %s * (_w + 0.04)" % S(f), "_top + _h + 0.0399", ln, 0.0013, (0.46, 0.5, 0.39, 0.28))
+        if side == "l": o.rect("_left - 0.0572", "_top + %s * _h" % S(f), 0.0013, ln, (0.46, 0.5, 0.39, 0.28))
+        if side == "r": o.rect("_left + _w + 0.0559", "_top + %s * _h" % S(f), 0.0013, ln, (0.46, 0.5, 0.39, 0.28))
+    # ----- sensorler, pogo, yazi (kabartma yazi: koyu golge + acik ust) -----
+    o.dot("_left - 0.0335", "_top + _h * 0.5 - 0.007", 0.014, (0.03, 0.03, 0.035))
+    o.dot("_left - 0.0305", "_top + _h * 0.5 - 0.004", 0.008, (0.1, 0.12, 0.18))
+    o.dot("_left - 0.0305", "_top + _h * 0.5 - 0.036", 0.006, (0.08, 0.08, 0.08))
+    o.dot("_left + _w + 0.0225", "_top + _h * 0.5 - 0.012", 0.007, (0.06, 0.06, 0.06))
+    o.dot("_left + _w + 0.0225", "_top + _h * 0.5 + 0.012", 0.007, (0.06, 0.06, 0.06))
+    for k in range(4):
+        o.dot("_left + _w * 0.5 - 0.027 + %s" % S(k * 0.018), "_top + _h + 0.0225", 0.0065, (0.55, 0.45, 0.18))
+    o.text("_left + 0.0405", "_top + _h + 0.0195", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.02, 0.03, 0.015))
+    o.text("_left + 0.04", "_top + _h + 0.0188", 0.12, 0.022, "TC2 TACTICAL", 0.016, (0.42, 0.48, 0.36))
     return o
 
 def desk():
@@ -120,23 +194,23 @@ def ev(e, env):
 
 def render(o, mode, out):
     img = Image.new("RGB", (PXW, PXH))
-    d = ImageDraw.Draw(img)
+    d = ImageDraw.Draw(img, "RGBA")
     for yy in range(PXH):
         t = yy / PXH
         d.line([(0, yy), (PXW, yy)], fill=(int(120 - 50 * t), int(150 - 60 * t), int(190 - 110 * t)))
     w = 0.7 * W
     field = mode == "FIELD"
-    h = (0.56 if field else 0.58) * H
+    h = (0.64 if field else 0.58) * H
     left = (W - w) / 2
-    top = (H - (h + 0.15)) / 2 + 0.05 if field else (H - (h + 0.19)) / 2 + 0.022
+    top = (H - h) / 2 if field else (H - (h + 0.19)) / 2 + 0.022
     env = {"_left": left, "_top": top, "_w": w, "_h": h, "_cx": left + w / 2, "_ratio": ratio}
-    col = lambda c: tuple(int(round(v * 255)) for v in c[:3])
+    col = lambda c: tuple(int(round(v * 255)) for v in c[:3]) + ((int(round(c[3] * 255)),) if len(c) > 3 else ())
     def rect(x, y, rw, rh, c):
         x0, y0, x1, y1 = x * sx, y * sy, (x + rw) * sx - 1, (y + rh) * sy - 1
         if x1 >= x0 and y1 >= y0: d.rectangle([x0, y0, x1, y1], fill=col(c))
     def strips(x, y, rw, rh, r, c, flip):
         rv = r * ratio
-        n = min(12, max(3, round(r * sx / 4)))
+        n = min(8, max(3, round(r * sx / 4)))
         sh = rv / n
         for k in range(n):
             t = (n - k - 0.5) / n
@@ -193,7 +267,7 @@ def render(o, mode, out):
     rect(left, top + h - 0.04, w, 0.04, (0, 0.12, 0.03))
     d.text(((left + 0.01) * sx, (top + h - 0.03) * sy), "ESC = kapat", fill=col((0.12, 0.6, 0.2)), font=f)
     # ekran kose maskeleri
-    cc = (0.012, 0.012, 0.012) if field else (0.01, 0.03, 0.015)
+    cc = (0.015, 0.015, 0.015) if field else (0.01, 0.03, 0.015)
     r = 0.014; rv = r * ratio; n = 5; sh = rv / n
     for kk in range(n):
         t = (n - kk - 0.5) / n; inset = r * (1 - math.sqrt(1 - t * t))

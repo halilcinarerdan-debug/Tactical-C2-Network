@@ -5,7 +5,7 @@
     Ekranın dört köşesini çerçeve renginde ince şeritlerle kaplar; böylece ekran içeriği de yuvarlak köşeli görünür
     (uiBuildFrame yalnızca çerçevenin dışını yuvarlar). Yarıçap küçüktür (0.014); köşedeki birkaç piksel içerik kapanır.
     Köşe renkleri uiBuildFrame'deki ekran kenarıyla aynıdır (masa başı: koyu yeşilimsi girinti, saha: siyah kenar).
-    IDC: 93400-93499
+    IDC: 93900-93999
 
     Parametreler: yok (geometri TC2_ui_frame değişkeninden: [mod, sol, üst, genişlik, yükseklik])
     Dönüş: yok
@@ -17,13 +17,13 @@ if (isNull _display) exitWith {};
 (missionNamespace getVariable ["TC2_ui_frame", []]) params [["_mode", ""], ["_left", 0], ["_top", 0], ["_w", 0], ["_h", 0]];
 if (_mode isEqualTo "") exitWith {};
 
-private _color = if (_mode isEqualTo "DESK") then {[0.01, 0.03, 0.015, 1]} else {[0.012, 0.012, 0.012, 1]};
+private _color = if (_mode isEqualTo "DESK") then {[0.01, 0.03, 0.015, 1]} else {[0.015, 0.015, 0.015, 1]};
 private _ratio = (safeZoneH / safeZoneW) * (getResolution select 4);
 private _r = 0.014;
 private _rv = _r * _ratio;
 private _steps = 5;
 private _stripH = _rv / _steps;
-private _idc = 93400;
+private _idc = 93900;
 
 for "_k" from 0 to (_steps - 1) do {
     // üst: şerit k'nın dışta kalan (maskelenecek) yatay payı = girinti
