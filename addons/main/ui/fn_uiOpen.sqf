@@ -52,12 +52,13 @@ if (!isNull findDisplay 92000) exitWith {};
 
     // Ekran alanı; çerçeve (uiBuildFrame) bunun dışına çizilir. Masaüstü monitörde çene + ayak, tablette kalın kılıf için pay bırakılır.
     private _w = 0.7 * safeZoneW;
-    private _h = ([0.6, 0.64] select _fieldMode) * safeZoneH;
+    private _h = ([0.58, 0.64] select _fieldMode) * safeZoneH;
     private _left = safeZoneX + (safeZoneW - _w) / 2;
     private _top = if (_fieldMode) then {
         safeZoneY + (safeZoneH - _h) / 2
     } else {
-        safeZoneY + (safeZoneH - (_h + 0.12)) / 2 + 0.018
+        // monitör çenesi + boyun + taban + klavye altta yer tutar (toplam ~0.18)
+        safeZoneY + (safeZoneH - (_h + 0.18)) / 2 + 0.018
     };
 
     [_display, ["DESK", "FIELD"] select _fieldMode, _left, _top, _w, _h] call TC2_fnc_uiBuildFrame;
