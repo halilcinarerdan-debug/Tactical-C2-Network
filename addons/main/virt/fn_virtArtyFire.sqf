@@ -31,7 +31,7 @@ private _adjusting = (_mission select 19) isEqualTo "ADJUST";
 private _guns = round (missionNamespace getVariable ["TC2_virt_artyGuns", 4]);
 private _total = if (_adjusting) then {1} else {((_mission select 13) max 1) * (_guns max 1)};
 
-private _prep = missionNamespace getVariable ["TC2_virt_artyPrep", 15];
+private _prep = missionNamespace getVariable [format ["TC2_virt_prep_%1", _id], missionNamespace getVariable ["TC2_virt_artyPrep", 15]];   // görev başına geçersiz kılma: yalnızca debugVirtArty
 private _rate = missionNamespace getVariable ["TC2_virt_artyRate", 4];
 private _error = missionNamespace getVariable ["TC2_virt_artyError", 25];
 private _flight = switch (missionNamespace getVariable ["TC2_virt_artyCaliber", "155"]) do {

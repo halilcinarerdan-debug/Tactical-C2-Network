@@ -148,6 +148,7 @@ Oyun video ayarlarında **PiP açık** olsun. Mavi kart (`["BLUE"] call TC2_fnc_
 2. **Kask kamerası:** `["HELMETCAM"] call TC2_fnc_debugGive;` ile kendinize değil **başka bir askere** verin: `[cursorObject] call TC2_fnc_debugHelmetCam;` (AI'ya bakarak, sunucuda). Listede `KASK  <çağrı adı> <ad>` çıkar (aynı telsiz menzilinde; CBA `Kamera ▸ telsiz menziliyle sınırlı` kapalıysa menzilsiz). Seçince o askerin kafasından görüntü gelir. Eşyayı alınca (`[cursorObject, false] call TC2_fnc_debugHelmetCam;`) 5 sn içinde listeden düşer ve yayın kesilir.
 3. **Telsiz:** KAMERA sekmesi diğer sekmeler gibi **aktif ACRE2 telsizi gerektirir** (varsayılan; "ağ yoksa veri yok"). Telsiz yoksa *"BAĞLANTI YOK: aktif telsiz yok"*. Test için CBA `Kamera ▸ Kamera için aktif telsiz şart` kapatılabilir (telsizsiz kask kamerasında menzil sınırı da uygulanmaz).
 3b. **Yetki:** Kırmızı kart ya da izleme modunda (tabletli er) sekme *"Level 2 ve üstü içindir"*; liste ve görüntü yok. Bir İHA'yı gizlemek: `uav setVariable ["TC2_camHidden", true, true];`.
+3c. **Boyut:** canlı görüntü artık içerik alanının altına kadar uzanır (genişlik aynı kaldı; yükseklik ~%20 arttı, görüntü gerilmez). Durum satırı, kamera ekranındaki OSD şeridi gibi görüntünün alt kenarındadır.
 4. **Performans:** sekmeden çıkınca / pencere kapanınca yayın durur (kamera yok edilir). Yayın açıkken FPS düşüşü görürseniz bildirin (doku küçültülür).
 5. **Aktarılmayan kaynak:** çok uzak bir İHA/asker için görüntü boş kalabilirse ya da *"Kaynak bu istemciye aktarılmıyor"* derse bildirin (MP nesne akışı; doğrulanmadı).
 
@@ -163,7 +164,7 @@ Oyun video ayarlarında **PiP açık** olsun. Mavi kart (`["BLUE"] call TC2_fnc_
 
 ## R. Eşya ikonları ve arsenal
 
-TC2 eşyalarının (Kırmızı / Mavi / Siyah-Altın kart, CAC kartı, Saha Tableti, Kask Kamerası) envanter / arsenal resimleri artık gerçekçi çizimdir (`data/icon_*_ca.paa`; kaynak: `tools/gen_item_icons.py`). Eşyalar `scope = 2` ve `scopeArsenal = 2`.
+TC2 eşyalarının (Kırmızı / Mavi / Siyah-Altın kart, CAC kartı, Saha Tableti, Kask Kamerası) envanter / arsenal resimleri artık gerçekçi çizimdir (`data/icon_*_ca.paa`; kaynak: `tools/gen_item_icons.py`). Eşyalar `scope = 2` ve `scopeArsenal = 2`. İkonlar dokunun ortasında **%60 ölçekte** durur (şeffaf kenar boşluğu); arsenal / envanter listesinde eskisinden küçük görünür. Daha da küçük istenirse `tools/gen_item_icons.py` içinde `ICON_SCALE` düşürülüp ikonlar yeniden üretilir.
 1. Arsenal'i açın (Eden / Zeus / ACE Arsenal kutusu). **ACE Arsenal:** *Çeşitli eşyalar (Misc. items)* sekmesinde `Kirmizi Kart (Level 1)`, `Mavi Kart`, `Siyah-Altin Kart`, `CAC Kimlik Karti`, `TC2 Saha Tableti`, `TC2 Kask Kamerasi`. **Vanilla Arsenal:** *Eşyalar ▸ Çeşitli*.
 2. Envanterde ikonlar (kart, tablet, kamera) görünmeli. Ağırlıklar: tablet 8, kamera 3, kart 1.
 3. **Arsenalde görünmüyorsa:** ACE'in arsenal kısıtlamasını kontrol edin (kutuya bu eşyalar `ace_arsenal_fnc_addVirtualItems` ile eklenmemiş olabilir) ya da bize CfgPatches/RPT satırını gönderin. Yere atılan eşyanın 3B modeli yoktur (yalnızca envanter eşyası).
@@ -183,6 +184,17 @@ CBA `Sanal ateş desteği` (varsayılan KAPALI). Açılınca oyuncular formu do�
 3. **Adjust fire:** tek mermi; gözlemci düzeltme (LEFT / RIGHT, ADD / DROP) gönderince yeni mermi düzeltilmiş noktaya düşer; **FIRE FOR EFFECT:** mermi x top sayısı (CBA 4). **CHECK FIRING** atılmamış mermileri keser (havadakiler düşer). AT MY COMMAND: `IS READY` ⇒ gözlemci FIRE.
 4. SMOKE / ILLUM: ilgili mermi sınıfı yoksa görev *"sanal bataryada ... mühimmatı yok"* ile reddedilir (sınıf adları oyuna göre değişebilir).
 5. NFA içindeki hedef reddedilir; danger close 600 m kuralı sürer.
+
+**Doğrudan tetikleme (debug, formu doldurmadan):** debug konsolunu açın. **Host / tek oyunculu:** `LOKAL ÇALIŞTIR` (Local Exec). **Ayrılmış sunucu:** `SUNUCUDA ÇALIŞTIR` (Server Exec) ve `player` yerine `allPlayers select 0` yazın. CBA `TC2_virt_cas` / `TC2_virt_arty` KAPALI olsa da çalışır; zincirin son halkasını hazır talep olarak yazar, uçak / mermi kodu gerçek zincirle aynıdır.
+* **CAS, piyade hedef** (600 m önünüze, uçak ~8 sn sonra, yanınızdan geçer): `[player] call TC2_fnc_debugVirtCas;`
+* **CAS, araç hedefi** (800 m önünüze, kuzeyden atak; füze → bomba → roket → top): `[player, 800, 0, "BMP zirhli arac"] call TC2_fnc_debugVirtCas;`
+* **CAS, lazer işaretli:** `[player, 500, -1, "piyade", "LASER"] call TC2_fnc_debugVirtCas;`  (parametreler: JTAC, mesafe m, atak yönü derece (-1 = sağınızdan), tanım, işaret NONE|SMOKE|LASER|IR, gecikme sn)
+* **Topçu, 155 mm HE FFE** (500 m önünüze; ilk mermi 5 sn sonra atılır, düşmesi +32 sn): `[player] call TC2_fnc_debugVirtArty;`
+* **Duman perdesi:** `[player, 700, "SMOKE", 1] call TC2_fnc_debugVirtArty;`   **Aydınlatma:** `[player, 600, "ILLUM", 1] call TC2_fnc_debugVirtArty;`   **Adjust (tek mermi):** `[player, 600, "HE", 1, "ADJUST"] call TC2_fnc_debugVirtArty;`  (parametreler: gözlemci, mesafe m, HE|SMOKE|WP|ILLUM, top başına mermi, FFE|ADJUST, hazırlık sn)
+* **Yalnızca mermi düşürmek** (zincirsiz; sunucuda): `[ATLToASL (player getPos [400, 0]), "Sh_155mm_AMOS", 25] call TC2_fnc_virtShell;`
+* Dönen sayı talep / görev numarasıdır; `-1` ise başlatılamadı (neden ekrandaki bildirim ve RPT `[TC2][VIRT]`). Sanal CAS "meşgul" derse sıfırlamak için: `missionNamespace setVariable ["TC2_virt_casBusy_WEST", false];` (OPFOR için `EAST`).
+* Aktif tabletiniz / terminaliniz varsa (aynı telsiz ağı) olay satırları **CAS** ve **TOPÇU** sekmelerinde canlı akar: `SANAL CAS #n: uçak yolda`, `IN HOT`, `RIFLE`, `GUNS GUNS GUNS`; topçuda `MTO ...`, `SHOT, OUT.`, `SPLASH, OVER.`, `ROUNDS COMPLETE, OUT.`. Tabletiniz yoksa yalnızca ekran bildirimi ve RPT.
+* Danger close denetimi bu yolda ATLANIR: 150 m'den yakına HE istemeyin (155 mm'in öldürücü yarıçapı ~50 m, CBA sapma 25 m).
 
 **Doğrulanmadı (oyunda denenmedi):** uçağın betikli uçuşu (hız / yön), `fireAtTarget` ile uçak silahlarının ateşlenmesi, güdümlü silahın lazer hedefi, mermi sınıfı adları ve patlamalar, çok oyunculu davranış. Uçak vurmuyorsa RPT'deki `[TC2][VIRT] CAS ucus` satırını (silah sınıfları) gönderin.
 

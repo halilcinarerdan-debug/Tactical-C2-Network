@@ -1,4 +1,4 @@
-# TC2 envanter / arsenal ikonlari (256x128): tablet, kask kamerasi, seviye kartlari. Dort kat ornekleme + golge + isik/gradyan + ince tane.
+# TC2 envanter / arsenal ikonlari (256x128, esya dokunun %60 ortasinda): tablet, kask kamerasi, seviye kartlari. Dort kat ornekleme + golge + isik/gradyan + ince tane.
 import os, sys, math
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -47,8 +47,15 @@ def grain(img, amp=7):
     arr[..., :3] = np.clip(arr[..., :3] + n, 0, 255)
     return Image.fromarray(arr.astype(np.uint8), "RGBA")
 
+# Arsenal / envanter listesinde ikon, dokunun tamamini kaplayarak gorunur; esya dokunun ortasina bu oranda kucultulerek yerlestirilir
+# (seffaf kenar boslugu). Daha kucuk goruntu istenirse bu oran dusurulur.
+ICON_SCALE = 0.6
+
 def finish(base, name):
-    out = base.resize((256, 128), Image.LANCZOS)
+    iw, ih = int(round(256 * ICON_SCALE)), int(round(128 * ICON_SCALE))
+    small = base.resize((iw, ih), Image.LANCZOS)
+    out = Image.new("RGBA", (256, 128), (0, 0, 0, 0))
+    out.alpha_composite(small, ((256 - iw) // 2, (128 - ih) // 2))
     out.save(os.path.join(OUT, name))
 
 def highlight_edge(base, mask, light=0.35, dark=0.45, width=5):

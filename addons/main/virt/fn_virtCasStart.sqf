@@ -7,13 +7,14 @@
 
     Parametreler:
         0: talep id <NUMBER>
+        1: gecikme saniye <NUMBER>  (isteğe bağlı; -1 = CBA ayarı TC2_virt_casDelay. debugVirtCas hızlı test için kısa süre verir)
 
     Dönüş: yok
 */
 
 if (!isServer) exitWith {};
 
-params [["_id", -1, [0]]];
+params [["_id", -1, [0]], ["_delayOverride", -1, [0]]];
 
 private _index = [_id] call TC2_fnc_casReqIndex;
 if (_index < 0) exitWith {};
@@ -24,7 +25,7 @@ if !((_request select 7) isEqualTo "READBACK_OK") exitWith {};
 private _side = side (group (_request select 2));
 missionNamespace setVariable [format ["TC2_virt_casBusy_%1", str _side], true];
 
-private _delay = missionNamespace getVariable ["TC2_virt_casDelay", 45];
+private _delay = if (_delayOverride >= 0) then {_delayOverride} else {missionNamespace getVariable ["TC2_virt_casDelay", 45]};
 private _jtacNet = _request select 1;
 private _data = _request select 5;
 

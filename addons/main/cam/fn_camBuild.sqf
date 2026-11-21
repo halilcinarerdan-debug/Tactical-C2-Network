@@ -4,9 +4,9 @@
 
     KAMERA sekmesinin kontrollerini kurar (varsayılan GİZLİ; camUiUpdate gösterir). YALNIZCA İZLEME: kontrol, bağlanma, silah, hedefleme yok.
       Üst:   kaynak listesi (İHA'lar ve kask kameraları) + görüntü modu düğmeleri (NORMAL / NVG / TERMAL; yalnızca izleyenin ekranını etkiler)
-      Sol:   canlı görüntü (render-to-texture; yalnızca seçili kaynak varken render edilir)
+      Sol:   canlı görüntü (render-to-texture; yalnızca seçili kaynak varken render edilir). Yükseklik içerik alanının altına kadar uzanır
       Sağ:   kaynağın durumu (tür, irtifa, hız, grid, yön) ve "yalnızca izleme" notu
-      Alt:   durum satırı
+      Durum satırı: görüntünün alt kenarında, kamera ekranındaki OSD şeridi gibi (görüntüden yer çalmaz)
     IDC: 92900 kaynak listesi, 92901 görüntü, 92902 bilgi, 92903-92905 mod düğmeleri, 92906 durum, 92907 görüntü zemini.
 
     Parametreler:
@@ -40,12 +40,13 @@ private _modeW = (_width * 0.42 - 0.02) / 3;
     _button ctrlAddEventHandler ["ButtonClick", {[(_this select 0) getVariable ["tc2_mode", 0]] call TC2_fnc_camUiMode}];
 } forEach [[92903, "NORMAL", 0], [92904, "NVG", 1], [92905, "TERMAL", 2]];
 
-// Görüntü: ekran kenarı zemini + render-to-texture resmi. Alan, durum satırına kadar uzanır; genişlik içeriğin ~%74'ü (bilgi paneli dar kalır).
+// Görüntü: ekran kenarı zemini + render-to-texture resmi. Genişlik içeriğin ~%74'ü (bilgi paneli dar kalır). Yükseklik, içerik alanının
+// 0.02 altına kadar uzar (uiOpen: içerik ile alt şerit arasında 0.03 boşluk var); durum satırı görüntünün ALT KENARINA bindirilir.
 // Doku 2:1; resmin gerçek piksel oranı hesaplanır ve r2t'ye verilir (görüntü gerilmez).
-private _picH = 9 * _rowH - 0.012;
+private _picTop = _top + _rowH + 0.006;
+private _picH = (_top + _height + 0.02) - _picTop - 0.01;
 private _picW = _width * 0.74;
 missionNamespace setVariable ["TC2_cam_aspect", (_picW / _picH) * (safeZoneH / safeZoneW) * (getResolution select 4)];
-private _picTop = _top + _rowH + 0.006;
 
 private _background = [_display, 92907, "RscText", _left, _picTop, _picW + 0.01, _picH + 0.01] call TC2_fnc_uiMakeControl;
 _background ctrlSetBackgroundColor [0.01, 0.015, 0.01, 1];
@@ -56,8 +57,9 @@ _picture ctrlSetText "";
 private _info = [_display, 92902, "RscStructuredText", _left + _picW + 0.025, _picTop, _width - _picW - 0.025, _picH + 0.01] call TC2_fnc_uiMakeControl;
 _info ctrlSetBackgroundColor [0, 0.05, 0.01, 1];
 
-private _status = [_display, 92906, "RscText", _left, _top + 10 * _rowH + 0.006, _width, _rowH] call TC2_fnc_uiMakeControl;
-_status ctrlSetBackgroundColor [0, 0.12, 0.03, 1];
+private _statusH = _rowH * 0.8;
+private _status = [_display, 92906, "RscText", _left + 0.005, _picTop + 0.005 + _picH - _statusH, _picW, _statusH] call TC2_fnc_uiMakeControl;
+_status ctrlSetBackgroundColor [0, 0.1, 0.02, 0.8];
 _status ctrlSetTextColor _green;
 _status ctrlSetFontHeight (_rowH * 0.45);
 

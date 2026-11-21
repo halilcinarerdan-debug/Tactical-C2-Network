@@ -16,4 +16,8 @@ class virt
     class virtArtyAccept {};
     class virtArtyFdc {};
     class virtArtyFire {};
+
+    // Test yardimcilari (formu doldurmadan dogrudan tetikler)
+    class debugVirtCas {};
+    class debugVirtArty {};
 };
