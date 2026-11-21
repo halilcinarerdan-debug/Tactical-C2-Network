@@ -348,6 +348,9 @@ class CfgFunctions
 
         // 7. Asama: KAMERA (iha + kask kamerasi, yalnizca izleme)
         #include "cam\CfgFunctions.hpp"
+
+        // 8. Asama: SANAL ates destegi (yapay ucak CAS, sanal topcu)
+        #include "virt\CfgFunctions.hpp"
     };
 };
 

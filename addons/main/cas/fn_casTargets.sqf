@@ -43,6 +43,11 @@ private _out = [];
     };
 } forEach (missionNamespace getVariable ["TC2_cas_simPilots", []]);
 
+// SANAL CAS (CBA TC2_virt_cas): gerçek pilot olmasa da seçilebilen yapay uçak; geri okuma otomatik, uçak gecikmeyle gelir (virtCasStart).
+if (missionNamespace getVariable ["TC2_virt_cas", false]) then {
+    _out pushBack ["VIRT_CAS", "SANAL CAS (yapay)", "FW", 0, true];
+};
+
 if (missionNamespace getVariable ["TC2_cas_allowSelf", false]) then {
     _out pushBack [_jtacNet, "SEN (TEST)", "RW", 0, false];
 };

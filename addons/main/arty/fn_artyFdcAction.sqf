@@ -71,6 +71,12 @@ switch (_action) do {
         if ((_battery select 2) isEqualTo "EMPTY") exitWith {["NO_BATTERY", []] call _ack};
         if !(_battery select 4) exitWith {["NO_PLAYER_CREW", []] call _ack};
 
+        // SANAL batarya: top / mühimmat / menzil denetimi yok; kabul virtArtyAccept ile
+        if ((_battery select 2) isEqualTo "VIRT") exitWith {
+            private _virtTarget = [_id, _volume, _changes, name _unit] call TC2_fnc_virtArtyAccept;
+            if (_virtTarget isEqualTo "") then {["NO_AMMO", [(_mission select 8) select 11]] call _ack} else {["ACCEPTED", [_virtTarget]] call _ack};
+        };
+
         private _guns = ((_battery select 3) apply {objectFromNetId _x}) select {!isNull _x && {alive _x}};
         private _data = _mission select 8;
         private _magazine = [_guns, _data select 11] call TC2_fnc_artyAmmo;

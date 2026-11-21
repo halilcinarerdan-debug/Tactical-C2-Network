@@ -32,6 +32,11 @@ private _out = [];
     };
 } forEach (missionNamespace getVariable ["TC2_cop_field", []]);
 
+// SANAL FDC (CBA TC2_virt_arty + TC2_virt_artyAutoFdc): FDC oyuncusu olmadan CFF'yi sanal bataryaya otomatik KABUL eder.
+if ((missionNamespace getVariable ["TC2_virt_arty", false]) && {missionNamespace getVariable ["TC2_virt_artyAutoFdc", true]}) then {
+    _out pushBack ["VIRT_FDC", "SANAL FDC (yapay)"];
+};
+
 if (missionNamespace getVariable ["TC2_arty_allowSelf", false]) then {
     _out pushBack [_observerNet, "SEN (TEST)"];
 };

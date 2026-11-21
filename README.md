@@ -20,6 +20,7 @@ Tek mod (`@TC2`), tek PBO (`tc2_main.pbo`). Gerektirir: **CBA_A3**, **ACE3**. **
 | 6b | **Raporlar** (SALUTE / SITREP / LACE) + WARNO; kart seviyeleri (Kırmızı/Mavi/Altın), CO/S2/S4 rolleri, saha tableti, izleme modu, haritada LACE | ✅ hazır (test bekliyor) |
 | 6b+ | **9-Line MEDEVAC** (CASEVAC): 9 satır form, helikopter mürettebatına talep, kabul + ETA, iptal | ✅ hazır (test bekliyor) |
 | 6c | INTSUM + lojistik talepleri (S4) | ⏳ |
+| 8 | **Sanal ateş desteği (isteğe bağlı, CBA)**: doğru 9-Line / CFF ile yapay zekâ uçağı gelip vurur (sanal CAS), sanal batarya mermi yağdırır (sanal FDC dahil) | ✅ hazır (test bekliyor, varsayılan kapalı): bkz. `docs/TEST_ASAMA6_RAPORLAR.md` bölüm S |
 | 7a | **KAMERA sekmesi**: dost İHA'ların ve kask kameralarının (envanterde kamera eşyası) canlı görüntüsü, terminalden ve tabletten, **yalnızca izleme** (kontrol yok) | ✅ hazır (test bekliyor): [`docs/UAV_ENTEGRASYON.md`](docs/UAV_ENTEGRASYON.md) |
 | 7 | **Askeri teknoloji uyum katmanı (sade)**: CAS/CFF/MEDEVAC noktaları haritada (pilot yardımcısı), CAS danger close, NFA/RFA alanları, gece modu | ✅ hazır (test bekliyor): [`docs/ENTEGRASYON_KATMANI.md`](docs/ENTEGRASYON_KATMANI.md) |
 

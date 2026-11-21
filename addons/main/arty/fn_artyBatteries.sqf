@@ -8,6 +8,7 @@
       PLAYER -> en az bir oyuncu mürettebatı var (emirler oyunculara bildirilir; FDC SHOT/SPLASH/COMPLETE'i elle girer)
       SIM    -> TEST: topta TC2_arty_simCrew = true (debugArtyCrew); oyuncu yokmuş gibi emir alır, FDC her şeyi elle girer
       AI     -> AI mürettebat: KULLANILAMAZ
+      VIRT   -> SANAL batarya (CBA TC2_virt_arty): top gerekmez, mermiler betikle düşer
       EMPTY  -> mürettebat yok: KULLANILAMAZ
 
     Parametreler:
@@ -54,9 +55,14 @@ private _batteries = [];
     };
 } forEach vehicles;
 
-// AI topçu yok: yalnızca oyuncu (ya da TEST için SIM) mürettebatlı bataryalar kullanılabilir.
+// SANAL batarya (CBA TC2_virt_arty): gerçek top / mürettebat gerekmez; FDC KABUL edince mermiler sanal olarak düşer (virtArtyFire).
+if (missionNamespace getVariable ["TC2_virt_arty", false]) then {
+    _batteries pushBack ["VIRT_BAT", format ["SANAL BATARYA (%1 mm)", missionNamespace getVariable ["TC2_virt_artyCaliber", "155"]], "VIRT", [], true];
+};
+
+// AI topçu yok: oyuncu (ya da TEST için SIM) mürettebatlı ve SANAL bataryalar kullanılabilir.
 {
-    _x set [4, (_x select 2) in ["PLAYER", "SIM"]];
+    _x set [4, (_x select 2) in ["PLAYER", "SIM", "VIRT"]];
 } forEach _batteries;
 
 _batteries

@@ -23,6 +23,9 @@ if (_index < 0) exitWith {};
 
 private _mission = (missionNamespace getVariable ["TC2_arty_missions", []]) select _index;
 
+// SANAL batarya (mermi alanı "VIRT:<sınıf>"): atış virtArtyFire ile (top yok)
+if (((_mission select 25) find "VIRT") == 0) exitWith {[_id] call TC2_fnc_virtArtyFire};
+
 private _guns = ((_mission select 12) apply {objectFromNetId _x}) select {!isNull _x && {alive _x}};
 if (_guns isEqualTo []) exitWith {
     [_id, "Atanan top yok ya da etkisiz; görev durduruldu.", "BAD"] call TC2_fnc_artyEvent;

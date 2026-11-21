@@ -20,6 +20,7 @@ private _text = switch (_code) do {
     case "ABORTED":   {"TALEP İPTAL EDİLDİ."};
     case "INVALID":   {format ["FORM GEÇERSİZ (%1 hata): %2", count _extra, if (_extra isEqualTo []) then {""} else {_extra select 0}]};
     case "NOT_JTAC":  {"JTAC yetkiniz yok."};
+    case "VIRT_BUSY": {format ["Sanal CAS meşgul (sortide / yeniden dolumda). Yaklaşık %1 sn sonra tekrar deneyin.", _extra param [0, "?"]]};
     case "NFA":       {"Hedef ATEŞ YASAK ALANI (NFA) içinde: talep reddedildi."};
     case "DANGER_CLOSE": {format ["DANGER CLOSE: hedefe dost %1 m (%2). Satır 17'ye komutan baş harflerini yazın.", _extra param [0, "?"], _extra param [1, ""]]};
     case "NO_TARGET": {"Alıcı ağda/menzilde değil."};

@@ -168,6 +168,24 @@ TC2 eşyalarının (Kırmızı / Mavi / Siyah-Altın kart, CAC kartı, Saha Tabl
 2. Envanterde ikonlar (kart, tablet, kamera) görünmeli. Ağırlıklar: tablet 8, kamera 3, kart 1.
 3. **Arsenalde görünmüyorsa:** ACE'in arsenal kısıtlamasını kontrol edin (kutuya bu eşyalar `ace_arsenal_fnc_addVirtualItems` ile eklenmemiş olabilir) ya da bize CfgPatches/RPT satırını gönderin. Yere atılan eşyanın 3B modeli yoktur (yalnızca envanter eşyası).
 
+## S. Sanal ateş desteği (CAS uçağı, topçu) — isteğe bağlı
+
+CBA `Sanal ateş desteği` (varsayılan KAPALI). Açılınca oyuncular formu doğru doldurunca gerçek pilot / FDC / top olmadan da destek gelir.
+**Sanal CAS (`TC2_virt_cas`):** CAS sekmesinde alıcı listesinde `SANAL CAS (yapay)` çıkar (JTAC yetkisi, telsiz ağı ve doğru 9-Line yine şart: danger close, NFA kuralları geçerli).
+1. JTAC (`TC2_jtac` / JTAC rolü) 9-Line'ı doldurur (hedef konumu, saldırı yönü FAH ya da satır 3 yönü, hedef tanımı), alıcı olarak `SANAL CAS` seçer, GÖNDER.
+2. ~3 sn sonra otomatik **geri okuma DOĞRU**; ağ günlüğünde `SANAL CAS #n: uçak yolda, tahmini 45 sn` (CBA gecikme).
+3. Gecikme sonunda uçak hedefin ~7 km gerisinden, atak yönünde girer; günlükte `IN HOT`, `RIFLE` (roket / bomba / füze), `GUNS GUNS GUNS`, `OFF TARGET`; uçak hedefi top / roket / bomba ile vurur ve çıkar (uçağın KENDİ silahları; hedef tanımında *tank, zırh, araç, apc, bmp, btr* vb. varsa füze / bomba öncelikli). **Lazer** işaretlemede hedefe lazer nesnesi konur.
+4. Atak başlamadan **ABORT** ⇒ uçak ateş etmeden ayrılır. Sortiden sonra sanal CAS `yeniden dolum` süresi (CBA, 120 sn) boyunca meşgul: tekrar talepte *"Sanal CAS meşgul..."*.
+5. Uçak sınıfı CBA'dan (BLUFOR A-164, OPFOR To-199, INDFOR A-143); uçak ölümsüzdür, sortiden sonra silinir. RPT: `[TC2][VIRT]`.
+**Sanal topçu (`TC2_virt_arty`):** FDC'nin batarya listesinde `SANAL BATARYA (155 mm)`; ayrıca `TC2_virt_artyAutoFdc` açıkken gözlemcinin FDC listesinde `SANAL FDC (yapay)` (FDC oyuncusu gerekmez).
+1. Gözlemci CFF'yi doldurur (konum, mühimmat HE / SMOKE / WP / ILLUM, kontrol, mermi), FDC olarak `SANAL FDC` seçer ⇒ ~6 sn sonra sanal FDC **KABUL** eder (MTO satırı, hedef numarası AF1xxx). (FDC oyuncusu kullanıyorsanız bataryayı `SANAL BATARYA` seçip KABUL edin.)
+2. Hazırlık gecikmesinden sonra `SHOT, OUT.`; ilk mermi düşmeden 5 sn önce `SPLASH, OVER.`; mermiler kalibreye göre 18 / 24 / 32 sn uçuş süresiyle hedefe (CBA sapma yarıçapı kadar yayılımla) **düşer** ve patlar; son mermi atılınca `ROUNDS COMPLETE, OUT.`.
+3. **Adjust fire:** tek mermi; gözlemci düzeltme (LEFT / RIGHT, ADD / DROP) gönderince yeni mermi düzeltilmiş noktaya düşer; **FIRE FOR EFFECT:** mermi x top sayısı (CBA 4). **CHECK FIRING** atılmamış mermileri keser (havadakiler düşer). AT MY COMMAND: `IS READY` ⇒ gözlemci FIRE.
+4. SMOKE / ILLUM: ilgili mermi sınıfı yoksa görev *"sanal bataryada ... mühimmatı yok"* ile reddedilir (sınıf adları oyuna göre değişebilir).
+5. NFA içindeki hedef reddedilir; danger close 600 m kuralı sürer.
+
+**Doğrulanmadı (oyunda denenmedi):** uçağın betikli uçuşu (hız / yön), `fireAtTarget` ile uçak silahlarının ateşlenmesi, güdümlü silahın lazer hedefi, mermi sınıfı adları ve patlamalar, çok oyunculu davranış. Uçak vurmuyorsa RPT'deki `[TC2][VIRT] CAS ucus` satırını (silah sınıfları) gönderin.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

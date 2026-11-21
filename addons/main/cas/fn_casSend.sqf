@@ -62,6 +62,18 @@ if (_target isEqualTo []) exitWith {
 
 _target params ["", "_pilotLabel", "_platform", "", "_sim"];
 
+// Sanal CAS meşgulse (sortide ya da yeniden dolumda) talep alınmaz.
+private _virtBusy = false;
+if (_targetNet isEqualTo "VIRT_CAS") then {
+    private _sideKey = str (side (group _unit));
+    private _readyAt = missionNamespace getVariable [format ["TC2_virt_casReady_%1", _sideKey], 0];
+    if (missionNamespace getVariable [format ["TC2_virt_casBusy_%1", _sideKey], false] || {diag_tickTime < _readyAt}) then {
+        [_unit, "TC2_fnc_casOnAck", ["VIRT_BUSY", [round ((_readyAt - diag_tickTime) max 0)]]] call TC2_fnc_netToUnit;
+        _virtBusy = true;
+    };
+};
+if (_virtBusy) exitWith {};
+
 private _validation = [_data, _platform] call TC2_fnc_casValidate;
 if !(_validation select 0) exitWith {
     [_unit, "TC2_fnc_casOnAck", ["INVALID", _validation select 1]] call TC2_fnc_netToUnit;
@@ -143,6 +155,9 @@ if (_sim) then {
             if (_wrong) then {"00000 00000"} else {[_data select 8] call TC2_fnc_casGrid},
             _data select 15, _data select 17, _data select 16, _data select 18
         ]] call TC2_fnc_casApplyReadback;
+
+        // Sanal CAS: geri okuma DOĞRU ise uçak sortisi başlar
+        if ((_request select 3) isEqualTo "VIRT_CAS") then {[_id] call TC2_fnc_virtCasStart};
     }, [_id], 3] call CBA_fnc_waitAndExecute;
 } else {
     [_pilotUnit, "TC2_fnc_casOnIncoming", [_id, _jtacCallsign, _pilotCallsign, _data, _platform, "SENT", [], _warning]] call TC2_fnc_netToUnit;

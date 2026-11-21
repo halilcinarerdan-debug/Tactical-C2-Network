@@ -124,6 +124,11 @@ private _typeText = switch (_data select 0) do {
 [_id, format ["CFF #%1  %2  %3", _id, _observerCallsign, _typeText], "BEEP", "FDC"] call TC2_fnc_artyEvent;
 [_id, format ["%1, bu %2, %3, GRID %4, OVER.", _fdcLabel, _observerCallsign, _typeText, [_position] call TC2_fnc_casGrid], "INFO", "OBS"] call TC2_fnc_artyEvent;
 
+// Sanal FDC seçildiyse CFF'yi birkaç sn sonra kendisi KABUL eder (FDC'nin ateş hesabı süresi).
+if (_fdcNet isEqualTo "VIRT_FDC") then {
+    [{[_this select 0] call TC2_fnc_virtArtyFdc}, [_id], 6] call CBA_fnc_waitAndExecute;
+};
+
 [_unit, "TC2_fnc_artyOnAck", ["SENT", [_id, _fdcLabel]]] call TC2_fnc_netToUnit;
 
 [_observerNet, format ["TOPÇU #%1  gözlemci %2  FDC %3  %4%5", _id, _observerCallsign, _fdcLabel, _typeText, ["", "  | UYARI: hedef RFA içinde (" + (_zone select 1) + ")"] select ((_zone select 0) isEqualTo "RFA")]] call TC2_fnc_netInfo;

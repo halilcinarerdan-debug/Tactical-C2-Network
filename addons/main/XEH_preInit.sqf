@@ -21,6 +21,7 @@ call TC2_fnc_casInitSettings;
 // 5B. Topcu (CFF / FDC)
 call TC2_fnc_artyInitSettings;
 call TC2_fnc_camInitSettings;
+call TC2_fnc_virtInitSettings;
 
 // 6. OPORD / belge yetki seviyeleri
 call TC2_fnc_opordInitSettings;
