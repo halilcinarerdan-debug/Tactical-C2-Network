@@ -16,7 +16,7 @@ class CfgPatches
         url = "";
         // units[]: Zeus (curator) bu listeden addon'u aktive eder.
         units[] = {"TC2_Terminal_F", "TC2_Module_Jtac", "TC2_Module_Observer", "TC2_Module_Fdc", "TC2_Module_Co", "TC2_Module_S2", "TC2_Module_S4"};
-        weapons[] = {"TC2_CAC_Card", "TC2_Card_Red", "TC2_Card_Blue", "TC2_Card_Gold", "TC2_Tablet"};
+        weapons[] = {"TC2_CAC_Card", "TC2_Card_Red", "TC2_Card_Blue", "TC2_Card_Gold", "TC2_Tablet", "TC2_HelmetCam"};
         requiredVersion = 0.1;
         // A3_Structures_F_Items_Electronics: Land_Laptop_unfolded_F bu yamada tanimli;
         // taban sinifin bizden ONCE yuklenmesi icin gerekli.
@@ -180,6 +180,13 @@ class CfgWeapons
         descriptionShort = "Sahadan terminal verilerine baglanir. Liderler ve JTAC tam kullanir; digerleri yalnizca harita ve isaretleri izler.";
     };
 
+    // Kask kamerasi: envanterinde bu esya olan askerin kamerasi terminalden / saha cihazindan izlenebilir (yalnizca izleme).
+    class TC2_HelmetCam: TC2_Card_Red
+    {
+        displayName = "TC2 Kask Kamerasi";
+        descriptionShort = "Kask kamerasi: bunu tasiyan askerin goruntusu terminalden ve saha cihazindan izlenebilir (yalnizca izleme).";
+    };
+
     class TC2_CAC_Card: CBA_MiscItem
     {
         author = "TC2";
@@ -321,6 +328,9 @@ class CfgFunctions
 
         // 6b. Asama: 9-Line MEDEVAC
         #include "med\CfgFunctions.hpp"
+
+        // 7. Asama: KAMERA (iha + kask kamerasi, yalnizca izleme)
+        #include "cam\CfgFunctions.hpp"
     };
 };
 
@@ -582,6 +592,18 @@ class CfgRemoteExec
             jip = 0;
         };
         class TC2_fnc_medOnUpdate
+        {
+            allowedTargets = 0;
+            jip = 0;
+        };
+
+        // KAMERA (yalnizca izleme). Sunucuya giden: camPoll. Istemciye giden: camOnData.
+        class TC2_fnc_camPoll
+        {
+            allowedTargets = 2;
+            jip = 0;
+        };
+        class TC2_fnc_camOnData
         {
             allowedTargets = 0;
             jip = 0;

@@ -39,7 +39,7 @@ private _body = switch (_index) do {
     case 6: {""};  // RAPOR sekmesi: SALUTE / SITREP / LACE (rptBuild)
     case 7: {""};  // MEDEVAC sekmesi: 9-Line MEDEVAC (medBuild)
     case 8: {"Lojistik talepleri (S4).<br/><br/>Sonraki aşamada eklenecek."};
-    case 9: {"UAV: yetkili İHA listesi, bağlantı durumu, yayın isteği.<br/><br/>Ağ (Aşama 3) kurulduktan sonra eklenecek. Bkz. docs/UAV_ENTEGRASYON.md"};
+    case 9: {""};  // KAMERA sekmesi: İHA + kask kamerası, yalnızca izleme (camBuild)
     default {""};
 };
 

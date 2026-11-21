@@ -141,6 +141,15 @@ Bir araca ya da helikoptere binin (yolcu veya pilot koltuğu fark etmez). ACE se
 3. **NFA / RFA:** Eden'de (ya da Zeus ile) bir **dikdörtgen/elips alan işareti** oluşturun, adı `TC2_NFA_1` (yasak) ya da `TC2_RFA_1` (kısıtlı). HARİTA'da KATMAN açıkken görünür. NFA içine CAS ⇒ *"Hedef ATEŞ YASAK ALANI (NFA) içinde: talep reddedildi."*, CFF ⇒ *"...CFF reddedildi."*; RPT'de `[TC2][CAS]/[TC2][TOPCU] RED NFA`. RFA içine ⇒ gönderilir, ağ günlüğünde `RFA` uyarısı.
 4. **Gece modu:** geceye alın (`skipTime`) ya da NVG takın, terminali açın ⇒ ekran kısılır; gündüz normal. CBA `Arayüz ▸ gece modu` ile kapatılır.
 
+## P. KAMERA sekmesi (İHA + kask kamerası, yalnızca izleme)
+
+Oyun video ayarlarında **PiP açık** olsun. Mavi kart (`["BLUE"] call TC2_fnc_debugGive;`) ve terminal (ya da saha tableti + lider) kullanın.
+1. **İHA:** dost bir İHA kurun (örn. Zeus ile BLUFOR "AR-2 Darter" ya da "MQ-4A Greyhawk"; tabletle bağlanmanız GEREKMEZ). Terminal ⇒ **KAMERA** sekmesi (10.) ⇒ listede `İHA  <ad>` ⇒ seçin ⇒ canlı görüntü, sağda tür / irtifa / hız / yön / grid. NORMAL / NVG / TERMAL düğmeleri görüntüyü değiştirir. İHA'yı kontrol edemezsiniz (düğme yok).
+2. **Kask kamerası:** `["HELMETCAM"] call TC2_fnc_debugGive;` ile kendinize değil **başka bir askere** verin: `[cursorObject] call TC2_fnc_debugHelmetCam;` (AI'ya bakarak, sunucuda). Listede `KASK  <çağrı adı> <ad>` çıkar (aynı telsiz menzilinde; CBA `Kamera ▸ telsiz menziliyle sınırlı` kapalıysa menzilsiz). Seçince o askerin kafasından görüntü gelir. Eşyayı alınca (`[cursorObject, false] call TC2_fnc_debugHelmetCam;`) 5 sn içinde listeden düşer ve yayın kesilir.
+3. **Yetki:** Kırmızı kart ya da izleme modunda (tabletli er) sekme *"Level 2 ve üstü içindir"*; liste ve görüntü yok. Bir İHA'yı gizlemek: `uav setVariable ["TC2_camHidden", true, true];`.
+4. **Performans:** sekmeden çıkınca / pencere kapanınca yayın durur (kamera yok edilir). Yayın açıkken FPS düşüşü görürseniz bildirin (doku küçültülür).
+5. **Aktarılmayan kaynak:** çok uzak bir İHA/asker için görüntü boş kalabilirse ya da *"Kaynak bu istemciye aktarılmıyor"* derse bildirin (MP nesne akışı; doğrulanmadı).
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

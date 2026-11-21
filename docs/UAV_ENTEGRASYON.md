@@ -1,30 +1,16 @@
-# UAV entegrasyonu — düşünme notları (karar bekliyor)
+# UAV ve kask kamerası — KAMERA sekmesi (yalnızca izleme)
 
-Durum: Aşama 2'de **UAV** sekmesi yalnızca yer tutucudur. Bu belge, neden ve nasıl entegre edileceğine dair öneridir.
-Aşağıdaki oyun davranışları Arma 3/ACE bilgisine dayanır, **bu projede henüz denenmedi**; uygulamadan önce küçük bir prototip gerekir.
+**Karar (kullanıcı):** İHA'ların ve kask kameralarının görüntüsü terminalden ve saha tabletinden **izlenebilir, kontrol edilemez**. Önceki "A/B/C" seçeneklerinden **B (canlı yayın, render-to-texture)** uygulandı; vanilla UAV terminaline BAĞLANILMAZ (`connectTerminalToUAV` kullanılmaz), silah / hedefleme / sürüş yok.
 
-## Sorun: vanilla UAV terminali "arcade"
+## Nasıl çalışıyor
+* Sekme: **KAMERA** (eski UAV yer tutucusunun yerine; 10. sekme). Hem masa başı terminalde hem saha cihazında. Yetki: **Level 2+ ve izleme modunda değil** (er tabletle kamera izleyemez; bilgi güvenirliği).
+* **Kaynaklar** (sunucu listeler, `camPoll`): (1) aynı taraftaki **İHA'lar** (CBA `TC2_cam_uavShare`, bir İHA'yı gizlemek: `this setVariable ["TC2_camHidden", true, true]`), (2) envanterinde **kask kamerası eşyası** (`TC2_HelmetCam`, CBA'dan değiştirilebilir) olan aynı taraf askerler (oyuncu ya da AI), CBA açıksa izleyenin telsiz menzili içinde.
+* **Görüntü:** izleyenin makinesinde yerel kamera nesnesi kaynağa iliştirilir, görüntü bir dokuya yazılır (1024x512), resimde gösterilir. İHA'da kamera yönü pilot kamerasını (gimbal) izler; kaskta askerin kafasına bağlıdır. **Maliyet:** ek render geçişi; yalnızca sekme açık ve kaynak seçiliyken; sekmeden çıkınca / pencere kapanınca kamera yok edilir.
+* **Görüntü modu:** NORMAL / NVG / TERMAL düğmeleri yalnızca izleyenin ekranını etkiler (kaynağa komut gitmez).
+* **Bilgi paneli:** İHA: tür, irtifa, hız, yön, grid, kamera yönü/eğimi. Kask: çağrı adı, yön, grid, durum.
 
-- Dost bir İHA'ya bağlanmak için menzil, telsiz veya yetki gerekmez; terminal eşyası yeterlidir.
-- Bağlanan oyuncu hemen kamera, hedef işaretleme ve silahları kullanır.
-- Bu, projenin OPSEC / yetki / ağ mantığıyla çelişir: "ağ yoksa veri yok" kuralı UAV'de işlemez.
-
-## Seçenekler
-
-| | Yaklaşım | Artı | Eksi |
-|---|---|---|---|
-| **A (öneri)** | UAV sekmesi *yetki ve bağlantı kapısı* olur: yetkili İHA listesi + durum; "Bağlan" yalnızca yetki **ve** ağ (ACRE2) koşulu sağlanırsa vanilla bağlantıyı (`connectTerminalToUAV`) tetikler | Kamera/kontrol motoru yeniden yazılmaz; performans maliyeti sıfıra yakın | Oyuncuda vanilla UAV terminali eşyası varsa kapıyı atlayabilir → görev tasarımında bu eşya dağıtılmaz / yalnızca TC2 terminalinden bağlanılır |
-| B | İHA görüntüsünü terminal penceresine canlı yayın (render-to-texture / PiP) | Terminal içinde "yayın izleme" hissi | Her yayın ek render yükü; basitlik ve performans hedefine ters |
-| C | Vanilla'ya dokunma, yalnızca bağlanınca ağ kontrolü yap, kopunca bağlantıyı kes | En az kod | Engelleme geç ve kaba; kullanıcı deneyimi kötü |
-
-## Öneri
-
-**A**, Aşama 3'ten (ACRE2 ağ kontrolü) **sonra**: İHA'ya bağlanma koşulu, 9-Line gibi aynı `ağ + yetki` kontrolünden geçer.
-Aşama 2'de sekme, bu planı söyleyen bir not gösterir. Bağlantı/yetki kuralları (hangi seviye, hangi İHA, yayın mı kontrol mü)
-sizinle birlikte Aşama 3 sonunda netleştirilecek.
-
-## Açık sorular
-
-1. Terminal yalnızca *yayın izleme* mi versin, yoksa *kontrol* de mi?
-2. İHA operatörü ayrı bir rol mü (yalnızca onda UAV terminali var), yoksa herkes yetkiye göre mi bağlanır?
-3. Görevlerde ACE'in kendi UAV modülü (varsa) kullanılıyor mu? Çakışma kontrolü gerekir.
+## Sınırlar (doğrulanmadı, dürüstçe)
+* Görüntü için oyun **video ayarlarında PiP (resim içinde resim) açık** olmalıdır; kapalıysa siyah kalır.
+* MP'de kaynak, izleyenin makinesine **ağ üzerinden aktarılmıyorsa** (çok uzak) nesne yoktur ya da çevresi yüklenmemiştir: görüntü boş/eksik olabilir ya da "kaynak aktarılmıyor" denir. Bu, oyunun nesne akış (streaming) kuralına bağlıdır ve oyunda denenmedi.
+* İHA kamera yönü `getPilotCameraRotation` ile, kask kamerası "head" noktasına iliştirmeyle yapıldı: oyunda doğrulanmadı; yön/konum ince ayar isteyebilir.
+* Kamera eşyası bir kask modeli göstermez; yalnızca envanter eşyasıdır.

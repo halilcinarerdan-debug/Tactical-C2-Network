@@ -10,7 +10,7 @@
 
     Düzen:
         [ başlık: TC2 KOMUTA TERMİNALİ | terminal | kullanıcı ................ [KAPAT] ]
-        [ ANA | HARİTA | CAS | TOPÇU | FDC | OPORD | RAPOR | MEDEVAC | LOJİSTİK | UAV ]
+        [ ANA | HARİTA | CAS | TOPÇU | FDC | OPORD | RAPOR | MEDEVAC | LOJİSTİK | KAMERA ]
         [ içerik (sekmeye göre)                                                        ]
         [ alt satır: ESC = kapat                                                       ]
 
@@ -45,7 +45,7 @@ if (!isNull findDisplay 92000) exitWith {};
     // Kullanım modu (DESK / FIELD / VIEW): VIEW'de yalnızca HARİTA + OPORD sekmeleri etkin (kolaylık; asıl denetim sunucuda).
     missionNamespace setVariable ["TC2_ui_mode", [_player, _terminal] call TC2_fnc_accessMode];
 
-    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "RAPOR", "MEDEVAC", "LOJİSTİK", "UAV"];
+    private _tabs = ["ANA", "HARİTA", "CAS", "TOPÇU", "FDC", "OPORD", "RAPOR", "MEDEVAC", "LOJİSTİK", "KAMERA"];
     missionNamespace setVariable ["TC2_ui_tabs", _tabs];
 
     private _fieldMode = _terminal isKindOf "CAManBase";
@@ -210,6 +210,9 @@ if (!isNull findDisplay 92000) exitWith {};
 
     // MEDEVAC sekmesi: 9-Line MEDEVAC talebi; varsayılan gizli.
     [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_medBuild;
+
+    // KAMERA sekmesi: İHA + kask kamerası (yalnızca izleme); varsayılan gizli.
+    [_display, _left + _pad, _contentY, _w - 2 * _pad, _contentH] call TC2_fnc_camBuild;
 
     // Ağ durumunu sıfırla (yeni oturum) ve sunucuya ilk raporu gönder.
     missionNamespace setVariable ["TC2_net_status", []];

@@ -14,6 +14,9 @@ if (_handle >= 0) then {
 };
 missionNamespace setVariable ["TC2_ui_watchHandle", -1];
 
+// Kamera yayını (varsa) dursun: kamera nesnesi yok edilir, render yükü kalmaz.
+call TC2_fnc_camStop;
+
 private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNull];
 missionNamespace setVariable ["TC2_terminal_current", objNull];
 

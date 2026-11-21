@@ -5,7 +5,7 @@
     Seçili sekmeyi vurgular ve içerik alanını o sekmenin metniyle doldurur. Döngü yok, tek seferlik iş.
 
     Parametreler:
-        0: sekme sırası <NUMBER>  (0 = ANA, 1 = HARİTA, 2 = CAS, 3 = TOPÇU, 4 = FDC, 5 = OPORD, 6 = RAPOR, 7 = MEDEVAC, 8 = LOJİSTİK, 9 = UAV)
+        0: sekme sırası <NUMBER>  (0 = ANA, 1 = HARİTA, 2 = CAS, 3 = TOPÇU, 4 = FDC, 5 = OPORD, 6 = RAPOR, 7 = MEDEVAC, 8 = LOJİSTİK, 9 = KAMERA)
 
     Dönüş: yok
 */
@@ -73,6 +73,13 @@ if (_index == 6) then {
     missionNamespace setVariable ["TC2_rpt_statusText", ""];
     call TC2_fnc_rptUiChanged;
     call TC2_fnc_rptUiRequest;
+};
+// KAMERA (9): sekmeden çıkınca yayın durur (render yükü kalmaz)
+if (_index != 9) then {call TC2_fnc_camStop};
+call TC2_fnc_camUiUpdate;
+if (_index == 9) then {
+    missionNamespace setVariable ["TC2_cam_statusText", ""];
+    call TC2_fnc_camUiRequest;
 };
 // MEDEVAC (7)
 call TC2_fnc_medUiUpdate;
