@@ -5,7 +5,7 @@
                   - host / tek oyunculuda: camUiRequest doğrudan çağırır
 
     KAMERA sekmesinin kaynak listesi: izlenebilir İHA'lar ve kask kameraları. YALNIZCA İZLEME: kontrol yok, hiçbir İHA'ya bağlanılmaz.
-    Yetki: oturum geçerli (kart; telsiz yalnızca CBA TC2_cam_requireRadio açıksa şart) + Level 2 ve üstü + izleme modunda değil (bilgi güvenirliği: er tabletle kamera izleyemez).
+    Yetki: oturum geçerli (kart + aktif ACRE2 telsizi; telsiz şartı CBA TC2_cam_requireRadio ile kapatılabilir) + Level 2 ve üstü + izleme modunda değil (bilgi güvenirliği: er tabletle kamera izleyemez).
       İHA:  aynı taraf, canlı, `unitIsUAV`, CBA TC2_cam_uavShare açık, objede TC2_camHidden yok.
       Kask: aynı taraf, canlı, oyuncu / AI fark etmez, envanterinde CBA kask eşyası (TC2_cam_helmetItem) var; CBA açıksa izleyenin telsiz menzili içinde.
     Yanıt: kod, seviye, izleyebilir mi, kaynaklar [[tür "UAV" | "HELM", netId, etiket]], kullanım modu (DESK | FIELD | VIEW).
@@ -26,8 +26,8 @@ if !([_unit] call TC2_fnc_netSenderOk) exitWith {};
 private _session = [_unit, _terminal, _state] call TC2_fnc_netServerSession;
 _session params ["_ok", "_code", "_entry"];
 
-// Telsiz şartı: CBA TC2_cam_requireRadio kapalıysa (varsayılan) İHA veri bağı / kask ağı telsizden bağımsız sayılır; telsiz yoksa da izlenebilir.
-private _radioOptional = !(missionNamespace getVariable ["TC2_cam_requireRadio", false]);
+// Telsiz şartı: CBA TC2_cam_requireRadio AÇIKSA (varsayılan) aktif ACRE2 telsizi gerekir ("ağ yoksa veri yok"); kapalıysa telsizsiz de izlenebilir (test).
+private _radioOptional = !(missionNamespace getVariable ["TC2_cam_requireRadio", true]);
 if (!_ok || {!(_code isEqualTo "OK" || {_radioOptional && {_code in ["NO_RADIO", "NO_ACRE"]}})}) exitWith {
     [_unit, "TC2_fnc_camOnData", [_code, 1, false, [], ""]] call TC2_fnc_netToUnit;
 };
