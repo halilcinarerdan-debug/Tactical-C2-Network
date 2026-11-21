@@ -153,7 +153,9 @@ class CfgWeapons
         scope = 2;
         displayName = "Kirmizi Kart (Level 1)";
         descriptionShort = "Level 1 kimlik karti: terminalde yalnizca kendi gorevini okur.";
-        picture = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\itemacc_ca.paa";
+        picture = "\z\tc2\addons\main\data\icon_card_red_ca.paa";
+        // Arsenal (vanilla / ACE): esyanin arsenalde gorunmesi icin
+        scopeArsenal = 2;
 
         class ItemInfo: CBA_MiscItem_ItemInfo
         {
@@ -165,12 +167,14 @@ class CfgWeapons
     {
         displayName = "Mavi Kart (Level 2)";
         descriptionShort = "Level 2 kimlik karti: gizli (Level 3) belgeleri goremez; 9-Line / CFF yazabilir, raporlari okur.";
+        picture = "\z\tc2\addons\main\data\icon_card_blue_ca.paa";
     };
 
     class TC2_Card_Gold: TC2_Card_Red
     {
         displayName = "Siyah-Altin Kart (Level 3)";
         descriptionShort = "Level 3 kimlik karti: komuta / kurmay; her seyi gorur, OPORD'u duzenler.";
+        picture = "\z\tc2\addons\main\data\icon_card_gold_ca.paa";
     };
 
     // Saha tableti: laptop olmadan ACE self menusunden terminal penceresini acar.
@@ -178,6 +182,12 @@ class CfgWeapons
     {
         displayName = "TC2 Saha Tableti";
         descriptionShort = "Sahadan terminal verilerine baglanir. Liderler ve JTAC tam kullanir; digerleri yalnizca harita ve isaretleri izler.";
+        picture = "\z\tc2\addons\main\data\icon_tablet_ca.paa";
+
+        class ItemInfo: CBA_MiscItem_ItemInfo
+        {
+            mass = 8;
+        };
     };
 
     // Kask kamerasi: envanterinde bu esya olan askerin kamerasi terminalden / saha cihazindan izlenebilir (yalnizca izleme).
@@ -185,6 +195,12 @@ class CfgWeapons
     {
         displayName = "TC2 Kask Kamerasi";
         descriptionShort = "Kask kamerasi: bunu tasiyan askerin goruntusu terminalden ve saha cihazindan izlenebilir (yalnizca izleme).";
+        picture = "\z\tc2\addons\main\data\icon_helmetcam_ca.paa";
+
+        class ItemInfo: CBA_MiscItem_ItemInfo
+        {
+            mass = 3;
+        };
     };
 
     class TC2_CAC_Card: CBA_MiscItem
@@ -193,7 +209,8 @@ class CfgWeapons
         scope = 2;
         displayName = "CAC Kimlik Karti";
         descriptionShort = "Common Access Card. Komuta terminallerine giris icin gerekir.";
-        picture = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\itemacc_ca.paa";
+        picture = "\z\tc2\addons\main\data\icon_cac_ca.paa";
+        scopeArsenal = 2;
 
         class ItemInfo: CBA_MiscItem_ItemInfo
         {

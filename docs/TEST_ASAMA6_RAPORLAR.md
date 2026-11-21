@@ -161,6 +161,13 @@ Oyun video ayarlarında **PiP açık** olsun. Mavi kart (`["BLUE"] call TC2_fnc_
 4. Test yardımcıları: `debugNetPeer` ve `debugCasPilot` ile eklenen simüle eşler **birimin tarafındaki** ağa girer.
 5. Aynı taraftaki oyuncular eskisi gibi birbirini görür.
 
+## R. Eşya ikonları ve arsenal
+
+TC2 eşyalarının (Kırmızı / Mavi / Siyah-Altın kart, CAC kartı, Saha Tableti, Kask Kamerası) envanter / arsenal resimleri artık gerçekçi çizimdir (`data/icon_*_ca.paa`; kaynak: `tools/gen_item_icons.py`). Eşyalar `scope = 2` ve `scopeArsenal = 2`.
+1. Arsenal'i açın (Eden / Zeus / ACE Arsenal kutusu). **ACE Arsenal:** *Çeşitli eşyalar (Misc. items)* sekmesinde `Kirmizi Kart (Level 1)`, `Mavi Kart`, `Siyah-Altin Kart`, `CAC Kimlik Karti`, `TC2 Saha Tableti`, `TC2 Kask Kamerasi`. **Vanilla Arsenal:** *Eşyalar ▸ Çeşitli*.
+2. Envanterde ikonlar (kart, tablet, kamera) görünmeli. Ağırlıklar: tablet 8, kamera 3, kart 1.
+3. **Arsenalde görünmüyorsa:** ACE'in arsenal kısıtlamasını kontrol edin (kutuya bu eşyalar `ace_arsenal_fnc_addVirtualItems` ile eklenmemiş olabilir) ya da bize CfgPatches/RPT satırını gönderin. Yere atılan eşyanın 3B modeli yoktur (yalnızca envanter eşyası).
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).
