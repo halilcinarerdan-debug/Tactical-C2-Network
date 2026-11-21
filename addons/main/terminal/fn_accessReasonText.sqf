@@ -24,6 +24,8 @@ switch (_reason) do {
     case "NO_DEVICE":       {"ERİŞİM REDDEDİLDİ: Saha cihazı eşyası (tablet) yok."};
     case "VIEW_ONLY":       {"SALT OKUNUR MOD: bu cihazla yalnızca harita ve işaretleri izleyebilirsiniz."};
     case "NO_LEVEL":        {"YETKİ YETERSİZ: bu işlem için seviye kartınız/yetkiniz yok."};
+    case "NO_RADIO":        {"BAĞLANTI YOK: aktif telsiz yok (envanterde ACRE2 telsizi ve aktif olmalı)."};
+    case "NO_ACRE":         {"BAĞLANTI YOK: ACRE2 yüklü değil."};
     case "NOT_TERMINAL":    {"Bu obje bir komuta terminali değil."};
     case "BAD_PARAMS":      {"Geçersiz erişim talebi."};
     case "TIMEOUT":         {"SUNUCU YANIT VERMEDİ: Erişim talebi zaman aşımına uğradı. (Sunucuda mod yüklü mü?)"};

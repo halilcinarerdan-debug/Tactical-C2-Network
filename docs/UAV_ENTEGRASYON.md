@@ -4,6 +4,7 @@
 
 ## Nasıl çalışıyor
 * Sekme: **KAMERA** (eski UAV yer tutucusunun yerine; 10. sekme). Hem masa başı terminalde hem saha cihazında. Yetki: **Level 2+ ve izleme modunda değil** (er tabletle kamera izleyemez; bilgi güvenirliği).
+* **Telsiz:** varsayılan olarak şart DEĞİL (CBA `TC2_cam_requireRadio` kapalı); telsizsiz kask menzil sınırı da uygulanmaz.
 * **Kaynaklar** (sunucu listeler, `camPoll`): (1) aynı taraftaki **İHA'lar** (CBA `TC2_cam_uavShare`, bir İHA'yı gizlemek: `this setVariable ["TC2_camHidden", true, true]`), (2) envanterinde **kask kamerası eşyası** (`TC2_HelmetCam`, CBA'dan değiştirilebilir) olan aynı taraf askerler (oyuncu ya da AI), CBA açıksa izleyenin telsiz menzili içinde.
 * **Görüntü:** izleyenin makinesinde yerel kamera nesnesi kaynağa iliştirilir, görüntü bir dokuya yazılır (1024x512), resimde gösterilir. İHA'da kamera yönü pilot kamerasını (gimbal) izler; kaskta askerin kafasına bağlıdır. **Maliyet:** ek render geçişi; yalnızca sekme açık ve kaynak seçiliyken; sekmeden çıkınca / pencere kapanınca kamera yok edilir.
 * **Görüntü modu:** NORMAL / NVG / TERMAL düğmeleri yalnızca izleyenin ekranını etkiler (kaynağa komut gitmez).

@@ -33,3 +33,12 @@ private _category = ["Tactical C2 Network", "Kamera (İHA / kask)"];
     true,
     true
 ] call CBA_settings_fnc_init;
+
+[
+    "TC2_cam_requireRadio",
+    "CHECKBOX",
+    ["Kamera için aktif telsiz şart", "Açıksa KAMERA sekmesi yalnızca aktif ACRE2 telsizi olan kullanıcılara açılır (diğer sekmelerle aynı ağ yoksa veri yok kuralı). Kapalıysa (varsayılan) İHA veri bağı ve kask ağı telsizden bağımsız sayılır."],
+    ["Tactical C2 Network", "Kamera (İHA / kask)"],
+    false,
+    true
+] call CBA_settings_fnc_init;
