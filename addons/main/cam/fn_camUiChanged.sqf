@@ -19,5 +19,6 @@ if (_data isEqualTo (missionNamespace getVariable ["TC2_cam_current", ""])) exit
 
 if (_data isEqualTo "") exitWith {call TC2_fnc_camStop};
 
-private _parts = _data splitString ":";
-[_parts select 0, _parts select 1] call TC2_fnc_camStart;
+// Veri biçimi "TÜR:netId" ve netId'nin kendisi iki noktalıdır ("2:15"): yalnızca İLK iki noktada böl.
+private _split = _data find ":";
+[_data select [0, _split], _data select [_split + 1, (count _data) - _split - 1]] call TC2_fnc_camStart;
