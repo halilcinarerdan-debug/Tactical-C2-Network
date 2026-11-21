@@ -151,6 +151,16 @@ Oyun video ayarlarında **PiP açık** olsun. Mavi kart (`["BLUE"] call TC2_fnc_
 4. **Performans:** sekmeden çıkınca / pencere kapanınca yayın durur (kamera yok edilir). Yayın açıkken FPS düşüşü görürseniz bildirin (doku küçültülür).
 5. **Aktarılmayan kaynak:** çok uzak bir İHA/asker için görüntü boş kalabilirse ya da *"Kaynak bu istemciye aktarılmıyor"* derse bildirin (MP nesne akışı; doğrulanmadı).
 
+## Q. Taraf ayrımı (BLUFOR / OPFOR / INDFOR)
+
+**Kural:** sunucuda ağ anahtarı = telsiz tipi **+ taraf** (`ACRE_PRC343|WEST`). Farklı taraflar AYNI telsiz tipi ve kanalda olsa, menzil içinde bile birbirlerinin **harita (dostlar, düşman işaretleri, SALUTE noktaları, CAS / CFF / MEDEVAC noktaları), mesaj, rapor, CAS, MEDEVAC, topçu, LACE** verisini görmez; kamera (İHA / kask) ve AI liderler zaten tarafa göre süzülür; topçu bataryaları ve en yakın dost hesabı taraf başınadır.
+**OPORD / WARNO taraf başınadır:** her tarafın belgesi ayrı; OPFOR, BLUFOR'un emrini göremez / düzenleyemez. Mission dosyaları: `tc2_opord.sqf` (üç tarafa ortak), `tc2_opord_west.sqf` / `tc2_opord_east.sqf` / `tc2_opord_guer.sqf` (tarafa özel; ortak olanı o taraf için geçersiz kılar), WARNO için `tc2_warno*.sqf`.
+1. BLUFOR ve OPFOR birer oyuncu (ya da biri AI değil, iki oyuncu); ikisinde de aynı telsiz tipi (örn. PRC343) ve **aynı kanal**, yakın mesafe, ikisinde de tablet + Mavi kart.
+2. BLUFOR HARİTA'ya düşman işareti koysun, mesaj / rapor göndersin ⇒ OPFOR'un haritasında **BLUFOR dostları ve işaretleri görünmemeli**, mesaj gelmemeli, RAPOR / MEDEVAC listesi boş olmalı.
+3. OPORD: BLUFOR Level 3 ile şablon oluştursun ⇒ OPFOR'un OPORD sekmesi *"Henüz yayımlanmış OPORD yok"* demeli.
+4. Test yardımcıları: `debugNetPeer` ve `debugCasPilot` ile eklenen simüle eşler **birimin tarafındaki** ağa girer.
+5. Aynı taraftaki oyuncular eskisi gibi birbirini görür.
+
 ## Bilinen sınırlar
 
 * Raporlar sunucu belleğindedir (sunucu yeniden başlayınca silinir; son 3 saat, en çok 80 rapor).

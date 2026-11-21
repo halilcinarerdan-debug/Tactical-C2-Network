@@ -39,7 +39,8 @@ if (!_allowed) exitWith {
     [_unit, "TC2_fnc_opordOnData", [_code, 1, [], [], [], 0, false, _docType]] call TC2_fnc_netToUnit;
 };
 
-private _document = missionNamespace getVariable [["TC2_opord", "TC2_warno"] select (_docType isEqualTo "WARNO"), []];
+// Taraf ayrımı: yalnızca kendi tarafının belgesi
+private _document = missionNamespace getVariable [[_docType, side (group _unit)] call TC2_fnc_opordVar, []];
 private _level = [_unit, _terminal] call TC2_fnc_accessLevel;
 
 if (_document isEqualTo []) exitWith {

@@ -30,6 +30,9 @@ params [
 
 if (isNull _unit) exitWith {false};
 
+// Taraf ayrımı: simüle pilot da kendi tarafının ağında olur.
+_base = [_base, _unit] call TC2_fnc_netBaseKey;
+
 private _netId = netId _unit;
 private _pilots = (missionNamespace getVariable ["TC2_cas_simPilots", []]) select {(_x select 0) != _netId};
 

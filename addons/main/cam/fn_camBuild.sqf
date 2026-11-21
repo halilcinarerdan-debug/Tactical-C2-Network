@@ -40,9 +40,11 @@ private _modeW = (_width * 0.42 - 0.02) / 3;
     _button ctrlAddEventHandler ["ButtonClick", {[(_this select 0) getVariable ["tc2_mode", 0]] call TC2_fnc_camUiMode}];
 } forEach [[92903, "NORMAL", 0], [92904, "NVG", 1], [92905, "TERMAL", 2]];
 
-// Görüntü: ekran kenarı zemini + render-to-texture resmi (2:1 doku; ~16:9'a yakın alan)
-private _picH = 8.2 * _rowH;
-private _picW = (_picH * 1200 / 1280) * 1.8;
+// Görüntü: ekran kenarı zemini + render-to-texture resmi. Alan, durum satırına kadar uzanır; genişlik içeriğin ~%74'ü (bilgi paneli dar kalır).
+// Doku 2:1; resmin gerçek piksel oranı hesaplanır ve r2t'ye verilir (görüntü gerilmez).
+private _picH = 9 * _rowH - 0.012;
+private _picW = _width * 0.74;
+missionNamespace setVariable ["TC2_cam_aspect", (_picW / _picH) * (safeZoneH / safeZoneW) * (getResolution select 4)];
 private _picTop = _top + _rowH + 0.006;
 
 private _background = [_display, 92907, "RscText", _left, _picTop, _picW + 0.01, _picH + 0.01] call TC2_fnc_uiMakeControl;

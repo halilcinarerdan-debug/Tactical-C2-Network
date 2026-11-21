@@ -1,5 +1,5 @@
 /*
-    ORNEK: Mission klasorune "tc2_opord.sqf" adiyla koyun (mission.sqm ile ayni klasor). Sunucu mission basinda okur ve yayimlar.
+    ORNEK: Mission klasorune "tc2_opord.sqf" (uc tarafa ortak) ya da "tc2_opord_west.sqf" / "tc2_opord_east.sqf" / "tc2_opord_guer.sqf" (tarafa ozel) adiyla koyun (mission.sqm ile ayni klasor). Sunucu mission basinda okur ve yayimlar.
     Format: [baslik, DTG, gizlilik etiketi, [[anahtar, baslik, seviye (1-3), metin], ...], yayimlayan (istege bagli)]
     Seviye: 1 herkes, 2 lider/rol/rutbe, 3 komuta. Metindeki satir sonu icin "\n" YERINE toString [10] kullanin ya da asagidaki gibi birlestirin.
     Anahtarlar (TASKORG, 1A, ... FIRES) docs/DOKTRIN_NOTLARI_OPORD.md'deki sablonla ayni olmak zorunda DEGILDIR; istediginiz bolumleri tanimlayin.

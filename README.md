@@ -165,6 +165,11 @@ Sonuç: `@TC2\addons\tc2_main.pbo` (+ varsa `.bisign`) ve `@TC2\mod.cpp`.
 
 Test: [`docs/TEST_ASAMA6_RAPORLAR.md`](docs/TEST_ASAMA6_RAPORLAR.md). Test yardımcısı: `["BLUE"] call TC2_fnc_debugGive;` (RED / BLUE / GOLD / TABLET / NONE).
 
+### Taraf ayrımı (BLUFOR / OPFOR / INDFOR)
+
+Sunucuda ağ = telsiz tipi + kanal + menzil + **taraf**. Aynı telsiz ve kanalda bile karşı taraf haritayı, işaretleri, mesajları, raporları, CAS / MEDEVAC / topçu verisini ve OPORD / WARNO belgelerini **görmez**.
+OPORD dosyaları: `tc2_opord.sqf` (ortak), `tc2_opord_west|east|guer.sqf` (tarafa özel). Ayrıntı ve test: `docs/TEST_ASAMA6_RAPORLAR.md` bölüm Q.
+
 ### 9-Line MEDEVAC
 
 **MEDEVAC** sekmesi (7. sekme): Level 2+ (Mavi kart / tabletli lider / kurmay) 9 satırlık talebi doldurur; talep aynı ağdaki **helikopter mürettebatına** gider

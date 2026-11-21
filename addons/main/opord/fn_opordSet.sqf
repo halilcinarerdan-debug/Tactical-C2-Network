@@ -14,13 +14,15 @@
         3: bölümler <ARRAY>
         4: yayımlayan <STRING>    (isteğe bağlı)
         5: belge türü <STRING>    "OPORD" (varsayılan) | "WARNO" (uyarı emri)
+        6: taraf <SIDE | STRING>  belgenin ait olduğu taraf (west / east / independent); "ALL" (varsayılan) = üç tarafa da aynı belge
+                                  TARAF AYRIMI: her tarafın belgesi ayrıdır; bir taraf diğerininkini göremez / düzenleyemez
 
     Dönüş: başarılı mı <BOOL>
 */
 
 if (!isServer) exitWith {false};
 
-params [["_title", "", [""]], ["_dtg", "", [""]], ["_classification", "", [""]], ["_sections", [], [[]]], ["_issuer", "", [""]], ["_docType", "OPORD", [""]]];
+params [["_title", "", [""]], ["_dtg", "", [""]], ["_classification", "", [""]], ["_sections", [], [[]]], ["_issuer", "", [""]], ["_docType", "OPORD", [""]], ["_side", "ALL", ["", west]]];
 
 private _clean = (_sections select {
     count _x == 4 && {(_x select 0) isEqualType ""} && {(_x select 1) isEqualType ""} && {(_x select 2) isEqualType 0} && {(_x select 3) isEqualType ""}
@@ -33,7 +35,9 @@ if (_clean isEqualTo []) exitWith {
     false
 };
 
-missionNamespace setVariable [["TC2_opord", "TC2_warno"] select (_docType isEqualTo "WARNO"), [_title, _dtg, _classification, 1, _issuer, _clean, []]];
+{
+    missionNamespace setVariable [[_docType, _x] call TC2_fnc_opordVar, [_title, _dtg, _classification, 1, _issuer, +_clean, []]];
+} forEach ([[west, east, independent], [_side]] select (_side isEqualType west));
 diag_log format ["[TC2][OPORD] yayimlandi %1 '%2' | %3 bolum | yayimlayan=%4", _docType, _title, count _clean, _issuer];
 
 true

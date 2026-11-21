@@ -100,7 +100,7 @@ diag_log format ["[TC2][MEDEVAC] GONDERILDI id=%1 | gonderen=%2 (%3) | alicilar=
 [_unit, "TC2_fnc_medOnAck", ["SENT", [_id, count _recipients]]] call TC2_fnc_netToUnit;
 [_senderNet, format ["MEDEVAC #%1  %2  (%3 alıcı)", _id, _callsign, count _recipients]] call TC2_fnc_netInfo;
 
-private _lines = [_data, [[_position] call TC2_fnc_casGrid, _callsign, format ["%1 K%2", _base, _channel]]] call TC2_fnc_medLines;
+private _lines = [_data, [[_position] call TC2_fnc_casGrid, _callsign, format ["%1 K%2", [_base] call TC2_fnc_netBaseName, _channel]]] call TC2_fnc_medLines;
 
 {
     _x params ["_netId", "_label", "", "", "_sim"];

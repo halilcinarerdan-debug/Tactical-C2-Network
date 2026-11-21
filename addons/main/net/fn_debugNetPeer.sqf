@@ -25,6 +25,9 @@ params [["_unit", objNull, [objNull]], ["_base", "ACRE_PRC343", [""]], ["_channe
 
 if (isNull _unit) exitWith {false};
 
+// Taraf ayrımı: simüle eş de kendi tarafının ağında olur.
+_base = [_base, _unit] call TC2_fnc_netBaseKey;
+
 private _netId = netId _unit;
 private _sessions = (missionNamespace getVariable ["TC2_net_sessions", []]) select {(_x select 0) != _netId};
 

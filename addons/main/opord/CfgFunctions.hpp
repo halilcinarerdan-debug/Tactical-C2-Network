@@ -11,6 +11,7 @@ class opord
     class opordTemplate {};
 
     // Sunucu
+    class opordVar {};
     class opordSet {};
     class opordPoll {};
     class opordEdit {};

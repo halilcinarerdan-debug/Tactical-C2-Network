@@ -56,6 +56,9 @@ if (_has) then {
     _code = if (_reason isEqualTo "NO_ACRE") then {"NO_ACRE"} else {"NO_RADIO"};
 };
 
+// Taraf ayrımı: ağ anahtarı telsiz tipi + taraf (BLUFOR / OPFOR aynı kanalda olsa da birbirini görmez).
+if (_has) then {_base = [_base, _unit] call TC2_fnc_netBaseKey};
+
 if (!_has) then {
     _radioId = "";
     _base = "";

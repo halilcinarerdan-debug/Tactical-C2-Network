@@ -53,7 +53,7 @@ _visible = _visible select [(count _visible - 8) max 0, 8];
 
 private _summary = _visible apply {
     _x params ["_id", "_senderNet", "", "_callsign", "_data", "_time", "", "", "_status", "", "_acceptor", "_eta", "_position"];
-    [_id, _callsign, round (_now - _time), _status, _acceptor, _eta, _senderNet isEqualTo _myNet, [_data, [[_position] call TC2_fnc_casGrid, _callsign, format ["%1 K%2", _base, _channel]]] call TC2_fnc_medLines]
+    [_id, _callsign, round (_now - _time), _status, _acceptor, _eta, _senderNet isEqualTo _myNet, [_data, [[_position] call TC2_fnc_casGrid, _callsign, format ["%1 K%2", [_base] call TC2_fnc_netBaseName, _channel]]] call TC2_fnc_medLines]
 };
 reverse _summary;
 

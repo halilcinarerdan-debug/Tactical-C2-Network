@@ -32,4 +32,6 @@ class net
     // Test
     class debugNetPeer {};
     class debugNetInfo {};
+    class netBaseKey {};
+    class netBaseName {};
 };

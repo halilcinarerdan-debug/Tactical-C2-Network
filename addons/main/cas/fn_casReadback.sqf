@@ -40,6 +40,7 @@ if ((_request select 7) isEqualTo "ABORTED") exitWith {
 
 // Pilotun telsizi: envanterde, JTAC ile aynı tip + kanal, JTAC'ın menzili içinde.
 _state params [["_has", false, [false]], ["_radioId", "", [""]], ["_base", "", [""]], ["_channel", -1, [0]]];
+if (_has) then {_base = [_base, _unit] call TC2_fnc_netBaseKey};
 private _radioOk = _has && {(toLower _radioId) in ((items _unit) apply {toLower _x})};
 private _netOk = _radioOk && {_base isEqualTo (_request select 10)} && {_channel == (_request select 11)} && {(_unit distance (_request select 2)) <= ([_base] call TC2_fnc_netRangeOf)};
 

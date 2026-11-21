@@ -35,7 +35,7 @@ private _ack = {[_unit, "TC2_fnc_opordOnAck", _this] call TC2_fnc_netToUnit};
 if (!_allowed) exitWith {[_code, []] call _ack};
 
 private _level = [_unit, _terminal] call TC2_fnc_accessLevel;
-private _variable = ["TC2_opord", "TC2_warno"] select (_docType isEqualTo "WARNO");
+private _variable = [_docType, side (group _unit)] call TC2_fnc_opordVar;   // taraf ayrımı: yalnızca kendi tarafının belgesi
 private _document = missionNamespace getVariable [_variable, []];
 
 switch (_action) do {
@@ -91,7 +91,7 @@ switch (_action) do {
 
         private _date = date;
         private _dtg = format ["%1%2%3Z", _date select 2, _date select 3, _date select 4];
-        private _created = [["OPERASYON EMRİ", "UYARI EMRİ"] select (_docType isEqualTo "WARNO"), _dtg, "TC2 EGITIM", [_docType] call TC2_fnc_opordTemplate, name _unit, _docType] call TC2_fnc_opordSet;
+        private _created = [["OPERASYON EMRİ", "UYARI EMRİ"] select (_docType isEqualTo "WARNO"), _dtg, "TC2 EGITIM", [_docType] call TC2_fnc_opordTemplate, name _unit, _docType, side (group _unit)] call TC2_fnc_opordSet;
         diag_log format ["[TC2][OPORD] SABLON olusturuldu | %1", name _unit];
         [["NO_SECTION", "TEMPLATE_OK"] select _created, []] call _ack;
     };

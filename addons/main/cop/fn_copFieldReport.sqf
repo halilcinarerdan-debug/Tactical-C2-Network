@@ -39,6 +39,8 @@ private _index = -1;
 
 _state params [["_has", false, [false]], ["_radioId", "", [""]], ["_base", "", [""]], ["_channel", -1, [0]]];
 
+if (_has) then {_base = [_base, _unit] call TC2_fnc_netBaseKey};
+
 private _valid = _has && {alive _unit} && {(toLower _radioId) in ((items _unit) apply {toLower _x})} && {[_unit] call TC2_fnc_hasTablet};
 
 if (!_valid) exitWith {

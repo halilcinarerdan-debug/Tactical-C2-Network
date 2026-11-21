@@ -43,7 +43,7 @@ if (_kind isEqualTo "UAV") then {
 _camera cameraEffect ["INTERNAL", "BACK", "tc2_cam_rtt"];
 "tc2_cam_rtt" setPiPEffect [missionNamespace getVariable ["TC2_cam_mode", 0]];
 
-(_display displayCtrl 92901) ctrlSetText "#(argb,1024,512,1)r2t(tc2_cam_rtt,1.8)";
+(_display displayCtrl 92901) ctrlSetText format ["#(argb,1024,512,1)r2t(tc2_cam_rtt,%1)", missionNamespace getVariable ["TC2_cam_aspect", 1.8]];
 
 missionNamespace setVariable ["TC2_cam_camera", _camera];
 missionNamespace setVariable ["TC2_cam_source", [_kind, _object]];

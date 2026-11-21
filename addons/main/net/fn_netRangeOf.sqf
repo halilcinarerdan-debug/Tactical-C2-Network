@@ -17,6 +17,9 @@
 
 params [["_class", "", [""]]];
 
+// Ağ anahtarındaki taraf ekini ("ACRE_PRC343|WEST") yok say.
+if (_class find "|" >= 0) then {_class = (_class splitString "|") select 0};
+
 // Ayar boş / henüz hazır değilse (örn. sunucuda CBA ayarı oturmadan çağrılırsa) kodda gömülü varsayılan tablo kullanılır.
 private _table = missionNamespace getVariable ["TC2_net_ranges", ""];
 if (_table isEqualTo "") then {
