@@ -13,7 +13,7 @@
 private _display = findDisplay 92000;
 if (isNull _display || {isNull (_display displayCtrl 92900)}) exitWith {};
 
-(missionNamespace getVariable ["TC2_cam_data", ["EMPTY", 1, false, []]]) params ["_code", "_level", "_canView", "_sources"];
+(missionNamespace getVariable ["TC2_cam_data", ["EMPTY", 1, false, [], ""]]) params ["_code", "_level", "_canView", "_sources", ["_mode", ""]];
 
 private _onTab = (missionNamespace getVariable ["TC2_ui_tab", 0]) == 9;
 private _ok = _code isEqualTo "OK";
@@ -26,9 +26,34 @@ if (!_onTab) exitWith {};
 
 if (!_canView) exitWith {
     call TC2_fnc_camStop;
-    private _text = if (!_ok) then {format ["BAĞLANTI YOK | %1", [_code] call TC2_fnc_accessReasonText]} else {"KAMERA sekmesi Level 2 (Mavi kart) ve üstü içindir; izleme modunda kamera görünmez."};
+    private _waited = diag_tickTime - (missionNamespace getVariable ["TC2_cam_reqTime", diag_tickTime]);
+    private _text = "";
+    private _status = "";
+    if (_code isEqualTo "EMPTY") then {
+        // henüz sunucu yanıtı yok
+        if (_waited > 7) then {
+            _text = "SUNUCU YANIT VERMEDİ.<br/>Sunucuda TC2'nin güncel sürümü yüklü mü? (camPoll)<br/>Yüklüyse RPT'de [TC2][KAMERA] satırlarına bakın.";
+            _status = "  KAMERA: sunucu yanıtı yok";
+        } else {
+            _text = "Sunucudan yanıt bekleniyor...";
+            _status = "  KAMERA: yükleniyor";
+        };
+    } else {
+        if (!_ok) then {
+            _text = format ["BAĞLANTI YOK | %1", [_code] call TC2_fnc_accessReasonText];
+            _status = "  KAMERA: bağlantı yok";
+        } else {
+            if (_mode isEqualTo "VIEW") then {
+                _text = "Bu cihaz İZLEME modunda (lider olmayan tablet): kamera görünmez.<br/>Grup/takım lideri, JTAC, gözlemci ya da Level 2+ kart (masa başı) gerekir.";
+                _status = "  KAMERA: izleme modu, yetki yok";
+            } else {
+                _text = format ["Seviyeniz Level %1. KAMERA sekmesi Level 2 (Mavi kart) ve üstü içindir.", _level];
+                _status = format ["  KAMERA: Level %1, yetki yok", _level];
+            };
+        };
+    };
     (_display displayCtrl 92902) ctrlSetStructuredText parseText format ["<t size='0.8'>%1</t>", _text];
-    (_display displayCtrl 92906) ctrlSetText "  KAMERA: yetki yok";
+    (_display displayCtrl 92906) ctrlSetText _status;
 };
 
 // kaynak listesi

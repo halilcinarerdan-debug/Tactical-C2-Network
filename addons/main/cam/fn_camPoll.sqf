@@ -8,7 +8,7 @@
     Yetki: oturum geçerli (kart / telsiz ağı) + Level 2 ve üstü + izleme modunda değil (bilgi güvenirliği: er tabletle kamera izleyemez).
       İHA:  aynı taraf, canlı, `unitIsUAV`, CBA TC2_cam_uavShare açık, objede TC2_camHidden yok.
       Kask: aynı taraf, canlı, oyuncu / AI fark etmez, envanterinde CBA kask eşyası (TC2_cam_helmetItem) var; CBA açıksa izleyenin telsiz menzili içinde.
-    Yanıt: kod, seviye, izleyebilir mi, kaynaklar [[tür "UAV" | "HELM", netId, etiket]].
+    Yanıt: kod, seviye, izleyebilir mi, kaynaklar [[tür "UAV" | "HELM", netId, etiket]], kullanım modu (DESK | FIELD | VIEW).
 
     Parametreler:
         0: birim <OBJECT>   1: terminal / saha cihazı <OBJECT>   2: telsiz durumu <ARRAY>
@@ -27,7 +27,7 @@ private _session = [_unit, _terminal, _state] call TC2_fnc_netServerSession;
 _session params ["_ok", "_code", "_entry"];
 
 if (!_ok || {!(_code isEqualTo "OK")}) exitWith {
-    [_unit, "TC2_fnc_camOnData", [_code, 1, false, []]] call TC2_fnc_netToUnit;
+    [_unit, "TC2_fnc_camOnData", [_code, 1, false, [], ""]] call TC2_fnc_netToUnit;
 };
 
 private _level = [_unit, _terminal] call TC2_fnc_accessLevel;
@@ -35,7 +35,8 @@ private _mode = _entry param [9, "DESK"];
 private _canView = _level >= 2 && {!(_mode isEqualTo "VIEW")};
 
 if (!_canView) exitWith {
-    [_unit, "TC2_fnc_camOnData", ["OK", _level, false, []]] call TC2_fnc_netToUnit;
+    diag_log format ["[TC2][KAMERA] RED: %1 | seviye=%2 mod=%3", name _unit, _level, _mode];
+    [_unit, "TC2_fnc_camOnData", ["OK", _level, false, [], _mode]] call TC2_fnc_netToUnit;
 };
 
 private _side = side (group _unit);
@@ -78,4 +79,4 @@ if !(_item isEqualTo "") then {
 
 _sources = _sources select [0, 30];
 
-[_unit, "TC2_fnc_camOnData", ["OK", _level, true, _sources]] call TC2_fnc_netToUnit;
+[_unit, "TC2_fnc_camOnData", ["OK", _level, true, _sources, _mode]] call TC2_fnc_netToUnit;

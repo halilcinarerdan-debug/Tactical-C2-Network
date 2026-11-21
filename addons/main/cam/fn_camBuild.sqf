@@ -59,7 +59,8 @@ _status ctrlSetBackgroundColor [0, 0.12, 0.03, 1];
 _status ctrlSetTextColor _green;
 _status ctrlSetFontHeight (_rowH * 0.45);
 
-missionNamespace setVariable ["TC2_cam_data", ["EMPTY", 1, false, []]];
+missionNamespace setVariable ["TC2_cam_data", ["EMPTY", 1, false, [], ""]];
+missionNamespace setVariable ["TC2_cam_reqTime", -1];
 missionNamespace setVariable ["TC2_cam_sig", ""];
 missionNamespace setVariable ["TC2_cam_current", ""];
 missionNamespace setVariable ["TC2_cam_statusText", ""];

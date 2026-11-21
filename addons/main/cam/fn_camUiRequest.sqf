@@ -13,6 +13,9 @@ private _terminal = missionNamespace getVariable ["TC2_terminal_current", objNul
 if (isNull _terminal || {isNull (findDisplay 92000)}) exitWith {};
 if ((missionNamespace getVariable ["TC2_ui_tab", 0]) != 9) exitWith {};
 
+// İlk istek zamanı: sunucudan hiç yanıt gelmezse (örn. sunucuda TC2 güncel değil) arayüz bunu söyler.
+if ((missionNamespace getVariable ["TC2_cam_reqTime", -1]) < 0) then {missionNamespace setVariable ["TC2_cam_reqTime", diag_tickTime]};
+
 private _args = [ACE_player, _terminal, call TC2_fnc_netGetRadioState];
 
 if (isServer) then {

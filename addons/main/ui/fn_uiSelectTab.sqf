@@ -79,6 +79,7 @@ if (_index != 9) then {call TC2_fnc_camStop};
 call TC2_fnc_camUiUpdate;
 if (_index == 9) then {
     missionNamespace setVariable ["TC2_cam_statusText", ""];
+    missionNamespace setVariable ["TC2_cam_reqTime", diag_tickTime];
     call TC2_fnc_camUiRequest;
 };
 // MEDEVAC (7)
